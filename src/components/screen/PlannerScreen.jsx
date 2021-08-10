@@ -5,13 +5,13 @@ import Todo from '../todo/Todo'
 import SideMenu from '../ui/sidemenu/SideMenu'
 
 function PlannerScreen() {
-  const { isTodoOrPlanner } = useContext(UiContext)
+  const { states } = useContext(UiContext)
   return (
     <div className="flex">
       <SideMenu />
       <div className="container p-5 mx-auto">
         {
-          isTodoOrPlanner ? <Todo /> : < Planner />
+          states.isTodoOrPlanner ? <Todo /> : <Planner />
         }
       </div>
     </div>

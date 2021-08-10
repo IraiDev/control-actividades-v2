@@ -8,7 +8,6 @@ function UiProvider({ children }) {
   const [isViewChanged, setViewTrue, setViewFalse] = useChangeTab()
   const [isTodoOrPlanner, setviewTodo, setViewPlanner] = useChangeTab()
   const [toggleSideBar, setToggleSideBar] = useToggle();
-
   const [tab, setTab] = useState({
     planner: 'text-blue-600 font-bold',
     acivities: ''
@@ -35,7 +34,7 @@ function UiProvider({ children }) {
       isViewChanged,
       tab,
       isTodoOrPlanner,
-      toggleSideBar
+      toggleSideBar,
     },
     functions: {
       activityView,
