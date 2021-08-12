@@ -4,17 +4,14 @@ import PlannerCard from './PlannerCard'
 function Planner() {
   return (
     <>
-      <PlannerCard />
-      <PlannerCard />
-      <PlannerCard />
-      <PlannerCard />
-      <PlannerCard />
-      <PlannerCard />
-      <PlannerCard />
-      <PlannerCard />
-      <PlannerCard />
-      <PlannerCard />
-      <PlannerCard />
+      <PlannerCard title="titulo" desc="descripcion" plan="plan" />
+      <PlannerCard title="titulo" desc="descripcion" plan="plan" />
+      <PlannerCard title="titulo" desc="descripcion" plan="plan" />
+      <PlannerCard title="titulo" desc="descripcion" plan="plan" />
+      <PlannerCard title="titulo" desc="descripcion" plan="plan" />
+      <PlannerCard title="titulo" desc="descripcion" plan="plan" />
+      <PlannerCard title="titulo" desc="descripcion" plan="plan" />
+      <PlannerCard title="titulo" desc="descripcion" plan="plan" />
     </>
   )
 }

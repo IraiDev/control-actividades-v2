@@ -15,9 +15,9 @@ function Todo() {
         </button>
       </div>
       <div className="grid grid-cols-12 gap-3">
-        <TodoCard />
-        <TodoCard />
-        <TodoCard />
+        <TodoCard title="titulo" desc="descripcion" />
+        <TodoCard title="titulo" desc="descripcion" />
+        <TodoCard title="titulo" desc="descripcion" />
       </div>
     </>
   )
