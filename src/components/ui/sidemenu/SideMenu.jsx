@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import { UiContext } from '../../../context/UiContext'
 import { GraphContext } from '../../../context/GraphContext'
 import { useForm } from '../../../hooks/useForm'
+import { alertTimer } from '../../../helpers/alerts'
 import ButtonList from '../buttons/ButtonList'
 import Modal from "@material-tailwind/react/Modal"
 import ModalHeader from "@material-tailwind/react/ModalHeader"
@@ -29,7 +30,16 @@ function SideMenu() {
   }
 
   const handleCreateTodoList = () => {
-    GraphFunc.createTodoList()
+    const data = {
+      displayName: input
+    }
+    const action = () => {
+      setShowModal(false)
+      GraphFunc.createTodoList(data)
+      reset()
+    }
+    let state = input === '' ? false : true
+    alertTimer(state, 'info', 1500) ? action() : setShowModal(true)
   }
 
   const showModalFalse = () => {
@@ -116,11 +126,14 @@ function SideMenu() {
         </ModalBody>
         <ModalFooter>
           <Button
+            buttonType="link"
+            size="sm"
+            rounded={true}
             color="blue"
             onClick={() => handleCreateTodoList()}
             ripple="light"
           >
-            Actualizar
+            Crear
           </Button>
         </ModalFooter>
       </Modal>

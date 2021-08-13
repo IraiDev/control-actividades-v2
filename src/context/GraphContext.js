@@ -52,16 +52,19 @@ function GraphProvider({ children }) {
 
   const createTodoList = async (data) => {
     await postFetch('todo/lists', data)
+    getTodoList()
   }
 
   const updateTodoList = async (idList, data) => {
     const endPoint = `todo/lists/${idList}`
     await updateFetch(endPoint, data)
+    getTodoList()
   }
 
   const deleteTodoList = async (idList) => {
     const endPoint = `todo/lists/${idList}`
     await deleteFetch(endPoint)
+    getTodoList()
   }
 
   // vaariables de contexto globa

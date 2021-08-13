@@ -94,11 +94,14 @@ function Todo() {
         </ModalBody>
         <ModalFooter>
           <Button
+            buttonType="link"
+            size="sm"
+            rounded={true}
             color="blue"
             onClick={() => handleCreateTodo()}
             ripple="light"
           >
-            Crear
+            crear
           </Button>
         </ModalFooter>
       </Modal>

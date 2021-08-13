@@ -36,7 +36,7 @@ function TodoCard({ idTodo, title, desc }) {
     const action = () => GraphFunc.deleteTodo(GraphState.idListSelected, idTodo)
     alertQuest(
       'info',
-      '¿Eliminar ToDo?',
+      `<p>¿Eliminar ToDo: <b>"${title}"</b>?</p>`,
       'No, cancelar',
       'Si, eliminar',
       action
@@ -83,7 +83,7 @@ function TodoCard({ idTodo, title, desc }) {
 
       <Modal size="sm" active={showModal} toggler={() => showModalFalse()}>
         <ModalHeader toggler={() => showModalFalse()}>
-          Actualizar ToDo
+          Editar ToDo
         </ModalHeader>
         <ModalBody>
           <div className="w-430"></div>
@@ -110,11 +110,14 @@ function TodoCard({ idTodo, title, desc }) {
         </ModalBody>
         <ModalFooter>
           <Button
+            buttonType="link"
+            size="sm"
+            rounded={true}
             color="blue"
             onClick={() => handleUpdate()}
             ripple="light"
           >
-            Actualizar
+            Editar
           </Button>
         </ModalFooter>
       </Modal>

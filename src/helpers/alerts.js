@@ -4,7 +4,7 @@ export const alertQuest = (icon, text, cancelButtonText, confirmButtonText, call
   Swal.fire({
     icon,
     iconColor: 'gray',
-    text,
+    html: text,
     showCancelButton: true,
     cancelButtonText,
     cancelButtonColor: '#EF4444',
