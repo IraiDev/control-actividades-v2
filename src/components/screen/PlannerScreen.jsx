@@ -1,17 +1,27 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
+import { GraphContext } from '../../context/GraphContext'
 import { UiContext } from '../../context/UiContext'
+import useIsSignedIn from '../../hooks/useSignedIn'
 import Planner from '../planner/Planner'
 import Todo from '../todo/Todo'
 import SideMenu from '../ui/sidemenu/SideMenu'
 
 function PlannerScreen() {
-  const { states } = useContext(UiContext)
+  const [isSigendIn] = useIsSignedIn()
+  const { states: UiStates } = useContext(UiContext)
+  const { functions: GraphFunc } = useContext(GraphContext)
+
+  useEffect(() => {
+    GraphFunc.getPlannerTask()
+    GraphFunc.getTodoList()
+  }, [isSigendIn])
+
   return (
     <div className="flex">
       <SideMenu />
       <div className="container p-5 mx-auto">
         {
-          states.isTodoOrPlanner ? <Todo /> : <Planner />
+          UiStates.isTodoOrPlanner ? <Todo /> : <Planner />
         }
       </div>
     </div>

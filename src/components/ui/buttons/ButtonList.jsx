@@ -1,9 +1,9 @@
 import React from 'react'
 
-function ButtonList({ title, icon = 'mr-4 fas fa-bars', actions = true, onclick, updateList, deletelist }) {
+function ButtonList({ idList, title, icon = 'mr-4 fas fa-bars', actions = true, onclick, updateList, deletelist }) {
 
   const handleClick = () => {
-    onclick()
+    onclick(idList)
   }
 
   const handleUpdateList = () => {

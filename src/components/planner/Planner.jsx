@@ -1,17 +1,25 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { GraphContext } from '../../context/GraphContext'
 import PlannerCard from './PlannerCard'
 
 function Planner() {
+  const { states } = useContext(GraphContext)
   return (
     <>
-      <PlannerCard title="titulo" desc="descripcion" plan="plan" />
-      <PlannerCard title="titulo" desc="descripcion" plan="plan" />
-      <PlannerCard title="titulo" desc="descripcion" plan="plan" />
-      <PlannerCard title="titulo" desc="descripcion" plan="plan" />
-      <PlannerCard title="titulo" desc="descripcion" plan="plan" />
-      <PlannerCard title="titulo" desc="descripcion" plan="plan" />
-      <PlannerCard title="titulo" desc="descripcion" plan="plan" />
-      <PlannerCard title="titulo" desc="descripcion" plan="plan" />
+      {
+        states.plannerTask.length > 0 ?
+          states.plannerTask.map(obj => {
+            return (
+              <PlannerCard
+                key={obj.id}
+                title={obj.title}
+                desc={obj.details.description}
+                assignments={obj.assignments}
+                idPlan={obj.planId} />)
+          })
+          :
+          ("no hay tareas")
+      }
     </>
   )
 }

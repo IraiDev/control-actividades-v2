@@ -1,7 +1,29 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { getFetch } from '../../helpers/fetchingGraph';
+import { Person } from '@microsoft/mgt-react';
+import { alertQuest } from '../../helpers/alerts';
 import Tippy from '@tippyjs/react'
 
-function PlannerCard({ title, desc, plan }) {
+function PlannerCard({ idPlan, title, desc, assignments }) {
+  const [plannerPlan, setplannerPlan] = useState('')
+
+  const handleAddTask = () => {
+    alertQuest(
+      'info',
+      '¿Desea crear esta tarea como una actividad en RA?',
+      'No, cancelar',
+      'Si, crear',
+      // action calbakc de accionq ue se quiera hacer
+    )
+  }
+
+  useEffect(() => {
+    getFetch(`/planner/plans/${idPlan}`, 'title', '')
+      .then(resp => {
+        setplannerPlan(resp.title)
+      })
+  }, [])
+
   return (
     <div className="grid w-full grid-cols-12 gap-2 p-4 mb-2 bg-white border border-gray-300 rounded-md hover:bg-gray-100">
       <div className="flex flex-col justify-between col-span-3">
@@ -9,14 +31,14 @@ function PlannerCard({ title, desc, plan }) {
           <h5 className="font-semibold">{title}</h5>
           <h5 className="text-sm">
             <strong className="font-semibold">Plan: </strong>
-            {plan}
+            {plannerPlan}
           </h5>
         </div>
-        {/* <div className="flex mt-1">
+        <div className="flex mt-1">
           {Object.keys(assignments).map((obj) => {
             return <Person className="mr-2" key={obj} userId={obj} />;
           })}
-        </div> */}
+        </div>
       </div>
       <div className="grid grid-cols-12 col-span-9">
         <div className="col-span-11">
@@ -31,9 +53,9 @@ function PlannerCard({ title, desc, plan }) {
           >
             <button
               className="px-2 py-1 mr-2 rounded-full focus:outline-none hover:bg-gray-200"
-            // onClick={() => {
-            //   handleAddTask();
-            // }}
+              onClick={() => {
+                handleAddTask();
+              }}
             >
               <i className="text-black fas fa-exchange-alt fa-md hover:text-blue-600"></i>
             </button>

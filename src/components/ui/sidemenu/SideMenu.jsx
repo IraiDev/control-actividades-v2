@@ -1,26 +1,130 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { UiContext } from '../../../context/UiContext'
+import { GraphContext } from '../../../context/GraphContext'
+import { useForm } from '../../../hooks/useForm'
 import ButtonList from '../buttons/ButtonList'
+import Modal from "@material-tailwind/react/Modal"
+import ModalHeader from "@material-tailwind/react/ModalHeader"
+import ModalBody from "@material-tailwind/react/ModalBody"
+import ModalFooter from "@material-tailwind/react/ModalFooter"
+import Button from "@material-tailwind/react/Button"
+import Input from "@material-tailwind/react/Input"
+import "@material-tailwind/react/tailwind.css"
 
 function SideMenu() {
-  const { functions } = useContext(UiContext)
+  const [{ input }, onChangeValues, reset] = useForm({ input: '' })
+  const { functions: GraphFunc, states: GraphState } = useContext(GraphContext)
+  const { functions: UiFunc } = useContext(UiContext)
+  const [showModal, setShowModal] = useState(false)
 
-  const handleClickTodo = () => {
-    functions.setviewTodo()
+  const handleClickTodo = (idList) => {
+    UiFunc.setviewTodo()
+    GraphFunc.getTodoTask(idList)
+    GraphFunc.setIdListSelected(idList)
   }
 
   const handleClickPlanner = () => {
-    functions.setViewPlanner()
+    UiFunc.setViewPlanner()
+    GraphFunc.getPlannerTask()
+  }
+
+  const handleCreateTodoList = () => {
+    GraphFunc.createTodoList()
+  }
+
+  const showModalFalse = () => {
+    setShowModal(false)
+    reset()
+  }
+
+  const showModalTrue = () => {
+    setShowModal(true)
   }
 
   return (
-    <div className="sticky z-10 h-full px-3 py-10 mt-10 ml-3 text-white bg-gray-700 border-r rounded-md shadow-md top-44">
-      <ButtonList title={"Crear Lista"} icon="mr-4 fas fa-plus" actions={false} />
-      <ButtonList title={"Asignados a ti"} icon="mr-4 far fa-user" actions={false} onclick={handleClickPlanner} />
-      <ButtonList title={"titulo"} onclick={handleClickTodo} />
-      <ButtonList title={"titulo"} onclick={handleClickTodo} />
-      <ButtonList title={"titulo"} onclick={handleClickTodo} />
-    </div>
+    <>
+      <div className="sticky z-10 h-full px-3 py-10 mt-10 ml-3 text-white bg-gray-700 border-r rounded-md shadow-md top-44">
+        <ButtonList
+          title={"Crear Lista"}
+          icon="mr-4 fas fa-plus"
+          actions={false}
+          onclick={showModalTrue}
+        />
+        <ButtonList
+          title={"Asignados a ti"}
+          icon="mr-4 far fa-user"
+          actions={false}
+          onclick={handleClickPlanner}
+        />
+        {
+          GraphState.todoList.map(obj => {
+            if (!obj.isOwner || (obj.isOwner && obj.wellknownListName === "defaultList")) {
+              return (
+                <ButtonList
+                  key={obj.id}
+                  idList={obj.id}
+                  title={obj.displayName}
+                  icon="mr-4 fas fa-bars"
+                  actions={false}
+                  onclick={handleClickTodo}
+                />
+              )
+            } else {
+              return ''
+            }
+          })
+        }
+        <hr className="my-3" />
+        {
+          GraphState.todoList.map(obj => {
+            if (obj.wellknownListName !== "defaultList" && obj.isOwner) {
+              return (
+                <ButtonList
+                  key={obj.id}
+                  idList={obj.id}
+                  title={obj.displayName}
+                  icon="mr-4 fas fa-bars"
+                  onclick={handleClickTodo}
+                />
+              )
+            } else {
+              return ''
+            }
+          })
+        }
+      </div>
+
+      {/* modal create todo */}
+
+      <Modal size="sm" active={showModal} toggler={() => showModalFalse()}>
+        <ModalHeader toggler={() => showModalFalse()}>
+          Crear nueva lista
+        </ModalHeader>
+        <ModalBody>
+          <div className="w-430"></div>
+          <Input
+            value={input}
+            name="input"
+            onChange={onChangeValues}
+            type="text"
+            color="blue"
+            size="sm"
+            outline={false}
+            placeholder="Titulo..."
+          />
+          <br />
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            color="blue"
+            onClick={() => handleCreateTodoList()}
+            ripple="light"
+          >
+            Actualizar
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </>
   )
 }
 

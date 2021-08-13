@@ -1,3 +1,81 @@
+body {
+  background-color: rgb(243, 244, 246);
+}
+
+.bg-img-login {
+  background-image: url("./assets/img/login.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+  width: 100%;
+}
+
+.scroll-row {
+  max-height: 10rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(90, 81, 81, 0.5) transparent;
+}
+
+.scroll-row-side-bar {
+  max-height: 5rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(124, 124, 124, 0) transparent;
+}
+
+.scroll-row-side-bar:hover{
+  scrollbar-color: rgba(124, 124, 124, 0.3) transparent;
+}
+
+.scroll-row::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scroll-row::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 5px;
+  width: 20px;
+}
+
+.scroll-row:hover::-webkit-scrollbar-thumb {
+  background: rgb(223, 223, 223);
+  border-radius: 5px;
+  width: 20px;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.border-card {
+  border-width: 5px;
+  border-style: solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(to left, #ff0000, #9c3ad5);
+}
+
+.z-1500{
+  z-index: 1500;
+}
+
+.h-700{
+  min-height: 700px;
+}
+
 .w-430{
   width: 430px;
+}
+
+@media (min-height: 1080px) {
+  .h-700{
+    min-height: 820px;
+  }
 }

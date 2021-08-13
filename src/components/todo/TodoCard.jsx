@@ -1,35 +1,124 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
+import { GraphContext } from '../../context/GraphContext'
+import { alertQuest, alertTimer } from '../../helpers/alerts'
+import Modal from "@material-tailwind/react/Modal"
+import ModalHeader from "@material-tailwind/react/ModalHeader"
+import ModalBody from "@material-tailwind/react/ModalBody"
+import ModalFooter from "@material-tailwind/react/ModalFooter"
+import Button from "@material-tailwind/react/Button"
+import Input from "@material-tailwind/react/Input"
+import Textarea from "@material-tailwind/react/Textarea"
+import "@material-tailwind/react/tailwind.css"
+import { useForm } from '../../hooks/useForm'
 
-function TodoCard({ title, desc }) {
+function TodoCard({ idTodo, title, desc }) {
+  const [{ input, textArea }, onChangeValues, reset] = useForm({ input: '', textArea: '' })
+  const { functions: GraphFunc, states: GraphState } = useContext(GraphContext)
+  const [showModal, setShowModal] = useState(false)
+
+  const handleUpdate = () => {
+    const data = {
+      title: input,
+      body: {
+        content: textArea,
+      }
+    }
+    const action = () => {
+      setShowModal(false)
+      GraphFunc.updateTodo(GraphState.idListSelected, idTodo, data)
+      reset()
+    }
+    let state = input === '' ? false : textArea === '' ? false : true
+    alertTimer(state, 'info', 1500) ? action() : setShowModal(true)
+  }
+
+  const handleDelete = () => {
+    const action = () => GraphFunc.deleteTodo(GraphState.idListSelected, idTodo)
+    alertQuest(
+      'info',
+      '¿Eliminar ToDo?',
+      'No, cancelar',
+      'Si, eliminar',
+      action
+    )
+  }
+
+  const showModalFalse = () => {
+    setShowModal(false)
+    reset()
+  }
+
   return (
-    <div className="col-span-12 p-4 bg-white rounded-md shadow-md lg:col-span-6 xl:col-span-4 2xl:col-span-3">
-      <div className="mb-1 font-semibold text-gray-800">
-        <h5>{title}</h5>
+    <>
+      <div className="col-span-12 p-4 bg-white rounded-md shadow-md lg:col-span-6 xl:col-span-4 2xl:col-span-3">
+        <div className="mb-1 font-semibold text-gray-800">
+          <h5>{title}</h5>
+        </div>
+        <hr />
+        <div className="pr-2 my-2 text-xs text-justify h-52 scroll-row">
+          <p>{desc}</p>
+        </div>
+        <hr />
+        <div className="flex justify-end pt-2 text-gray-700">
+          <button
+            className="focus:outline-none active:outline-none"
+            onClick={() => {
+              setShowModal(true)
+            }}
+          >
+            <i className="fas fa-pen"></i>
+          </button>
+          <button
+            className="ml-3 focus:outline-none active:outline-none"
+            onClick={() => {
+              handleDelete()
+            }}
+          >
+            <i className="fas fa-trash"></i>
+          </button>
+        </div>
       </div>
-      <hr />
-      <div className="pr-2 my-2 text-xs text-justify h-52 scroll-row">
-        <p>{desc}</p>
-      </div>
-      <hr />
-      <div className="flex justify-end pt-2 text-gray-700">
-        <button
-          className="focus:outline-none active:outline-none"
-        // onClick={() => {
-        //   handleUpdate();
-        // }}
-        >
-          <i className="fas fa-pen"></i>
-        </button>
-        <button
-          className="ml-3 focus:outline-none active:outline-none"
-        // onClick={() => {
-        //   handleDelete();
-        // }}
-        >
-          <i className="fas fa-trash"></i>
-        </button>
-      </div>
-    </div>
+
+      {/* modal update todo */}
+
+      <Modal size="sm" active={showModal} toggler={() => showModalFalse()}>
+        <ModalHeader toggler={() => showModalFalse()}>
+          Actualizar ToDo
+        </ModalHeader>
+        <ModalBody>
+          <div className="w-430"></div>
+          <Input
+            value={input}
+            name="input"
+            onChange={onChangeValues}
+            type="text"
+            color="blue"
+            size="sm"
+            outline={false}
+            placeholder="Titulo..."
+          />
+          <br />
+          <Textarea
+            value={textArea}
+            name="textArea"
+            onChange={onChangeValues}
+            color="blue"
+            size="sm"
+            outline={true}
+            placeholder="Descripcion..."
+          />
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            color="blue"
+            onClick={() => handleUpdate()}
+            ripple="light"
+          >
+            Actualizar
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </>
   )
 }
 
