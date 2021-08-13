@@ -4,6 +4,7 @@ import { Menu, MenuButton, MenuDivider, MenuGroup, MenuItem } from '@szhsin/reac
 import UserTimer from './UserTimer';
 import ButtonUnText from '../buttons/ButtonUnText';
 import ButtonText from '../buttons/ButtonText';
+import Tippy from '@tippyjs/react';
 
 function UtilityBar() {
   const { functions } = useContext(UiContext)
@@ -24,18 +25,33 @@ function UtilityBar() {
           <ButtonText icon="fas fa-filter fa-sm" text="Filtrar" onclick={handleSideBar} />
         </div>
         <div className="flex">
-          <ButtonUnText icon="fas fa-user-clock" tippyText="Todas las actividades" onclick={click} />
+          <ButtonUnText
+            icon="fas fa-user-clock"
+            tippyText="Todas las actividades"
+            isTippy={true}
+            onclick={click} />
 
-          <ButtonUnText icon="fas fa-sync-alt" tippyText="Actualizar vista Planner" onclick={click} />
+          <ButtonUnText
+            icon="fas fa-sync-alt"
+            tippyText="Actualizar vista Planner"
+            isTippy={true}
+            onclick={click} />
 
           <Menu
             direction="bottom"
             overflow="auto"
             position="anchor"
             menuButton={
-              <MenuButton className="focus:outline-none active:outline-none">
-                <i className="p-2 text-gray-700 rounded-full hover:bg-gray-200 fas fa-bell"></i>
-              </MenuButton>
+              <Tippy
+                offset={[0, 2]}
+                delay={[200, 0]}
+                placement={"bottom"}
+                content={<span>Notificaciones</span>}
+              >
+                <MenuButton className="focus:outline-none active:outline-none">
+                  <i className="p-2 text-gray-700 rounded-full hover:bg-gray-200 fas fa-bell"></i>
+                </MenuButton>
+              </Tippy>
             }
           >
             <MenuGroup takeOverflow>
@@ -63,7 +79,11 @@ function UtilityBar() {
             </MenuItem>
           </Menu>
 
-          <ButtonUnText icon="fas fa-paint-brush" tippyText="Ajustes de usuario" onclick={click} />
+          <ButtonUnText
+            icon="fas fa-paint-brush"
+            tippyText="Ajustes de usuario"
+            isTippy={true}
+            onclick={click} />
         </div>
       </div>
       <div className="flex items-center justify-around order-first pb-5 lg:order-last">

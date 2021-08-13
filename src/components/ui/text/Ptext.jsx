@@ -1,12 +1,12 @@
 import React from 'react'
 import Tippy from '@tippyjs/react'
 
-function Ptext({ isTippy = false, textTippy = '', tag, value, font, priority, isPriority }) {
+function Ptext({ isTippy = false, textTippy = '', tag, value, font = '', priority = '', isPriority = false }) {
   return (
     <>
       <p>
         <Tippy
-          disabled={isTippy}
+          disabled={!isTippy}
           offset={[0, 2]}
           placement="top"
           delay={[500, 0]}

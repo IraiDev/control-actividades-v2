@@ -1,7 +1,7 @@
-import Tippy from '@tippyjs/react'
 import React from 'react'
+import Tippy from '@tippyjs/react'
 
-function ButtonUnText({ icon, tippyText, onclick }) {
+function ButtonUnText({ icon, tippyText = '', isTippy = false, onclick }) {
 
   const handleClick = () => {
     onclick()
@@ -9,6 +9,7 @@ function ButtonUnText({ icon, tippyText, onclick }) {
 
   return (
     <Tippy
+      disabled={!isTippy}
       offset={[0, 2]}
       delay={[200, 0]}
       placement={"bottom"}
