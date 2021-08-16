@@ -4,37 +4,58 @@ import useToggle from '../hooks/useToggle'
 
 export const UiContext = createContext()
 
+const initialState = {
+  acivities: '',
+  planner: 'text-blue-600 font-bold',
+  disableActivityTab: false,
+  disablePlannerTab: true,
+  activeTab: false,
+  filterPayActiviies: true
+}
+
 function UiProvider({ children }) {
-  const [isViewChanged, setViewTrue, setViewFalse] = useTab()
+  const [isViewChanged, setViewActivities, setViewPLannerTask] = useTab()
   const [isTodoOrPlanner, setviewTodo, setViewPlanner] = useTab()
   const [toggleSideBar, setToggleSideBar] = useToggle();
   const [isLoading, setIsLoading] = useState(false)
-  const [tab, setTab] = useState({ planner: 'text-blue-600 font-bold', acivities: '' })
+  const [disbleBtnSideBar, setDisbleBtnSideBar] = useState(true)
+  const [navTab, setNavTab] = useState(initialState)
 
   const activityView = () => {
-    setViewTrue()
-    setTab({
+    setDisbleBtnSideBar(false)
+    setViewActivities()
+    setNavTab({
       planner: '',
-      acivities: 'text-blue-600 font-bold'
+      acivities: 'text-blue-600 font-bold',
+      disableActivityTab: true,
+      disablePlannerTab: false,
+      activeTab: true,
+      filterPayActiviies: false
     })
   }
 
   const plannerView = () => {
-    setViewFalse()
-    setTab({
-      acivities: '',
-      planner: 'text-blue-600 font-bold'
-    })
+    setDisbleBtnSideBar(true)
+    setViewPLannerTask()
     setIsLoading(true)
+    setNavTab({
+      acivities: '',
+      planner: 'text-blue-600 font-bold',
+      disableActivityTab: false,
+      disablePlannerTab: true,
+      activeTab: false,
+      filterPayActiviies: true
+    })
   }
 
   const value = {
     states: {
       isViewChanged,
-      tab,
+      navTab,
       isTodoOrPlanner,
       toggleSideBar,
       isLoading,
+      disbleBtnSideBar
     },
     functions: {
       activityView,
@@ -42,7 +63,7 @@ function UiProvider({ children }) {
       setViewPlanner,
       setviewTodo,
       setToggleSideBar,
-      setIsLoading
+      setIsLoading,
     }
   }
   return (

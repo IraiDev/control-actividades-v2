@@ -4,8 +4,7 @@ import { UiContext } from '../../../context/UiContext'
 import logo25x25 from '../../../assets/logo/logo25x25.png'
 
 function NavBar() {
-  const { functions, states } = useContext(UiContext)
-
+  const { functions: UiFunc, states: UiState } = useContext(UiContext)
 
   return (
     <div className="sticky top-0 z-40 flex items-center justify-between bg-white shadow-md h-14">
@@ -14,15 +13,15 @@ function NavBar() {
         <h1 className="font-semibold">ZionIT</h1>
       </div>
       <div className="flex items-center">
-        <button
-          className={`hover:text-blue-700 focus:outline-none hover:bg-gray-100 rounded-full px-4 py-2 ${states.tab.acivities}`}
-          onClick={() => { functions.activityView() }}
+        <button disabled={UiState.navTab.disableActivityTab}
+          className={`hover:text-blue-700 focus:outline-none hover:bg-gray-100 rounded-full px-4 py-2 ${UiState.navTab.acivities}`}
+          onClick={() => { UiFunc.activityView() }}
         >
           Actividades
         </button>
-        <button
-          className={`hover:text-blue-700 focus:outline-none hover:bg-gray-100 rounded-full px-4 py-2 ${states.tab.planner}`}
-          onClick={() => { functions.plannerView() }}
+        <button disabled={UiState.navTab.disablePlannerTab}
+          className={`hover:text-blue-700 focus:outline-none hover:bg-gray-100 rounded-full px-4 py-2 ${UiState.navTab.planner}`}
+          onClick={() => { UiFunc.plannerView() }}
         >
           Planner
         </button>

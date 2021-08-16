@@ -15,7 +15,7 @@ function GraphProvider({ children }) {
   //funciones api microsoft graph
 
   const getUserData = async () => {
-    await getFetch().then(resp => setUserEmail(resp.mail))
+    await getFetch('/me/').then(resp => setUserEmail(resp.mail))
   }
 
   const getPlannerTask = async () => {

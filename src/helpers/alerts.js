@@ -47,3 +47,16 @@ export const alertTimer = (state, icon, timer, text = 'Llene todos los campos.')
   }
   return true
 }
+
+export const normalAlert = (icon, text, confirmButtonText) => {
+  Swal.fire({
+    icon,
+    iconColor: 'gray',
+    html: text,
+    confirmButtonText,
+    confirmButtonColor: '#3B82F6'
+  }).then(result => {
+    if (result.isConfirmed) {
+    }
+  })
+}

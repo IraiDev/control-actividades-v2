@@ -1,24 +1,23 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
+import { ActivityContext } from './context/ActivityContext'
 import HomeScreen from './components/screen/HomeScreen'
 import LoginScreen from './components/screen/LoginScreen'
-import ActivityProvider from './context/ActivityContext'
-import GraphProvider from './context/GraphContext'
-import UiProvider from './context/UiContext'
 import useIsSignedIn from './hooks/useSignedIn'
-
 
 function App() {
   const [isSigendIn] = useIsSignedIn()
+  const { functions: ActFunc } = useContext(ActivityContext)
+
+  useEffect(() => {
+    !isSigendIn && ActFunc.logout()
+  }, [isSigendIn])
   return (
-    <UiProvider>
-      <GraphProvider>
-        <ActivityProvider>
-          {
-            isSigendIn ? <HomeScreen /> : <LoginScreen />
-          }
-        </ActivityProvider>
-      </GraphProvider>
-    </UiProvider>
+    <>
+      {
+        isSigendIn ? <HomeScreen /> : <LoginScreen />
+      }
+    </>
+
   )
 }
 

@@ -1,111 +1,249 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { UiContext } from '../../../context/UiContext';
+import { ActivityContext } from '../../../context/ActivityContext';
+import { GraphContext } from '../../../context/GraphContext';
 import { Menu, MenuButton, MenuDivider, MenuGroup, MenuItem } from '@szhsin/react-menu';
+import { alertTimer } from '../../../helpers/alerts';
+import Select from "react-select";
 import UserTimer from './UserTimer';
-import ButtonUnText from '../buttons/ButtonUnText';
-import ButtonText from '../buttons/ButtonText';
 import Tippy from '@tippyjs/react';
+import Modal from "@material-tailwind/react/Modal"
+import ModalHeader from "@material-tailwind/react/ModalHeader"
+import ModalBody from "@material-tailwind/react/ModalBody"
+import ModalFooter from "@material-tailwind/react/ModalFooter"
+import ButtonUnText from '../buttons/ButtonUnText';
+import ButtonColor from '../buttons/ButtonColor';
+import ButtonText from '../buttons/ButtonText';
+import Button from "@material-tailwind/react/Button"
+import PColor from '../text/PColor';
+import "@szhsin/react-menu/dist/index.css";
+import "@material-tailwind/react/tailwind.css"
+
+const colorArray = [
+  { id: "bg-gray-500", colorButton: "bg-gray-500" },
+  { id: "bg-blue-600", colorButton: "bg-blue-600" },
+  { id: "bg-indigo-600", colorButton: "bg-indigo-600" },
+  { id: "bg-purple-600", colorButton: "bg-purple-600" },
+  { id: "bg-pink-500", colorButton: "bg-pink-500" },
+  { id: "bg-red-600", colorButton: "bg-red-600" },
+  { id: "bg-yellow-900", colorButton: "bg-yellow-900" },
+  { id: "bg-yellow-400", colorButton: "bg-yellow-400" },
+  { id: "bg-green-500", colorButton: "bg-green-500" },
+];
+
+const selectArray = [
+  { value: 100, label: "Prioridad Alta" },
+  { value: 400, label: "Prioridad Media" },
+  { value: 600, label: "Prioridad Baja" },
+]
+
+const initialState = {
+  value: '',
+  label: 'Seleccione una prioridad'
+}
 
 function UtilityBar() {
-  const { functions } = useContext(UiContext)
+  const { states: UiState, functions: UiFunc } = useContext(UiContext)
+  const { functions: GraphFunc } = useContext(GraphContext)
+  const { states: ActState } = useContext(ActivityContext)
+  const [priority, setPriority] = useState(initialState)
+  const [colorSelected, setColorSelected] = useState('')
+  const [showModal, setShowModal] = useState(false)
 
   const click = () => {
     console.log('click click!!')
   }
 
   const handleSideBar = () => {
-    functions.setToggleSideBar()
+    UiFunc.setToggleSideBar()
+  }
+
+  const onChangeSelect = (option) => {
+    setColorSelected('')
+    setPriority(option)
+  }
+
+  const handleSelecColor = (color) => {
+    setColorSelected(color)
+  }
+
+  const handleUpdateColorPriority = () => {
+    console.log('select: ', priority.value)
+    console.log('color: ', colorSelected)
+    const data = {
+      prioridad_numero: priority.value,
+      prioridad_color: colorSelected,
+    }
+    const action = () => console.log(data)
+    const state = priority.value !== '' && colorSelected !== '' ? true : false
+    alertTimer(state, 'info', 1500, 'Debe seleccionar una prioridad y un color.') ? action() : showModalTrue()
+  }
+
+  const showModalTrue = () => {
+    setShowModal(true)
+  }
+
+  const showModalFalse = () => {
+    setPriority(initialState)
+    setColorSelected('')
+    setShowModal(false)
+  }
+
+  const updatePlannerComponents = () => {
+    UiFunc.setViewPlanner()
+    UiFunc.setIsLoading(true)
+    GraphFunc.getPlannerTask()
+    console.log('planner')
+  }
+
+  const updateActivityComponents = () => {
+    console.log('actividades')
   }
 
   return (
-    <div
-      className={`flex flex-col lg:flex-row bg-white shadow sticky top-14 z-20 pt-5 px-10`}>
-      <div className="flex justify-between order-last w-full pb-5 lg:order-first">
-        <div>
-          <ButtonText icon="fas fa-filter fa-sm" text="Filtrar" onclick={handleSideBar} />
-        </div>
-        <div className="flex">
-          <ButtonUnText
-            icon="fas fa-user-clock"
-            tippyText="Todas las actividades"
-            isTippy={true}
-            onclick={click} />
+    <>
+      <div
+        className={`flex flex-col lg:flex-row bg-white shadow sticky top-14 z-20 pt-5 px-10`}>
+        <div className="flex justify-between order-last w-full pb-5 lg:order-first">
+          <div>
+            <ButtonText disable={UiState.disbleBtnSideBar} icon="fas fa-filter fa-sm" text="Filtrar" onclick={handleSideBar} />
+          </div>
+          <div className="flex">
+            <ButtonUnText
+              disable={UiState.navTab.filterPayActiviies}
+              icon="fas fa-user-clock"
+              tippyText="Todas las actividades"
+              isTippy={true}
+              onclick={click} />
 
-          <ButtonUnText
-            icon="fas fa-sync-alt"
-            tippyText="Actualizar vista Planner"
-            isTippy={true}
-            onclick={click} />
-
-          <Menu
-            direction="bottom"
-            overflow="auto"
-            position="anchor"
-            menuButton={
-              <Tippy
-                offset={[0, 2]}
-                delay={[200, 0]}
-                placement={"bottom"}
-                content={<span>Notificaciones</span>}
-              >
+            <ButtonUnText
+              icon="fas fa-sync-alt"
+              tippyText={UiState.navTab.activeTab ? "Actualizar Actividades" : "Actualizar Planner"}
+              isTippy={true}
+              onclick={UiState.navTab.activeTab ? updateActivityComponents : updatePlannerComponents} />
+            <Menu
+              direction="bottom"
+              overflow="auto"
+              position="anchor"
+              menuButton={
                 <MenuButton className="focus:outline-none active:outline-none">
-                  <i className="p-2 text-gray-700 rounded-full hover:bg-gray-200 fas fa-bell"></i>
+                  <Tippy
+                    offset={[0, 2]}
+                    delay={[200, 0]}
+                    placement={"bottom"}
+                    content={<span>Notificaciones</span>}
+                  >
+                    <i className="p-2 text-gray-700 rounded-full hover:bg-gray-200 fas fa-bell"></i>
+                  </Tippy>
                 </MenuButton>
-              </Tippy>
-            }
-          >
-            <MenuGroup takeOverflow>
-              {/* {notificaciones.length > 0 ? (
-                notificaciones.map((obj, index) => {
-                  return (
-                    <MenuItem key={index}>
-                      <p className="pb-3 text-sm border-b">
-                        <strong>{obj.user_crea_nota.abrev_user}</strong> ha
-                        creado una nota en la Actividad ID:{" "}
-                        <strong>{obj.id_det}</strong>
-                      </p>
-                    </MenuItem>
-                  );
-                })
-              ) : (
-                <MenuItem>
-                  <p>no hay notificaciones</p>
-                </MenuItem>
-              )} */}
-            </MenuGroup>
-            <MenuDivider />
-            <MenuItem>
-              <p className="px-3 hover:text-red-500">Marcar como vistas</p>
-            </MenuItem>
-          </Menu>
-
-          <ButtonUnText
-            icon="fas fa-paint-brush"
-            tippyText="Ajustes de usuario"
-            isTippy={true}
-            onclick={click} />
+              }
+            >
+              <MenuGroup takeOverflow>
+                {ActState.userNotify.length > 0 ? (
+                  ActState.userNotify.map((obj, index) => {
+                    return (
+                      <MenuItem key={index}>
+                        <p className="pb-3 text-sm border-b">
+                          <strong>{obj.user_crea_nota.abrev_user}</strong> ha
+                          creado una nota en la Actividad ID:{" "}
+                          <strong>{obj.id_det}</strong>
+                        </p>
+                      </MenuItem>
+                    );
+                  })
+                ) : (
+                  <MenuItem>
+                    <p>no hay notificaciones</p>
+                  </MenuItem>
+                )}
+              </MenuGroup>
+              <MenuDivider />
+              <MenuItem>
+                <p className="px-3 hover:text-red-500">Marcar como vistas</p>
+              </MenuItem>
+            </Menu>
+            <ButtonUnText
+              icon="fas fa-paint-brush"
+              tippyText="Ajustes de usuario"
+              isTippy={true}
+              onclick={showModalTrue} />
+          </div>
         </div>
-      </div>
-      <div className="flex items-center justify-around order-first pb-5 lg:order-last">
-        <UserTimer />
-        <UserTimer />
-        <UserTimer />
-        <UserTimer />
-        <UserTimer />
-        {/* {tiempos.length > 0
-          ? tiempos.map((obj, index) => {
+        <div className="flex items-center justify-around order-first pb-5 lg:order-last">
+          {ActState.usersTimes.length > 0 ?
+            ActState.usersTimes.map((obj, index) => {
               return (
                 <UserTimer
                   key={index}
                   user={obj.usuario}
                   time={obj.tiempo}
-                  estado={obj.estado}
+                  isPause={obj.estado}
                 />
               );
             })
-          : ""} */}
+            : "no hay"}
+        </div>
       </div>
-    </div>
+
+      {/* modal update todo */}
+
+      <Modal size="regular" active={showModal} toggler={() => showModalFalse()}>
+        <ModalHeader toggler={() => showModalFalse()}>
+          Colores prioridades ToDo
+        </ModalHeader>
+        <ModalBody>
+          <label className="text-sm text-gray-500">Colores actuales:</label>
+          {
+            ActState.userData.usuario !== undefined && (
+              <div className="flex justify-between mt-2 mb-5 w-430">
+                <PColor userColor={ActState.userData.usuario.color_prioridad_baja} text="Prioridad baja" />
+                <PColor userColor={ActState.userData.usuario.color_prioridad_media} text="Prioridad media" />
+                <PColor userColor={ActState.userData.usuario.color_prioridad_alta} text="Prioridad alta" />
+              </div>
+            )
+          }
+          <div className="mb-5">
+            <label className="text-sm text-gray-500">
+              Prioridad:
+            </label>
+            <Select
+              className="mt-2"
+              options={selectArray}
+              value={priority}
+              onChange={onChangeSelect}
+            />
+          </div>
+          <div>
+            <label className="text-sm text-gray-500">
+              Seleccione un color:
+            </label>
+            <div className="mt-2">
+              {colorArray.map((obj) => {
+                return (
+                  <ButtonColor
+                    key={obj.id}
+                    color={obj.colorButton}
+                    setColor={handleSelecColor}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            buttonType="link"
+            size="sm"
+            rounded={true}
+            color="blue"
+            onClick={() => handleUpdateColorPriority()}
+            ripple="light"
+          >
+            Establecer
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </>
   )
 }
 

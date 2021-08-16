@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Providers, LocalizationHelper } from '@microsoft/mgt-element';
 import { Msal2Provider } from '@microsoft/mgt-msal2-provider';
+import ActivityProvider from './context/ActivityContext'
+import GraphProvider from './context/GraphContext'
+import UiProvider from './context/UiContext'
 import App from './App';
 import './index.css';
 import './style.css'
@@ -34,7 +37,13 @@ LocalizationHelper.strings = {
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <UiProvider>
+      <GraphProvider>
+        <ActivityProvider>
+          <App />
+        </ActivityProvider>
+      </GraphProvider>
+    </UiProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

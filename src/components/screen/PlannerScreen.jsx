@@ -8,10 +8,11 @@ import SideMenu from '../ui/sidemenu/SideMenu'
 
 function PlannerScreen() {
   const [isSigendIn] = useIsSignedIn()
-  const { states: UiStates } = useContext(UiContext)
+  const { states: UiStates, functions: UiFunc } = useContext(UiContext)
   const { functions: GraphFunc } = useContext(GraphContext)
 
   useEffect(() => {
+    UiFunc.setIsLoading(true)
     GraphFunc.getPlannerTask()
     GraphFunc.getTodoList()
   }, [isSigendIn])
