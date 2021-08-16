@@ -1,7 +1,7 @@
 import React from 'react'
 import Tippy from '@tippyjs/react'
 
-function ButtonUnText({ icon, tippyText = '', isTippy = false, onclick }) {
+function ButtonUnText({ icon, tippyText = '', isTippy = false, onclick, color }) {
 
   const handleClick = () => {
     onclick()
@@ -16,12 +16,12 @@ function ButtonUnText({ icon, tippyText = '', isTippy = false, onclick }) {
       content={<span>{tippyText}</span>}
     >
       <button
-        className={`focus:outline-none active:outline-none`}
+        className="focus:outline-none active:outline-none"
         onClick={() => {
           handleClick();
         }}
       >
-        <i className={`p-2 text-gray-700 rounded-full hover:bg-gray-200 ${icon}`}></i>
+        <i className={`p-2 text-gray-700 rounded-full hover:bg-gray-200 ${icon} ${color}`}></i>
       </button>
     </Tippy>
   )

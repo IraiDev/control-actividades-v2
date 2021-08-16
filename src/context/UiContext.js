@@ -1,17 +1,15 @@
 import React, { createContext, useState } from 'react'
-import useChangeTab from '../hooks/useChangeTab'
+import useTab from '../hooks/useTab'
 import useToggle from '../hooks/useToggle'
 
 export const UiContext = createContext()
 
 function UiProvider({ children }) {
-  const [isViewChanged, setViewTrue, setViewFalse] = useChangeTab()
-  const [isTodoOrPlanner, setviewTodo, setViewPlanner] = useChangeTab()
+  const [isViewChanged, setViewTrue, setViewFalse] = useTab()
+  const [isTodoOrPlanner, setviewTodo, setViewPlanner] = useTab()
   const [toggleSideBar, setToggleSideBar] = useToggle();
-  const [tab, setTab] = useState({
-    planner: 'text-blue-600 font-bold',
-    acivities: ''
-  })
+  const [isLoading, setIsLoading] = useState(false)
+  const [tab, setTab] = useState({ planner: 'text-blue-600 font-bold', acivities: '' })
 
   const activityView = () => {
     setViewTrue()
@@ -27,6 +25,7 @@ function UiProvider({ children }) {
       acivities: '',
       planner: 'text-blue-600 font-bold'
     })
+    setIsLoading(true)
   }
 
   const value = {
@@ -35,13 +34,15 @@ function UiProvider({ children }) {
       tab,
       isTodoOrPlanner,
       toggleSideBar,
+      isLoading,
     },
     functions: {
       activityView,
       plannerView,
       setViewPlanner,
       setviewTodo,
-      setToggleSideBar
+      setToggleSideBar,
+      setIsLoading
     }
   }
   return (

@@ -19,12 +19,14 @@ function SideMenu() {
   const [showModal, setShowModal] = useState(false)
 
   const handleClickTodo = (idList) => {
+    UiFunc.setIsLoading(true)
     UiFunc.setviewTodo()
     GraphFunc.getTodoTask(idList)
     GraphFunc.setIdListSelected(idList)
   }
 
   const handleClickPlanner = () => {
+    UiFunc.setIsLoading(true)
     UiFunc.setViewPlanner()
     GraphFunc.getPlannerTask()
   }

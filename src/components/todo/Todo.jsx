@@ -14,6 +14,10 @@ import "@material-tailwind/react/tailwind.css"
 import ButtonText from '../ui/buttons/ButtonText'
 import PResp from '../ui/text/PResp'
 
+const buttonStyle = 'text-blue-500 border-2 border-blue-500 font-semibold bg-white'
+const buttonStyleHover = 'hover:bg-blue-500 hover:text-white transition duration-300'
+const buttonAddToDo = `${buttonStyle} ${buttonStyleHover}`
+
 function Todo() {
   const [{ input, textArea }, onChangeValues, reset] = useForm({ input: '', textArea: '' })
   const { states: GraphState, functions: GraphFunc } = useContext(GraphContext)
@@ -46,11 +50,11 @@ function Todo() {
 
   return (
     <>
-      <div className="flex justify-end">
+      <div className="flex justify-end mb-5">
         <ButtonText
           isIcon={false}
           text="Agregar ToDo"
-          color="text-blue-500 font-semibold"
+          color={buttonAddToDo}
           onclick={showModalTrue}
         />
       </div>

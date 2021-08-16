@@ -1,7 +1,6 @@
 import React from 'react'
 import HomeScreen from './components/screen/HomeScreen'
 import LoginScreen from './components/screen/LoginScreen'
-import Loading from './components/ui/loading/Loading'
 import ActivityProvider from './context/ActivityContext'
 import GraphProvider from './context/GraphContext'
 import UiProvider from './context/UiContext'
@@ -14,7 +13,6 @@ function App() {
     <UiProvider>
       <GraphProvider>
         <ActivityProvider>
-          <Loading />
           {
             isSigendIn ? <HomeScreen /> : <LoginScreen />
           }

@@ -10,6 +10,7 @@ import Button from "@material-tailwind/react/Button"
 import Input from "@material-tailwind/react/Input"
 import Textarea from "@material-tailwind/react/Textarea"
 import "@material-tailwind/react/tailwind.css"
+import ButtonUnText from '../ui/buttons/ButtonUnText'
 
 function TodoCard({ idTodo, title, desc }) {
   const [{ input, textArea }, onChangeValues, reset] = useForm({ input: title, textArea: desc })
@@ -48,6 +49,11 @@ function TodoCard({ idTodo, title, desc }) {
     reset()
   }
 
+  const showModalTrue = () => {
+    setShowModal(true)
+    reset()
+  }
+
   return (
     <>
       <div className="col-span-12 p-4 bg-white rounded-md shadow-md lg:col-span-6 xl:col-span-4 2xl:col-span-3">
@@ -60,22 +66,15 @@ function TodoCard({ idTodo, title, desc }) {
         </div>
         <hr />
         <div className="flex justify-end pt-2 text-gray-700">
-          <button
-            className="focus:outline-none active:outline-none"
-            onClick={() => {
-              setShowModal(true)
-            }}
-          >
-            <i className="fas fa-pen"></i>
-          </button>
-          <button
-            className="ml-3 focus:outline-none active:outline-none"
-            onClick={() => {
-              handleDelete()
-            }}
-          >
-            <i className="fas fa-trash"></i>
-          </button>
+          <ButtonUnText
+            icon="fas fa-pen"
+            color="hover:text-blue-500 transition duration-500"
+            onclick={showModalTrue} />
+
+          <ButtonUnText
+            icon="fas fa-trash"
+            color="hover:text-red-500 transition duration-500"
+            onclick={handleDelete} />
         </div>
       </div>
 
