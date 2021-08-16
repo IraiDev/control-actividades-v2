@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { GraphContext } from '../../context/GraphContext'
 import { alertQuest, alertTimer } from '../../helpers/alerts'
+import { useForm } from '../../hooks/useForm'
 import Modal from "@material-tailwind/react/Modal"
 import ModalHeader from "@material-tailwind/react/ModalHeader"
 import ModalBody from "@material-tailwind/react/ModalBody"
@@ -9,10 +10,9 @@ import Button from "@material-tailwind/react/Button"
 import Input from "@material-tailwind/react/Input"
 import Textarea from "@material-tailwind/react/Textarea"
 import "@material-tailwind/react/tailwind.css"
-import { useForm } from '../../hooks/useForm'
 
 function TodoCard({ idTodo, title, desc }) {
-  const [{ input, textArea }, onChangeValues, reset] = useForm({ input: '', textArea: '' })
+  const [{ input, textArea }, onChangeValues, reset] = useForm({ input: title, textArea: desc })
   const { functions: GraphFunc, states: GraphState } = useContext(GraphContext)
   const [showModal, setShowModal] = useState(false)
 
@@ -81,7 +81,7 @@ function TodoCard({ idTodo, title, desc }) {
 
       {/* modal update todo */}
 
-      <Modal size="sm" active={showModal} toggler={() => showModalFalse()}>
+      <Modal size="regular" active={showModal} toggler={() => showModalFalse()}>
         <ModalHeader toggler={() => showModalFalse()}>
           Editar ToDo
         </ModalHeader>
@@ -93,7 +93,7 @@ function TodoCard({ idTodo, title, desc }) {
             onChange={onChangeValues}
             type="text"
             color="blue"
-            size="sm"
+            size="regular"
             outline={false}
             placeholder="Titulo..."
           />
@@ -103,7 +103,7 @@ function TodoCard({ idTodo, title, desc }) {
             name="textArea"
             onChange={onChangeValues}
             color="blue"
-            size="sm"
+            size="regular"
             outline={true}
             placeholder="Descripcion..."
           />

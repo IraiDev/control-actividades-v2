@@ -118,7 +118,7 @@ function SideMenu() {
             onChange={onChangeValues}
             type="text"
             color="blue"
-            size="sm"
+            size="regular"
             outline={false}
             placeholder="Titulo..."
           />

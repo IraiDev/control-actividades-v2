@@ -11,6 +11,8 @@ import Button from "@material-tailwind/react/Button"
 import Input from "@material-tailwind/react/Input"
 import Textarea from "@material-tailwind/react/Textarea"
 import "@material-tailwind/react/tailwind.css"
+import ButtonText from '../ui/buttons/ButtonText'
+import PResp from '../ui/text/PResp'
 
 function Todo() {
   const [{ input, textArea }, onChangeValues, reset] = useForm({ input: '', textArea: '' })
@@ -38,34 +40,41 @@ function Todo() {
     reset()
   }
 
+  const showModalTrue = () => {
+    setShowModal(true)
+  }
+
   return (
     <>
       <div className="flex justify-end">
-        <button
-          className="px-2 pt-1 pb-2 font-semibold text-blue-500 hover:text-green-600 active:outline-none focus:outline-none"
-          onClick={() => { setShowModal(true) }}
-        >
-          Agregar ToDo...
-        </button>
+        <ButtonText
+          isIcon={false}
+          text="Agregar ToDo"
+          color="text-blue-500 font-semibold"
+          onclick={showModalTrue}
+        />
       </div>
       <div className="grid grid-cols-12 gap-3">
         {
-          GraphState.todoTask.map(obj => {
-            return (
-              <TodoCard
-                key={obj.id}
-                title={obj.title}
-                desc={obj.body.content}
-                idTodo={obj.id}
-              />
-            )
-          })
+          GraphState.todoTask.length > 0 ?
+            (
+              GraphState.todoTask.map(obj => {
+                return (
+                  <TodoCard
+                    key={obj.id}
+                    title={obj.title}
+                    desc={obj.body.content}
+                    idTodo={obj.id}
+                  />
+                )
+              })
+            ) : (<PResp />)
         }
       </div>
 
       {/* modal create todo */}
 
-      <Modal size="sm" active={showModal} toggler={() => showModalFalse()}>
+      <Modal size="regular" active={showModal} toggler={() => showModalFalse()}>
         <ModalHeader toggler={() => showModalFalse()}>
           Crear ToDo
         </ModalHeader>
@@ -77,7 +86,7 @@ function Todo() {
             onChange={onChangeValues}
             type="text"
             color="blue"
-            size="sm"
+            size="regular"
             outline={false}
             placeholder="Titulo..."
           />
@@ -87,7 +96,7 @@ function Todo() {
             name="textArea"
             onChange={onChangeValues}
             color="blue"
-            size="sm"
+            size="regular"
             outline={true}
             placeholder="Descripcion..."
           />

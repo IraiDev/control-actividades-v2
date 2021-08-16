@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { GraphContext } from '../../context/GraphContext'
+import PResp from '../ui/text/PResp'
 import PlannerCard from './PlannerCard'
 
 function Planner() {
@@ -17,8 +18,7 @@ function Planner() {
                 assignments={obj.assignments}
                 idPlan={obj.planId} />)
           })
-          :
-          ("no hay tareas")
+          : (<PResp />)
       }
     </>
   )

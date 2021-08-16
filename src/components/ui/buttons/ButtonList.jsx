@@ -10,8 +10,8 @@ import Button from "@material-tailwind/react/Button"
 import Input from "@material-tailwind/react/Input"
 import "@material-tailwind/react/tailwind.css"
 
-function ButtonList({ idList, title, icon = 'mr-4 fas fa-bars', actions = true, onclick, updateList, deletelist }) {
-  const [{ input }, onChangeValues, reset] = useForm({ input: '' })
+function ButtonList({ idList, title, icon = 'mr-4 fas fa-bars', actions = true, onclick }) {
+  const [{ input }, onChangeValues, reset] = useForm({ input: title })
   const { functions: GraphFunc } = useContext(GraphContext)
   const [showModal, setShowModal] = useState(false)
 
@@ -104,7 +104,7 @@ function ButtonList({ idList, title, icon = 'mr-4 fas fa-bars', actions = true, 
             onChange={onChangeValues}
             type="text"
             color="blue"
-            size="sm"
+            size="regular"
             outline={false}
             placeholder="Titulo..."
           />

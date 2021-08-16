@@ -1,6 +1,6 @@
 import React from 'react'
 
-function ButtonText({ icon = 'text-gray-700', text, color = 'hover:bg-gray-100', onclick }) {
+function ButtonText({ isIcon = true, icon = 'text-gray-700', text, color = 'hover:bg-gray-100', onclick }) {
 
   const handleClick = () => {
     onclick()
@@ -8,13 +8,15 @@ function ButtonText({ icon = 'text-gray-700', text, color = 'hover:bg-gray-100',
 
   return (
     <button
-      className={`${color} rounded-lg shadow-md py-1 px-3 border border-gray-200 focus:outline-none active:outline-none`}
+      className={`${color} rounded-full hover:shadow-lg shadow-md py-1 px-4  focus:outline-none active:outline-none`}
       onClick={() => {
         handleClick();
       }}
     >
       {text}
-      <i className={`ml-2 ${icon}`}></i>
+      {
+        isIcon && <i className={`ml-2 ${icon}`}></i>
+      }
     </button>
   )
 }
