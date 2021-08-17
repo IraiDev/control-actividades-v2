@@ -8,6 +8,7 @@ function ActivityProvider({ children }) {
   const [userData, setUserData] = useState({})
   const [usersTimes, setUsersTimes] = useState([])
   const [userNotify, setUserNotify] = useState([])
+  const [activitiesRA, setActivitiesRA] = useState([])
 
   // Login y logout  functions
   const login = async (email) => {
@@ -30,7 +31,6 @@ function ActivityProvider({ children }) {
   const logout = () => {
     localStorage.removeItem('tokenBackend')
   }
-  // Login y logout  functions: fin
 
   // obtener tiempos de los usuarios en play (detenciones en RA)
   const getTimes = async () => {
@@ -55,19 +55,30 @@ function ActivityProvider({ children }) {
     }
   }
 
-
+  const getActivities = async (filters) => {
+    try {
+      const resp = await fetchToken(`task/get-task-ra?${filters}`)
+      const body = await resp.json()
+      body.ok ? setActivitiesRA(body.tareas) :
+        normalAlert('warning', 'Error al cargar las activiades del RA', 'Entiendo...')
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const value = {
     states: {
       userData,
       usersTimes,
       userNotify,
+      activitiesRA,
     },
     functions: {
       login,
       logout,
       getTimes,
       getNotify,
+      getActivities,
     }
   }
   return (

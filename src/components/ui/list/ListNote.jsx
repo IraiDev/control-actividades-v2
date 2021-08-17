@@ -21,7 +21,6 @@ function ListNote({ desc, date, dateColor, user }) {
     case "13.116.052-6":
       name = "CA"
       break;
-
     default: name = 'NN'
       break;
   }
