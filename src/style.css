@@ -74,6 +74,10 @@ input[type="number"]::-webkit-outer-spin-button {
   width: 430px;
 }
 
+.w-600{
+  min-width: 430px;
+}
+
 @media (min-height: 1080px) {
   .h-700{
     min-height: 820px;

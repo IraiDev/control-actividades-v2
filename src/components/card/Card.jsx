@@ -1,12 +1,22 @@
 
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { ActivityContext } from '../../context/ActivityContext';
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
+import { useForm } from '../../hooks/useForm';
 import ListNote from '../ui/list/ListNote';
 import Ptext from '../ui/text/Ptext';
+import Modal from "@material-tailwind/react/Modal"
+import ModalHeader from "@material-tailwind/react/ModalHeader"
+import ModalBody from "@material-tailwind/react/ModalBody"
+import ModalFooter from "@material-tailwind/react/ModalFooter"
+import Button from "@material-tailwind/react/Button"
+import Textarea from "@material-tailwind/react/Textarea"
+import "@material-tailwind/react/tailwind.css"
+import PDefaultNotes from '../ui/text/PDefaultNotes';
+import { alertTimer } from '../../helpers/alerts';
 
 let dateColor, textColor, lineColor, bgColor, actPriority, actPlay, isActPlay
-let ArrayNotes = []
+let initialState = { inputEdit: '', inputAdd: '' }
 
 function Card(props) {
   const {
@@ -24,7 +34,11 @@ function Card(props) {
     prioridadRA,
     notas
   } = props;
-  const { states: ActState } = useContext(ActivityContext)
+  const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
+  const [{ inputEdit, inputAdd }, onChangeValues, reset] = useForm(initialState)
+  const [showModal, setShowModal] = useState(false)
+  const [updateOrAdd, setUpdateOrAdd] = useState(false)
+  const [noteActive, setNoteActive] = useState({ idNote: null, description: '' })
 
   switch (prioridad) {
     case 600:
@@ -67,157 +81,304 @@ function Card(props) {
     }
   }
 
-  console.log(notas)
+  // funciones controladoras de eventos
+  const handleUpdatePriority = (id, priority) => {
+    let data = { prioridad_numero: priority, id_actividad: id, }
+    ActFunc.updatePriority(data)
+  }
+
+  const handleAddNewNote = () => {
+    const data = { id_actividad: id, description: inputAdd }
+    const action = () => {
+      ActFunc.addNewNote(data)
+      showModalFalse()
+    }
+    let state = inputAdd !== ''
+    alertTimer(state, 'info', 1500, 'No puedes agregar una nota vacia') && action()
+  }
+
+  const handleUpdateNote = () => {
+    const dataUpdate = { id_nota: noteActive.idNote, description: inputEdit }
+    const actionUpdate = () => {
+      ActFunc.updateNote(dataUpdate)
+      showModalFalse()
+    }
+    const dataAdd = { id_actividad: id, description: inputEdit }
+    const actionAdd = () => {
+      ActFunc.addNewNote(dataAdd)
+      showModalFalse()
+    }
+    if (noteActive.idNote !== null) {
+      let state = inputEdit !== ''
+      alertTimer(state, 'info', 1500, 'LLena el campo nota para actualizar') && actionUpdate()
+    } else {
+      let state = inputEdit !== ''
+      alertTimer(state, 'info', 1500, 'No puedes agregar una nota vacia') && actionAdd()
+    }
+  }
+
+  const showModalUpdateNote = () => {
+    setShowModal(true)
+    setUpdateOrAdd(false)
+  }
+
+  const showModalAddNote = () => {
+    setShowModal(true)
+    setUpdateOrAdd(true)
+  }
+
+  const showModalFalse = () => {
+    initialState.inputEdit = ''
+    setNoteActive({ idNote: null, description: '' })
+    setShowModal(false)
+    reset()
+  }
+
+  const handleGetidNote = (idNote, description) => {
+    reset()
+    setNoteActive({ idNote, description })
+    initialState.inputEdit = description
+  }
 
   return (
-    <div className={`rounded p-4 shadow-md text-sm ${bgColor} ${textColor} ${actPlay}`}>
-      <div className="flex items-center justify-between pb-2 text-base">
-        <Ptext tag={"Actividad"} value={actividad} font="font-bold" />
-        {isActPlay && (<i className="fas fa-user-clock"></i>)}
-      </div>
-      <div className={`grid grid-cols-12 mb-2 h-48 border-b pb-3 gap-2 ${lineColor}`}>
-        <div className="col-span-3 md:col-span-2 lg:col-span-3 2xl:col-span-2">
-          <Ptext
-            tag="Encar"
-            value={encargado}
-            font="font-bold"
-            isTippy={true}
-            textTippy="Encargado"
-          />
-          <Ptext
-            tag="Proy"
-            value={proyecto}
-            font="font-bold"
-            isTippy={true}
-            textTippy="Proyecto"
-          />
-          <Ptext
-            tag="Sub Proy"
-            value={subProyecto}
-            isTippy={true}
-            textTippy="Sub Proyecto"
-          />
-          <Ptext
-            tag="Soli"
-            value={solicitante}
-            isTippy={true}
-            textTippy="Solicitante"
-          />
-          <Ptext
-            tag="Est"
-            value={estado === 1 ? "Pendiente" : estado === 2 ? "En trabajo" : ""}
-            isTippy={true}
-            textTippy="Estado"
-          />
-          <Ptext tag="Ticket" value={ticket} />
-          <Ptext tag="ID" value={id} />
+    <>
+      <div className={`rounded p-4 shadow-md text-sm ${bgColor} ${textColor} ${actPlay}`}>
+        <div className="flex items-center justify-between pb-2 text-base">
+          <Ptext tag={"Actividad"} value={actividad} font="font-bold" />
+          {isActPlay && (<i className="fas fa-user-clock"></i>)}
         </div>
-        <div className="col-span-4 2xl:col-span-5">
-          <Ptext tag="Descripcion" />
-          <div className="h-48 scroll-row">
-            <p className="px-2 font-semibold leading-tight">{desc}</p>
+        <div className={`grid grid-cols-12 mb-2 h-48 border-b pb-3 gap-2 ${lineColor}`}>
+          <div className="col-span-3 md:col-span-2 lg:col-span-3 2xl:col-span-2">
+            <Ptext
+              tag="Encar"
+              value={encargado}
+              font="font-bold"
+              isTippy={true}
+              textTippy="Encargado"
+            />
+            <Ptext
+              tag="Proy"
+              value={proyecto}
+              font="font-bold"
+              isTippy={true}
+              textTippy="Proyecto"
+            />
+            <Ptext
+              tag="Sub Proy"
+              value={subProyecto}
+              isTippy={true}
+              textTippy="Sub Proyecto"
+            />
+            <Ptext
+              tag="Soli"
+              value={solicitante}
+              isTippy={true}
+              textTippy="Solicitante"
+            />
+            <Ptext
+              tag="Est"
+              value={estado === 1 ? "Pendiente" : estado === 2 ? "En trabajo" : ""}
+              isTippy={true}
+              textTippy="Estado"
+            />
+            <Ptext tag="Ticket" value={ticket} />
+            <Ptext tag="ID" value={id} />
+          </div>
+          <div className="col-span-4 2xl:col-span-5">
+            <Ptext tag="Descripcion" />
+            <div className="h-48 scroll-row">
+              <p className="px-2 font-semibold leading-tight">{desc}</p>
+            </div>
+          </div>
+          <div className="col-span-5">
+            <Ptext tag="Informes Diarios (notas)" />
+            <div className="scroll-row">
+              <ul className="mt-1">
+                {
+                  notas.map(obj => {
+                    if (id === obj.id_det) {
+                      return (
+                        <ListNote
+                          key={obj.id_nota}
+                          desc={obj.desc_nota}
+                          date={obj.fecha_hora_crea}
+                          user={obj.user_crea}
+                          dateColor={dateColor}
+                        />
+                      )
+                    } else {
+                      return ''
+                    }
+                  }).reverse()
+                }
+              </ul>
+            </div>
           </div>
         </div>
-        <div className="col-span-5">
-          <Ptext tag="Informes Diarios (notas)" />
-          <div className="scroll-row">
-            <ul className="mt-1">
-              {
-                notas.map(obj => {
-                  if (id === obj.id_det) {
-                    return (
-                      <ListNote
-                        key={obj.id_nota}
-                        desc={obj.desc_nota}
-                        date={obj.fecha_hora_crea}
-                        user={obj.user_crea}
-                        dateColor={dateColor}
-                      />
-                    )
-                  } else {
-                    return ''
-                  }
-                }).reverse()
+        <div className="flex justify-between mt-2">
+          <Ptext
+            tag="Prioridad"
+            value={actPriority}
+            font="font-bold"
+            isPriority={true}
+            priority={prioridadRA} />
+          <div>
+            <Menu
+              direction="left"
+              menuButton={
+                <MenuButton className="focus:outline-none active:outline-none">
+                  <i className="mx-2 fas fa-ellipsis-v"></i>
+                </MenuButton>
               }
-            </ul>
+            >
+              <MenuItem
+                className="font-medium text-left"
+                onClick={() => {
+                  showModalAddNote();
+                }}
+              >
+                Agregar Nota
+              </MenuItem>
+              <MenuItem
+                className="font-medium text-left"
+                onClick={() => {
+                  showModalUpdateNote();
+                }}
+              >
+                Editar/Agregar Nota
+              </MenuItem>
+              <MenuItem
+                className="flex justify-between"
+                onClick={() => {
+                  handleUpdatePriority(id, 100);
+                }}
+              >
+                <p className="font-medium">Prioridad Alta</p>
+                <p
+                  className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_alta} rounded-full focus:outline-none active:outline-none`}
+                ></p>
+              </MenuItem>
+              <MenuItem
+                className="flex justify-between"
+                onClick={() => {
+                  handleUpdatePriority(id, 400);
+                }}
+              >
+                <p className="font-medium">Prioridad Media</p>
+                <p
+                  className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_media} rounded-full focus:outline-none active:outline-none`}
+                ></p>
+              </MenuItem>
+              <MenuItem
+                className="flex justify-between"
+                onClick={() => {
+                  handleUpdatePriority(id, 600);
+                }}
+              >
+                <p className="font-medium">Prioridad Baja</p>
+                <p
+                  className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_baja} rounded-full focus:outline-none active:outline-none`}
+                ></p>
+              </MenuItem>
+              <MenuItem
+                className="flex justify-between"
+                onClick={() => {
+                  handleUpdatePriority(id, 1000);
+                }}
+              >
+                <p className="font-medium">Sin Prioridad</p>
+                <p
+                  className={`p-2 ml-3 bg-gray-200 rounded-full focus:outline-none active:outline-none`}
+                ></p>
+              </MenuItem>
+            </Menu>
           </div>
         </div>
       </div>
-      <div className="flex justify-between mt-2">
-        <Ptext tag="Prioridad" value={actPriority} font="font-bold" prioridad={prioridadRA} />
-        <div>
-          <Menu
-            direction="left"
-            menuButton={
-              <MenuButton className="focus:outline-none active:outline-none">
-                <i className="mx-2 fas fa-ellipsis-v"></i>
-              </MenuButton>
-            }
+
+      {/* modal update todo */}
+
+      <Modal size="regular" active={showModal} toggler={() => showModalFalse()}>
+        <ModalHeader toggler={() => showModalFalse()}>
+          {
+            updateOrAdd ? 'Agregar nueva nota' : 'Editar Nota'
+          }
+        </ModalHeader>
+        <ModalBody>
+          {
+            updateOrAdd ?
+              (<div className="w-430">
+                <label className="text-xs">Mensajes predeterminados:</label>
+                <div className="py-3 pl-3 pr-1 mx-auto mt-1 mb-5 bg-gray-100 rounded-md">
+                  <PDefaultNotes idAct={id} noteText="Inicializar actividad urgente" onclick={showModalFalse} updatePriority={true} />
+                  <PDefaultNotes idAct={id} noteText="esperando respuesta de cliente" onclick={showModalFalse} />
+                  <PDefaultNotes idAct={id} noteText="esperando actividad.." onclick={showModalFalse} />
+                  <PDefaultNotes idAct={id} noteText="trabajando..." onclick={showModalFalse} />
+                  <PDefaultNotes idAct={id} noteText="sin avance" onclick={showModalFalse} />
+                  <PDefaultNotes idAct={id} noteText="en cola" onclick={showModalFalse} isSeparator={false} />
+                </div>
+                <Textarea
+                  value={inputAdd}
+                  name="inputAdd"
+                  onChange={onChangeValues}
+                  color="blue"
+                  size="regular"
+                  outline={true}
+                  placeholder="Nota"
+                />
+              </div>) :
+              (<div className="w-600">
+                <label className="mb-2 text-xs">Notas:</label>
+                <ul className="min-h-80 scroll-row">
+                  {
+                    notas.map(obj => {
+                      if (id === obj.id_det) {
+                        return (
+                          <ListNote
+                            isModal={true}
+                            key={obj.id_nota}
+                            idNote={obj.id_nota}
+                            desc={obj.desc_nota}
+                            date={obj.fecha_hora_crea}
+                            user={obj.user_crea}
+                            dateColor={dateColor}
+                            onclick={handleGetidNote}
+                            activeColor={noteActive.idNote === obj.id_nota ? 'text-green-600' : 'text-gray-500'}
+                          />
+                        )
+                      } else {
+                        return 'No hay notas...'
+                      }
+                    }).reverse()
+                  }
+                </ul>
+                <br />
+                <Textarea
+                  value={inputEdit}
+                  name="inputEdit"
+                  onChange={onChangeValues}
+                  color="blue"
+                  size="regular"
+                  outline={true}
+                  placeholder="Nota"
+                />
+              </div>)
+          }
+        </ModalBody>
+        <ModalFooter>s
+          <Button
+            buttonType="link"
+            size="sm"
+            rounded={true}
+            color="blue"
+            onClick={updateOrAdd ? () => handleAddNewNote() : () => handleUpdateNote()}
+            ripple="light"
           >
-            <MenuItem
-              className="font-medium text-left"
-            // onClick={() => {
-            //   handleOpenModalAdd();
-            // }}
-            >
-              Agregar Nota
-            </MenuItem>
-            <MenuItem
-              className="font-medium text-left"
-            // onClick={() => {
-            //   handleOpenModalEdit();
-            // }}
-            >
-              Editar/Agregar Nota
-            </MenuItem>
-            <MenuItem
-              className="flex justify-between"
-            // onClick={() => {
-            //   handleClick(id, 100);
-            // }}
-            >
-              <p className="font-medium">Prioridad Alta</p>
-              <p
-                className={`p-2 ml-3 ${"user.color_prioridad_alta"} rounded-full focus:outline-none active:outline-none`}
-              ></p>
-            </MenuItem>
-            <MenuItem
-              className="flex justify-between"
-            // onClick={() => {
-            //   handleClick(id, 400);
-            // }}
-            >
-              <p className="font-medium">Prioridad Media</p>
-              <p
-                className={`p-2 ml-3 ${"user.color_prioridad_media"} rounded-full focus:outline-none active:outline-none`}
-              ></p>
-            </MenuItem>
-            <MenuItem
-              className="flex justify-between"
-            // onClick={() => {
-            //   handleClick(id, 600);
-            // }}
-            >
-              <p className="font-medium">Prioridad Baja</p>
-              <p
-                className={`p-2 ml-3 ${"user.color_prioridad_baja"} rounded-full focus:outline-none active:outline-none`}
-              ></p>
-            </MenuItem>
-            <MenuItem
-              className="flex justify-between"
-            // onClick={() => {
-            //   handleClick(id, 1000);
-            // }}
-            >
-              <p className="font-medium">Sin Prioridad</p>
-              <p
-                className={`p-2 ml-3 bg-gray-200 rounded-full focus:outline-none active:outline-none`}
-              ></p>
-            </MenuItem>
-          </Menu>
-        </div>
-      </div>
-    </div>
+            {noteActive.idNote !== null ? (updateOrAdd ? 'Agregar' : 'Editar') : 'Agregar'}
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </>
   )
 }
 
