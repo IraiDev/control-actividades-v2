@@ -1,7 +1,7 @@
 import React from 'react'
 import ButtonOrderFilter from '../buttons/ButtonOrderFilter'
 
-function InputFilter({ label, placeholder, name, onchange, type, value, orderPrioridad, bgColor, onclick }) {
+function InputFilter({ label, placeholder = 'Escriba aqui...', name, onchange, type, value, orderPrioridad, bgColor, onclick }) {
   return (
     <div className="flex items-center justify-between p-2 mb-2 bg-gray-100 rounded-md">
       <div>

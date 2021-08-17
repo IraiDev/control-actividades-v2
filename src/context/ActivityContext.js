@@ -4,6 +4,13 @@ import { fetchToken } from '../helpers/fetch'
 
 export const ActivityContext = createContext()
 
+let arrayState = []
+let arrayPriority = []
+let arrayProject = []
+let arraySubProject = []
+let arrayUsersE = []
+let arrayUsersS = []
+
 function ActivityProvider({ children }) {
   const [userData, setUserData] = useState({})
   const [usersTimes, setUsersTimes] = useState([])
@@ -53,6 +60,65 @@ function ActivityProvider({ children }) {
     }
   }
 
+  const getFilters = async () => {
+    const resp = await fetchToken('task/get-filters')
+    const body = await resp.json()
+    if (body.ok) {
+
+      arrayState = body.estados.map(item => {
+        return {
+          label: item.desc_estado,
+          value: item.id_estado,
+          name: 'estado',
+        }
+      })
+
+      arrayPriority = body.prioridades.map(item => {
+        return {
+          label: item.nombre,
+          value: item.color,
+          name: 'color',
+        }
+      })
+
+      arrayProject = body.proyectos.map(item => {
+        return {
+          label: item.abrev,
+          value: item.id_proy,
+          name: 'proyecto',
+          id: item.id_proy
+        }
+      })
+
+      arraySubProject = body.subproyectos.map(item => {
+        return {
+          label: item.nombre_sub_proy,
+          value: item.id_sub_proyecto,
+          name: 'sub_proyecto',
+          id: item.id_proyecto
+        }
+      })
+
+      arrayUsersE = body.usuarios.map(item => {
+        return {
+          label: item.abrev_user,
+          value: item.abrev_user,
+          name: 'encargado',
+        }
+      })
+
+      arrayUsersS = body.usuarios.map(item => {
+        return {
+          label: item.abrev_user,
+          value: item.abrev_user,
+          name: 'solicitante',
+        }
+      })
+    } else {
+      normalAlert('warning', 'Error al obtener los filtros', 'Entiendo...')
+    }
+  }
+
   const getActivities = async (filters) => {
     try {
       const resp = await fetchToken(`task/get-task-ra?${filters}`)
@@ -99,14 +165,6 @@ function ActivityProvider({ children }) {
       normalAlert('warning', 'Error al eliminar la nota', 'Entiendo...')
   }
 
-  const getFilters = async () => {
-    const resp = await fetchToken('task/get-filters')
-    const body = await resp.json()
-    if (body.ok) {
-      console.log(body)
-    }
-  }
-
   const addTaskToRA = async (data) => {
     const resp = await fetchToken('task/add-task-todo', data, 'POST')
     const body = await resp.json()
@@ -128,6 +186,12 @@ function ActivityProvider({ children }) {
       usersTimes,
       userNotify,
       activitiesRA,
+      arrayUsersE,
+      arrayUsersS,
+      arraySubProject,
+      arrayProject,
+      arrayPriority,
+      arrayState,
     },
     functions: {
       login,

@@ -1,4 +1,5 @@
 import React, { createContext, useState } from 'react'
+import { clearParams } from '../helpers/auxFunctions'
 import useTab from '../hooks/useTab'
 import useToggle from '../hooks/useToggle'
 
@@ -20,6 +21,14 @@ function UiProvider({ children }) {
   const [isLoading, setIsLoading] = useState(false)
   const [disbleBtnSideBar, setDisbleBtnSideBar] = useState(true)
   const [navTab, setNavTab] = useState(initialState)
+  const [filters, setFilters] = useState('')
+
+  const saveFilters = (param, value) => {
+    let clearing = clearParams(filters, param)
+    let newValue = clearing + value
+    setFilters(newValue)
+    console.log(newValue)
+  }
 
   const activityView = () => {
     setDisbleBtnSideBar(false)
@@ -55,7 +64,8 @@ function UiProvider({ children }) {
       isTodoOrPlanner,
       toggleSideBar,
       isLoading,
-      disbleBtnSideBar
+      disbleBtnSideBar,
+      filters,
     },
     functions: {
       activityView,
@@ -64,6 +74,7 @@ function UiProvider({ children }) {
       setviewTodo,
       setToggleSideBar,
       setIsLoading,
+      saveFilters,
     }
   }
   return (
