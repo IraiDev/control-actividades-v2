@@ -1,10 +1,14 @@
 import React from 'react'
 import Tippy from '@tippyjs/react';
 
-function ButtonOrderFilter({ orderPrioridad, bgColor, onclick }) {
+function ButtonOrderFilter({ orderPriority, bgColor = 'bg-gray-100 rounded-full', orderASC, orderDesc }) {
 
-  const handleClick = () => {
-    onclick()
+  const handleOrderASC = () => {
+    orderASC(orderPriority)
+  }
+
+  const handleOrderDESC = () => {
+    orderDesc(orderPriority)
   }
 
   return (
@@ -17,7 +21,7 @@ function ButtonOrderFilter({ orderPrioridad, bgColor, onclick }) {
       >
         <button
           onClick={() => {
-            handleClick()
+            handleOrderASC()
           }}
           className="px-2 py-1 rounded-full hover:bg-gray-200 focus:outline-none active:outline-none"
         >
@@ -32,7 +36,7 @@ function ButtonOrderFilter({ orderPrioridad, bgColor, onclick }) {
       >
         <button
           onClick={() => {
-            handleClick()
+            handleOrderDESC()
           }}
           className="px-2 py-1 ml-2 rounded-full hover:bg-gray-200 focus:outline-none active:outline-none"
         >

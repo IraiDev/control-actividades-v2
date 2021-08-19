@@ -24,7 +24,7 @@ function ButtonUnText({ disable = false, icon, tippyText = '', isTippy = false, 
                 handleClick();
               }}
             >
-              <i className={`p-2 text-gray-700 rounded-full hover:bg-gray-200 ${icon} ${color}`}></i>
+              <i className={`p-2 text-gray-700 transition duration-500 rounded-full hover:bg-gray-200 ${icon} ${color}`}></i>
             </button>
           </Tippy>
         )

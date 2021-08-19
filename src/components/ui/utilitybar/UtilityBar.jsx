@@ -38,16 +38,16 @@ const selectArray = [
 ]
 
 const initialState = {
-  value: '',
+  value: null,
   label: 'Seleccione una prioridad'
 }
 
 function UtilityBar() {
   const { states: UiState, functions: UiFunc } = useContext(UiContext)
   const { functions: GraphFunc } = useContext(GraphContext)
-  const { states: ActState } = useContext(ActivityContext)
+  const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
   const [priority, setPriority] = useState(initialState)
-  const [colorSelected, setColorSelected] = useState('')
+  const [colorSelected, setColorSelected] = useState(null)
   const [showModal, setShowModal] = useState(false)
 
   const click = () => {
@@ -68,15 +68,13 @@ function UtilityBar() {
   }
 
   const handleUpdateColorPriority = () => {
-    console.log('select: ', priority.value)
-    console.log('color: ', colorSelected)
-    const data = {
-      prioridad_numero: priority.value,
-      prioridad_color: colorSelected,
+    const data = { prioridad_numero: priority.value, prioridad_color: colorSelected }
+    const action = () => {
+      ActFunc.updateUserColors(data)
+      showModalFalse()
     }
-    const action = () => console.log(data)
-    const state = priority.value !== '' && colorSelected !== '' ? true : false
-    alertTimer(state, 'info', 1500, 'Debe seleccionar una prioridad y un color.') ? action() : showModalTrue()
+    const state = (priority.value !== null && colorSelected !== null)
+    alertTimer(state, 'info', 1500, 'Debe seleccionar una prioridad y un color.') && action()
   }
 
   const showModalTrue = () => {
@@ -85,7 +83,7 @@ function UtilityBar() {
 
   const showModalFalse = () => {
     setPriority(initialState)
-    setColorSelected('')
+    setColorSelected(null)
     setShowModal(false)
   }
 
@@ -170,7 +168,7 @@ function UtilityBar() {
           </div>
         </div>
         <div className="flex items-center justify-around order-first pb-5 lg:order-last">
-          {ActState.usersTimes.length > 0 ?
+          {ActState.usersTimes.length > 0 &&
             ActState.usersTimes.map((obj, index) => {
               return (
                 <UserTimer
@@ -180,8 +178,7 @@ function UtilityBar() {
                   isPause={obj.estado}
                 />
               );
-            })
-            : "no hay"}
+            })}
         </div>
       </div>
 
@@ -207,10 +204,11 @@ function UtilityBar() {
               Prioridad:
             </label>
             <Select
+              placeholder="seleccione una opcion"
               className="mt-2"
               options={selectArray}
-              value={priority}
               onChange={onChangeSelect}
+              value={priority}
             />
           </div>
           <div>

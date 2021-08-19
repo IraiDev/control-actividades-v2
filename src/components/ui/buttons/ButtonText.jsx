@@ -1,6 +1,13 @@
 import React from 'react'
 
-function ButtonText({ disable = false, isIcon = true, icon = 'text-gray-700', text, color = 'hover:bg-gray-100', onclick }) {
+function ButtonText(props) {
+  const {
+    disable = false,
+    isIcon = true,
+    icon = 'text-gray-700',
+    text,
+    color = 'hover:bg-gray-100 transition duration-500',
+    onclick } = props
 
   const handleClick = () => {
     onclick()
@@ -11,7 +18,7 @@ function ButtonText({ disable = false, isIcon = true, icon = 'text-gray-700', te
       {
         !disable && (
           <button
-            className={`${color} rounded-full hover:shadow-lg shadow-md py-1 px-4  focus:outline-none active:outline-none`}
+            className={`${color} rounded-full hover:shadow-lg shadow-md py-1 px-4 focus:outline-none active:outline-none`}
             onClick={() => {
               handleClick();
             }}

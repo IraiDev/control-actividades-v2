@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { UiContext } from '../../../context/UiContext'
 import { ActivityContext } from '../../../context/ActivityContext'
 import ButtonText from '../buttons/ButtonText'
@@ -11,27 +11,18 @@ let style = 'bg-white shadow-xl w-430 pt-4 px-8 h-screen animate__animated anima
 function SideBar() {
   const { states: UiState, functions: UiFunc } = useContext(UiContext)
   const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
-  const [subProjectArray, setSubProjectArray] = useState(ActState.arraySubProject)
 
   const handleClick = () => {
     UiFunc.setToggleSideBar()
   }
 
-  const onChangeSelect = (option) => {
-    let filter = option.name + '=' + option.value + '&'
-    UiFunc.saveFilters(option.name, filter)
-    // console.log(option)
+  const handleOrderAsc = (param) => {
+    console.log(param)
   }
 
-  const onChangeSelectPoject = (option) => {
-    UiFunc.saveFilters('sub_proyecto', '')
-    let newSubProjecArray = ActState.arraySubProject.filter(item => option.id === item.id)
-    setSubProjectArray(newSubProjecArray)
-    let filter = option.name + '=' + option.value + '&'
-    UiFunc.saveFilters(option.name, filter)
+  const handleOrderDesc = (param) => {
+    console.log(param)
   }
-
-  // console.log(ActState.arraySubProject)
 
   return (
     <div
@@ -50,38 +41,50 @@ function SideBar() {
       <div className="mb-10 h-700 scroll-row-side-bar">
         <InputFilterNumber type="text" label="ID (Solo numeros)" />
         <InputFilter type="text" label="Actividad" />
-        {/* <InputFilter type="text" label="Descripcion" placeholder="Filtrar por actividad..." /> */}
         <InputFilterNumber type="text" label="Prioridad RA (Solo numeros)" />
 
         <SelectFilter
-          option={ActState.arrayUsersE}
-          onchange={onChangeSelect}
+          options={ActState.arrayUsersE}
           label="Encargado"
+          orderPriority="orden_encargado"
+          orderASC={handleOrderAsc}
+          orderDesc={handleOrderDesc}
         />
         <SelectFilter
-          option={ActState.arrayPriority}
-          onchange={onChangeSelect}
+          options={ActState.arrayPriority}
           label="Prioriad ToDo"
+          orderPriority="orden_prioridad"
+          orderASC={handleOrderAsc}
+          orderDesc={handleOrderDesc}
         />
         <SelectFilter
-          option={ActState.arrayState}
-          onchange={onChangeSelect}
+          options={ActState.arrayState}
           label="Estado"
+          orderPriority="orden_estado"
+          orderASC={handleOrderAsc}
+          orderDesc={handleOrderDesc}
         />
         <SelectFilter
-          option={ActState.arrayProject}
-          onchange={onChangeSelectPoject}
+          options={ActState.arrayProject}
+          isController={true}
           label="Proyecto"
+          orderPriority="orden_proyecto"
+          orderASC={handleOrderAsc}
+          orderDesc={handleOrderDesc}
         />
         <SelectFilter
-          option={subProjectArray}
-          onchange={onChangeSelect}
+          iscontrollerBy={true}
           label="Sub proyecto"
+          orderPriority="orden_sub_proyecto"
+          orderASC={handleOrderAsc}
+          orderDesc={handleOrderDesc}
         />
         <SelectFilter
-          option={ActState.arrayUsersS}
-          onchange={onChangeSelect}
+          options={ActState.arrayUsersS}
           label="Solicitante"
+          orderPriority="orden_solicitante"
+          orderASC={handleOrderAsc}
+          orderDesc={handleOrderDesc}
         />
       </div>
 
@@ -93,7 +96,7 @@ function SideBar() {
         <ButtonText
           icon="fas fa-filter fa-sm"
           text="Filtrar"
-          color="ml-2 bg-blue-500 hover:bg-blue-600 text-white"
+          color="ml-2 bg-blue-500 hover:bg-blue-600 text-white transition duration-500"
           onclick={handleClick} />
       </div>
     </div>

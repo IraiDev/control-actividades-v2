@@ -1,5 +1,5 @@
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { ActivityContext } from '../../context/ActivityContext';
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 import { useForm } from '../../hooks/useForm';

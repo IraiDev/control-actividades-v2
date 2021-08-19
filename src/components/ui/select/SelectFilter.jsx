@@ -1,26 +1,64 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import Select from "react-select";
+import { UiContext } from '../../../context/UiContext';
+import { ActivityContext } from '../../../context/ActivityContext';
 import ButtonOrderFilter from '../buttons/ButtonOrderFilter';
 
-function SelectFilter({ width = 'w-60', option, label, value, onchange, orderPrioridad, bgColor, onclick }) {
-  // const handleGetId = () => {
-  //   getId(id);
-  // };
+let flag = true
+const initialState = {
+  label: 'Seleccione una opcion',
+  value: '',
+  id: null,
+  name: ''
+}
+let newSubProjecArray = []
+
+function SelectFilter(props) {
+  const {
+    iscontrollerBy = false,
+    isController = false,
+    width = 'w-60',
+    options,
+    label,
+    orderPriority,
+    bgColor,
+    orderASC,
+    orderDesc } = props
+
+  const { states: ActState } = useContext(ActivityContext)
+  const { functions: UiFunc, states: UiState } = useContext(UiContext)
+  const [selectValue, setSelectValue] = useState(initialState)
+
+  const onChangeSelect = (option) => {
+    let filter = `${option.name}=${option.value}&`
+    UiFunc.saveFilters(option.name, filter)
+    iscontrollerBy ? UiFunc.setSubProject(option) : setSelectValue(option)
+  }
+
+  const onChangeSelectController = (option) => {
+    let filter = `${option.name}=${option.value}&`
+    UiFunc.saveFiltersController('sub', option.name, filter)
+    UiFunc.setSubProject(initialState)
+    setSelectValue(option)
+    newSubProjecArray = ActState.arraySubProject.filter(item => option.id === item.id)
+    flag = false
+  }
+
   return (
     <div className="flex items-center justify-between px-2">
       <div>
         <label className="text-xs">{label}:</label>
         <div>
           <Select
-            placeholder="Seleccione una opcion"
+            placeholder="Seleccione una opcionnn"
             className={`mb-2 ${width}`}
-            options={option}
-            onChange={onchange}
-            value={value}
+            options={iscontrollerBy ? (flag ? ActState.arraySubProject : newSubProjecArray) : options}
+            onChange={isController ? onChangeSelectController : onChangeSelect}
+            value={iscontrollerBy ? UiState.subProject : selectValue}
           />
         </div>
       </div>
-      <ButtonOrderFilter orderPrioridad={orderPrioridad} bgColor={bgColor} onclick={onclick} />
+      <ButtonOrderFilter orderPriority={orderPriority} bgColor={bgColor} orderASC={orderASC} orderDesc={orderDesc} />
     </div>
   )
 }

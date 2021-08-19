@@ -5,7 +5,7 @@ import useToggle from '../hooks/useToggle'
 
 export const UiContext = createContext()
 
-const initialState = {
+const initialNavTab = {
   acivities: '',
   planner: 'text-blue-600 font-bold',
   disableActivityTab: false,
@@ -14,20 +14,34 @@ const initialState = {
   filterPayActiviies: true
 }
 
+const intialSubProject = {
+  label: 'Seleccione una opcion',
+  value: '',
+  id: null,
+  name: ''
+}
+
 function UiProvider({ children }) {
   const [isViewChanged, setViewActivities, setViewPLannerTask] = useTab()
   const [isTodoOrPlanner, setviewTodo, setViewPlanner] = useTab()
   const [toggleSideBar, setToggleSideBar] = useToggle();
   const [isLoading, setIsLoading] = useState(false)
   const [disbleBtnSideBar, setDisbleBtnSideBar] = useState(true)
-  const [navTab, setNavTab] = useState(initialState)
+  const [navTab, setNavTab] = useState(initialNavTab)
+  const [subProject, setSubProject] = useState(intialSubProject)
   const [filters, setFilters] = useState('')
 
-  const saveFilters = (param, value) => {
-    let clearing = clearParams(filters, param)
-    let newValue = clearing + value
+  const saveFilters = async (param, value = '') => {
+    let clearing = await clearParams(filters, param)
+    let newValue = `${clearing}${value}`
     setFilters(newValue)
-    console.log(newValue)
+  }
+
+  const saveFiltersController = async (param1, param2, value = '') => {
+    let clearing1 = await clearParams(filters, param1)
+    let clearing2 = await clearParams(clearing1, param2)
+    let newValue = `${clearing2}${value}`
+    setFilters(newValue)
   }
 
   const activityView = () => {
@@ -66,6 +80,7 @@ function UiProvider({ children }) {
       isLoading,
       disbleBtnSideBar,
       filters,
+      subProject
     },
     functions: {
       activityView,
@@ -75,6 +90,8 @@ function UiProvider({ children }) {
       setToggleSideBar,
       setIsLoading,
       saveFilters,
+      setSubProject,
+      saveFiltersController
     }
   }
   return (

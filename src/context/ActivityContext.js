@@ -94,7 +94,7 @@ function ActivityProvider({ children }) {
         return {
           label: item.nombre_sub_proy,
           value: item.id_sub_proyecto,
-          name: 'sub_proyecto',
+          name: 'sub',
           id: item.id_proyecto
         }
       })
@@ -119,7 +119,7 @@ function ActivityProvider({ children }) {
     }
   }
 
-  const getActivities = async (filters) => {
+  const getActivities = async (filters = '') => {
     try {
       const resp = await fetchToken(`task/get-task-ra?${filters}`)
       const body = await resp.json()
@@ -138,9 +138,10 @@ function ActivityProvider({ children }) {
   }
 
   const updateUserColors = async (data) => {
-    const resp = await fetchToken('task/update-priority', data, 'PUT')
-    const body = resp.json()
-    body.ok ? getActivities() :
+    const userEmail = userData.usuario.email
+    const resp = await fetchToken('user/update-priority', data, 'PUT')
+    const body = await resp.json()
+    body.ok ? login(userEmail) :
       normalAlert('warning', 'Error al actualizar color de prioridad ToDO', 'Entiendo...')
   }
 
