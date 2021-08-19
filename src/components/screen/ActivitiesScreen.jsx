@@ -10,7 +10,7 @@ function ActivitiesScreen() {
       <div className="grid gap-5 lg:grid-cols-2">
         {ActFunc.activitiesRA.length > 0 ? (
           ActFunc.activitiesRA.map((obj) => {
-            let subproyecto = obj.subproyectos_tareas !== null ?
+            let subProyecto = obj.subproyectos_tareas !== null ?
               obj.subproyectos_tareas.nombre_sub_proy : ""
             return (
               <Card
@@ -23,7 +23,7 @@ function ActivitiesScreen() {
                 solicitante={obj.user_solicita}
                 ticket={obj.num_ticket_edit}
                 proyecto={obj.proyecto_tarea.abrev}
-                subProyecto={subproyecto}
+                subProyecto={subProyecto}
                 bgColor={obj.color_prioridad}
                 notas={obj.notas}
                 pausa={obj.pausas}

@@ -1,14 +1,14 @@
 import React from 'react'
 import Tippy from '@tippyjs/react';
 
-function ButtonOrderFilter({ orderPriority, bgColor = 'bg-gray-100 rounded-full', orderASC, orderDesc }) {
+function ButtonOrderFilter({ orderPriority, bgColor = 'bg-gray-100 rounded-full', orderAsc, orderDesc }) {
 
   const handleOrderASC = () => {
-    orderASC(orderPriority)
+    orderAsc(`${orderPriority}=asc&`)
   }
 
   const handleOrderDESC = () => {
-    orderDesc(orderPriority)
+    orderDesc(`${orderPriority}=desc&`)
   }
 
   return (

@@ -44,6 +44,14 @@ function UiProvider({ children }) {
     setFilters(newValue)
   }
 
+  const saveFiltersInputs = async (param1, param2, param3, value = '') => {
+    let clearing1 = await clearParams(filters, param1)
+    let clearing2 = await clearParams(clearing1, param2)
+    let clearing3 = await clearParams(clearing2, param3)
+    let newValue = `${clearing3}${value}`
+    setFilters(newValue)
+  }
+
   const activityView = () => {
     setDisbleBtnSideBar(false)
     setViewActivities()
@@ -91,7 +99,8 @@ function UiProvider({ children }) {
       setIsLoading,
       saveFilters,
       setSubProject,
-      saveFiltersController
+      saveFiltersController,
+      saveFiltersInputs
     }
   }
   return (

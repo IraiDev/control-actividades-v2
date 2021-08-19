@@ -1,4 +1,5 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useContext, useState } from 'react'
+import { UiContext } from './UiContext'
 import { alertTimer, normalAlert } from '../helpers/alerts'
 import { fetchToken } from '../helpers/fetch'
 
@@ -12,6 +13,7 @@ let arrayUsersE = []
 let arrayUsersS = []
 
 function ActivityProvider({ children }) {
+  const { states: UiState } = useContext(UiContext)
   const [userData, setUserData] = useState({})
   const [usersTimes, setUsersTimes] = useState([])
   const [userNotify, setUserNotify] = useState([])
@@ -94,7 +96,7 @@ function ActivityProvider({ children }) {
         return {
           label: item.nombre_sub_proy,
           value: item.id_sub_proyecto,
-          name: 'sub',
+          name: 'subProy',
           id: item.id_proyecto
         }
       })
@@ -133,7 +135,7 @@ function ActivityProvider({ children }) {
   const updatePriority = async (data) => {
     const resp = await fetchToken('task/update-priority', data, 'POST')
     const body = await resp.json()
-    body.ok ? getActivities() :
+    body.ok ? getActivities(UiState.filters) :
       normalAlert('warning', 'Error al actualizar la prioridad de la actividad', 'Entiendo...')
   }
 
@@ -148,21 +150,21 @@ function ActivityProvider({ children }) {
   const addNewNote = async (data) => {
     const resp = await fetchToken('task/create-note', data, 'POST')
     const body = await resp.json()
-    body.ok ? getActivities() :
+    body.ok ? getActivities(UiState.filters) :
       normalAlert('warning', 'Error al crear la nota', 'Entiendo...')
   }
 
   const updateNote = async (data) => {
     const resp = await fetchToken('task/update-note', data, 'PUT')
     const body = await resp.json()
-    body.ok ? getActivities() :
+    body.ok ? getActivities(UiState.filters) :
       normalAlert('warning', 'Error al actualizar la nota', 'Entiendo...')
   }
 
   const deleteNote = async (data) => {
     const resp = await fetchToken('task/delete-note', data, 'DELETE')
     const body = await resp.json()
-    body.ok ? getActivities() :
+    body.ok ? getActivities(UiState.filters) :
       normalAlert('warning', 'Error al eliminar la nota', 'Entiendo...')
   }
 
@@ -170,7 +172,7 @@ function ActivityProvider({ children }) {
     const resp = await fetchToken('task/add-task-todo', data, 'POST')
     const body = await resp.json()
     if (body.ok) {
-      await getActivities()
+      await getActivities(UiState.filters)
       alertTimer(true, 'info', 1500, 'Tarea agregada correctamente al RA')
     } else {
       if (data.desc === '') {

@@ -22,7 +22,7 @@ function SelectFilter(props) {
     label,
     orderPriority,
     bgColor,
-    orderASC,
+    orderAsc,
     orderDesc } = props
 
   const { states: ActState } = useContext(ActivityContext)
@@ -37,7 +37,7 @@ function SelectFilter(props) {
 
   const onChangeSelectController = (option) => {
     let filter = `${option.name}=${option.value}&`
-    UiFunc.saveFiltersController('sub', option.name, filter)
+    UiFunc.saveFiltersController('subProy', option.name, filter)
     UiFunc.setSubProject(initialState)
     setSelectValue(option)
     newSubProjecArray = ActState.arraySubProject.filter(item => option.id === item.id)
@@ -58,7 +58,7 @@ function SelectFilter(props) {
           />
         </div>
       </div>
-      <ButtonOrderFilter orderPriority={orderPriority} bgColor={bgColor} orderASC={orderASC} orderDesc={orderDesc} />
+      <ButtonOrderFilter orderPriority={orderPriority} bgColor={bgColor} orderAsc={orderAsc} orderDesc={orderDesc} />
     </div>
   )
 }
