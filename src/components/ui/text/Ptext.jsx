@@ -12,7 +12,7 @@ function Ptext({ isTippy = false, textTippy = '', tag, value, font = '', priorit
           delay={[500, 0]}
           content={<span>{textTippy}</span>}
         >
-          <strong className="font-bold">{tag}: </strong>
+          <strong className="font-bold">{tag} </strong>
         </Tippy>
         <span className={font}>{value}</span>
         {

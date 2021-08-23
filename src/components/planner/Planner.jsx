@@ -13,6 +13,7 @@ function Planner() {
             return (
               <PlannerCard
                 key={obj.id}
+                idTask={obj.id}
                 title={obj.title}
                 desc={obj.details.description}
                 assignments={obj.assignments}

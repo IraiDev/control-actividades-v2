@@ -28,7 +28,6 @@ function HomeScreen() {
     if (ActState.userData.ok) {
       ActFunc.getTimes()
       ActFunc.getNotify()
-      ActFunc.getActivities()
       ActFunc.getFilters()
     }
   }, [ActState.userData.ok])

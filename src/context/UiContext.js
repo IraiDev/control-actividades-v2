@@ -24,7 +24,7 @@ const intialSubProject = {
 function UiProvider({ children }) {
   const [isViewChanged, setViewActivities, setViewPLannerTask] = useTab()
   const [isTodoOrPlanner, setviewTodo, setViewPlanner] = useTab()
-  const [toggleSideBar, setToggleSideBar] = useToggle();
+  const [toggleSideBar, setToggleSideBar] = useToggle(false);
   const [isLoading, setIsLoading] = useState(false)
   const [disbleBtnSideBar, setDisbleBtnSideBar] = useState(true)
   const [navTab, setNavTab] = useState(initialNavTab)
@@ -59,6 +59,7 @@ function UiProvider({ children }) {
   const activityView = () => {
     setDisbleBtnSideBar(false)
     setViewActivities()
+    setIsLoading(true)
     setNavTab({
       planner: '',
       acivities: 'text-blue-600 font-bold',
@@ -70,6 +71,7 @@ function UiProvider({ children }) {
   }
 
   const plannerView = () => {
+    toggleSideBar && setToggleSideBar()
     setDisbleBtnSideBar(true)
     setViewPLannerTask()
     setIsLoading(true)
@@ -107,7 +109,8 @@ function UiProvider({ children }) {
       saveFiltersController,
       saveFiltersInputs,
       setFilters,
-      setResetFilters
+      setResetFilters,
+      setViewActivities
     }
   }
   return (

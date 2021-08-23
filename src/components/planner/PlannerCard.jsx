@@ -1,19 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { ActivityContext } from '../../context/ActivityContext';
 import { getFetch } from '../../helpers/fetchingGraph';
 import { Person } from '@microsoft/mgt-react';
 import { alertQuest } from '../../helpers/alerts';
 import Tippy from '@tippyjs/react'
 
-function PlannerCard({ idPlan, title, desc, assignments }) {
+function PlannerCard({ idTask: id_todo, idPlan, title, desc: description, assignments }) {
   const [plannerPlan, setplannerPlan] = useState('')
+  const { functions: ActFunc } = useContext(ActivityContext)
 
   const handleAddTask = () => {
+    const data = { title, description, id_todo, proyect: plannerPlan }
+    const action = () => ActFunc.addTaskToRA(data)
     alertQuest(
       'info',
       '¿Desea crear esta tarea como una actividad en RA?',
       'No, cancelar',
       'Si, crear',
-      // action calbakc de accionq ue se quiera hacer
+      action
     )
   }
 
@@ -42,7 +46,7 @@ function PlannerCard({ idPlan, title, desc, assignments }) {
       </div>
       <div className="grid grid-cols-12 col-span-9">
         <div className="col-span-11">
-          <p className="text-sm">{desc}</p>
+          <p className="text-sm">{description}</p>
         </div>
         <div className="flex items-center justify-end col-span-1">
           <Tippy

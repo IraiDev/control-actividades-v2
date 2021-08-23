@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { UiContext } from '../../../context/UiContext';
 import { ActivityContext } from '../../../context/ActivityContext';
 import { GraphContext } from '../../../context/GraphContext';
@@ -32,9 +32,9 @@ const colorArray = [
 ];
 
 const selectArray = [
-  { value: 100, label: "Prioridad Alta" },
-  { value: 400, label: "Prioridad Media" },
   { value: 600, label: "Prioridad Baja" },
+  { value: 400, label: "Prioridad Media" },
+  { value: 100, label: "Prioridad Alta" },
 ]
 
 const initialState = {
@@ -49,10 +49,7 @@ function UtilityBar() {
   const [priority, setPriority] = useState(initialState)
   const [colorSelected, setColorSelected] = useState(null)
   const [showModal, setShowModal] = useState(false)
-
-  const click = () => {
-    console.log('click click!!')
-  }
+  const [isWorking, toggleIsWorking] = useState(false)
 
   const handleSideBar = () => {
     UiFunc.setToggleSideBar()
@@ -91,12 +88,35 @@ function UtilityBar() {
     UiFunc.setViewPlanner()
     UiFunc.setIsLoading(true)
     GraphFunc.getPlannerTask()
-    console.log('planner')
+    ActFunc.getTimes()
+    ActFunc.getNotify()
   }
 
   const updateActivityComponents = () => {
-    console.log('actividades')
+    UiFunc.setViewActivities()
+    UiFunc.setIsLoading(true)
+    ActFunc.getActivities()
+    ActFunc.getTimes()
+    ActFunc.getNotify()
   }
+
+  const handleUserWorking = () => {
+    UiFunc.setIsLoading(true)
+    toggleIsWorking(!isWorking)
+    if (!isWorking) {
+      let param = UiFunc.saveFilters('entrabajo', 'entrabajo=2&')
+      ActFunc.getActivities(param)
+      return
+    }
+    let param = UiFunc.saveFilters('entrabajo', 'entrabajo=&')
+    ActFunc.getActivities(param)
+  }
+
+  useEffect(() => {
+    if (UiState.isResetFilters) {
+      toggleIsWorking(false)
+    }
+  }, [UiState.isResetFilters])
 
   return (
     <>
@@ -110,9 +130,10 @@ function UtilityBar() {
             <ButtonUnText
               disable={UiState.navTab.filterPayActiviies}
               icon="fas fa-user-clock"
-              tippyText="Todas las actividades"
+              tippyText={isWorking ? "Todas las actividades" : "Mostrar actividades en Play"}
+              color={isWorking && 'text-blue-500'}
               isTippy={true}
-              onclick={click} />
+              onclick={handleUserWorking} />
 
             <ButtonUnText
               icon="fas fa-sync-alt"

@@ -13,7 +13,7 @@ let arrayUsersE = []
 let arrayUsersS = []
 
 function ActivityProvider({ children }) {
-  const { states: UiState } = useContext(UiContext)
+  const { states: UiState, functions: UiFunc } = useContext(UiContext)
   const [userData, setUserData] = useState({})
   const [usersTimes, setUsersTimes] = useState([])
   const [userNotify, setUserNotify] = useState([])
@@ -27,7 +27,6 @@ function ActivityProvider({ children }) {
       if (body.ok) {
         localStorage.setItem('tokenBackend', body.token)
         setUserData(body)
-        console.log("Body de login resp: ", body)
       } else {
         normalAlert('warning', `<p><b>Atencion: </b>${body.msg}</p>`, 'Entiendo')
       }
@@ -156,14 +155,19 @@ function ActivityProvider({ children }) {
       let filters = filtersParam === '' ? UiState.filters : filtersParam
       const resp = await fetchToken(`task/get-task-ra?${filters}`)
       const body = await resp.json()
-      body.ok ? setActivitiesRA(body.tareas) :
+      if (body.ok) {
+        setActivitiesRA(body.tareas)
+      } else {
         normalAlert('warning', 'Error al cargar las activiades del RA', 'Entiendo...')
+      }
+      UiFunc.setIsLoading(false)
     } catch (error) {
       console.log(error)
     }
   }
 
   const updatePriority = async (data) => {
+    UiFunc.setIsLoading(true)
     const resp = await fetchToken('task/update-priority', data, 'POST')
     const body = await resp.json()
     body.ok ? getActivities() :
@@ -171,6 +175,7 @@ function ActivityProvider({ children }) {
   }
 
   const updateUserColors = async (data) => {
+    UiFunc.setIsLoading(true)
     const userEmail = userData.usuario.email
     const resp = await fetchToken('user/update-priority', data, 'PUT')
     const body = await resp.json()
@@ -179,6 +184,7 @@ function ActivityProvider({ children }) {
   }
 
   const addNewNote = async (data) => {
+    UiFunc.setIsLoading(true)
     const resp = await fetchToken('task/create-note', data, 'POST')
     const body = await resp.json()
     body.ok ? getActivities() :
@@ -186,6 +192,7 @@ function ActivityProvider({ children }) {
   }
 
   const updateNote = async (data) => {
+    UiFunc.setIsLoading(true)
     const resp = await fetchToken('task/update-note', data, 'PUT')
     const body = await resp.json()
     body.ok ? getActivities() :
@@ -193,6 +200,7 @@ function ActivityProvider({ children }) {
   }
 
   const deleteNote = async (data) => {
+    UiFunc.setIsLoading(true)
     const resp = await fetchToken('task/delete-note', data, 'DELETE')
     const body = await resp.json()
     body.ok ? getActivities() :
@@ -203,8 +211,8 @@ function ActivityProvider({ children }) {
     const resp = await fetchToken('task/add-task-todo', data, 'POST')
     const body = await resp.json()
     if (body.ok) {
-      await getActivities()
-      alertTimer(true, 'info', 1500, 'Tarea agregada correctamente al RA')
+      alertTimer(false, 'info', 1500, 'Tarea agregada correctamente al RA')
+      return
     } else {
       if (data.desc === '') {
         normalAlert('warning', 'La tarea debe tener una descripcion para ser agregada al RA', 'Entiendo...')

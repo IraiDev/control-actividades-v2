@@ -1,15 +1,20 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { ActivityContext } from '../../context/ActivityContext';
 import Card from '../card/Card'
 import PResp from '../ui/text/PResp';
 
 function ActivitiesScreen() {
-  const { states: ActFunc } = useContext(ActivityContext)
+  const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
+
+  useEffect(() => {
+    ActFunc.getActivities()
+  }, [])
+
   return (
     <div className="container mx-auto my-5">
       <div className="grid gap-5 lg:grid-cols-2">
-        {ActFunc.activitiesRA.length > 0 ? (
-          ActFunc.activitiesRA.map((obj) => {
+        {ActState.activitiesRA.length > 0 ? (
+          ActState.activitiesRA.map((obj) => {
             let subProyecto = obj.subproyectos_tareas !== null ?
               obj.subproyectos_tareas.nombre_sub_proy : ""
             return (
@@ -29,6 +34,7 @@ function ActivitiesScreen() {
                 pausa={obj.pausas}
                 prioridad={obj.prioridad_etiqueta}
                 prioridadRA={obj.num_prioridad}
+                fechaCrea={obj.fecha_tx}
               />
             );
           })

@@ -14,9 +14,12 @@ import Textarea from "@material-tailwind/react/Textarea"
 import "@material-tailwind/react/tailwind.css"
 import PDefaultNotes from '../ui/text/PDefaultNotes';
 import { alertTimer } from '../../helpers/alerts';
+import moment from 'moment';
 
 let dateColor, textColor, lineColor, bgColor, actPriority, actPlay, isActPlay
 let initialState = { inputEdit: '', inputAdd: '' }
+let today = new Date()
+today = moment(today).format('yyyy-MM-DD')
 
 function Card(props) {
   const {
@@ -32,13 +35,18 @@ function Card(props) {
     pausa,
     prioridad,
     prioridadRA,
-    notas
+    notas,
+    fechaCrea
   } = props;
+
   const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
   const [{ inputEdit, inputAdd }, onChangeValues, reset] = useForm(initialState)
   const [showModal, setShowModal] = useState(false)
   const [updateOrAdd, setUpdateOrAdd] = useState(false)
   const [noteActive, setNoteActive] = useState({ idNote: null, description: '' })
+
+  let dateTo = moment(fechaCrea)
+  let days = dateTo.diff(today, 'days') - (dateTo.diff(today, 'days') * 2)
 
   switch (prioridad) {
     case 600:
@@ -144,54 +152,54 @@ function Card(props) {
     <>
       <div className={`rounded p-4 shadow-md text-sm ${bgColor} ${textColor} ${actPlay}`}>
         <div className="flex items-center justify-between pb-2 text-base">
-          <Ptext tag={"Actividad"} value={actividad} font="font-bold" />
+          <Ptext tag="Actividad:" value={actividad} font="font-bold" />
           {isActPlay && (<i className="fas fa-user-clock"></i>)}
         </div>
         <div className={`grid grid-cols-12 mb-2 h-48 border-b pb-3 gap-2 ${lineColor}`}>
           <div className="col-span-3 md:col-span-2 lg:col-span-3 2xl:col-span-2">
             <Ptext
-              tag="Encar"
+              tag="Encar:"
               value={encargado}
               font="font-bold"
               isTippy={true}
               textTippy="Encargado"
             />
             <Ptext
-              tag="Proy"
+              tag="Proy:"
               value={proyecto}
               font="font-bold"
               isTippy={true}
               textTippy="Proyecto"
             />
             <Ptext
-              tag="Sub Proy"
+              tag="Sub Proy:"
               value={subProyecto}
               isTippy={true}
               textTippy="Sub Proyecto"
             />
             <Ptext
-              tag="Soli"
+              tag="Soli:"
               value={solicitante}
               isTippy={true}
               textTippy="Solicitante"
             />
             <Ptext
-              tag="Est"
+              tag="Est:"
               value={estado === 1 ? "Pendiente" : estado === 2 ? "En trabajo" : ""}
               isTippy={true}
               textTippy="Estado"
             />
-            <Ptext tag="Ticket" value={ticket} />
-            <Ptext tag="ID" value={id} />
+            <Ptext tag="Ticket:" value={ticket} />
+            <Ptext tag="ID:" value={id} />
           </div>
           <div className="col-span-4 2xl:col-span-5">
-            <Ptext tag="Descripcion" />
+            <Ptext tag="Descripcion:" />
             <div className="h-48 scroll-row">
               <p className="px-2 font-semibold leading-tight">{desc}</p>
             </div>
           </div>
           <div className="col-span-5">
-            <Ptext tag="Informes Diarios (notas)" />
+            <Ptext tag="Informes Diarios (notas):" />
             <div className="scroll-row">
               <ul className="mt-1">
                 {
@@ -217,12 +225,26 @@ function Card(props) {
         </div>
         <div className="flex justify-between mt-2">
           <Ptext
-            tag="Prioridad"
+            tag="Prioridad:"
             value={actPriority}
             font="font-bold"
             isPriority={true}
             priority={prioridadRA} />
+          <div className="flex">
+            <Ptext
+              tag="f. crea:"
+              value={moment(fechaCrea).format('DD-MM-yyyy')}
+              isTippy={true}
+              textTippy="Fecha de creacion"
+            />
+            <Ptext
+              tag={`(${days})`}
+              isTippy={true}
+              textTippy="Dias transcurridos"
+            />
+          </div>
           <div>
+
             <Menu
               direction="left"
               menuButton={
