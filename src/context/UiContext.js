@@ -30,26 +30,30 @@ function UiProvider({ children }) {
   const [navTab, setNavTab] = useState(initialNavTab)
   const [subProject, setSubProject] = useState(intialSubProject)
   const [filters, setFilters] = useState('')
+  const [isResetFilters, setResetFilters] = useState(false)
 
-  const saveFilters = async (param, value = '') => {
-    let clearing = await clearParams(filters, param)
+  const saveFilters = (param, value = '') => {
+    let clearing = clearParams(filters, param)
     let newValue = `${clearing}${value}`
     setFilters(newValue)
+    return newValue
   }
 
-  const saveFiltersController = async (param1, param2, value = '') => {
-    let clearing1 = await clearParams(filters, param1)
-    let clearing2 = await clearParams(clearing1, param2)
+  const saveFiltersController = (param1, param2, value = '') => {
+    let clearing1 = clearParams(filters, param1)
+    let clearing2 = clearParams(clearing1, param2)
     let newValue = `${clearing2}${value}`
     setFilters(newValue)
+    return newValue
   }
 
-  const saveFiltersInputs = async (param1, param2, param3, value = '') => {
-    let clearing1 = await clearParams(filters, param1)
-    let clearing2 = await clearParams(clearing1, param2)
-    let clearing3 = await clearParams(clearing2, param3)
+  const saveFiltersInputs = (param1, param2, param3, value = '') => {
+    let clearing1 = clearParams(filters, param1)
+    let clearing2 = clearParams(clearing1, param2)
+    let clearing3 = clearParams(clearing2, param3)
     let newValue = `${clearing3}${value}`
     setFilters(newValue)
+    return newValue
   }
 
   const activityView = () => {
@@ -88,7 +92,8 @@ function UiProvider({ children }) {
       isLoading,
       disbleBtnSideBar,
       filters,
-      subProject
+      subProject,
+      isResetFilters
     },
     functions: {
       activityView,
@@ -100,7 +105,9 @@ function UiProvider({ children }) {
       saveFilters,
       setSubProject,
       saveFiltersController,
-      saveFiltersInputs
+      saveFiltersInputs,
+      setFilters,
+      setResetFilters
     }
   }
   return (

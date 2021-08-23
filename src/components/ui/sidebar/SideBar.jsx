@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { UiContext } from '../../../context/UiContext'
 import { ActivityContext } from '../../../context/ActivityContext'
 import { useForm } from '../../../hooks/useForm'
@@ -13,7 +13,8 @@ const initialState = { inputId: '', inputAct: '', inputPriority: '' }
 function SideBar() {
   const { states: UiState, functions: UiFunc } = useContext(UiContext)
   const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
-  const [{ inputId, inputAct, inputPriority }, onChangeValues] = useForm(initialState)
+  const [{ inputId, inputAct, inputPriority }, onChangeValues, reset] = useForm(initialState)
+  const [isChecked, setIsChecked] = useState(false)
 
   const handleClick = () => {
     UiFunc.setToggleSideBar()
@@ -27,12 +28,31 @@ function SideBar() {
     ActFunc.getActivities(`${UiState.filters}${param}`)
   }
 
-  const handleFilter = async () => {
+  const handleFilter = () => {
     let inputValues = `id_actividad=${inputId}&titulo=${inputAct}&prioridad_ra=${inputPriority}&`
-    await UiFunc.saveFiltersInputs('id_actividad', 'titulo', 'prioridad_ra', inputValues)
-    console.log(UiState.filters)
-    // ActFunc.getActivities(UiState.filters)
+    let newValues = UiFunc.saveFiltersInputs('id_actividad', 'titulo', 'prioridad_ra', inputValues)
+    ActFunc.getActivities(newValues)
   }
+
+  const onsChangeCheck = () => {
+    setIsChecked(!isChecked)
+    if (isChecked) {
+      let hideCA = UiFunc.saveFilters('usuario_no_mostar', 'usuario_no_mostar=ca&')
+      console.log('no mostrar a CA', hideCA)
+      ActFunc.getActivities(hideCA)
+    } else {
+      let showCA = UiFunc.saveFilters('usuario_no_mostar')
+      console.log('mostrar a CA', showCA)
+      ActFunc.getActivities(showCA)
+    }
+  }
+
+  useEffect(() => {
+    if (UiState.isResetFilters) {
+      setIsChecked(false)
+      reset()
+    }
+  }, [UiState.isResetFilters])
 
   return (
     <div
@@ -121,13 +141,26 @@ function SideBar() {
           orderAsc={handleOrderAsc}
           orderDesc={handleOrderDesc}
         />
+
+        <div className="flex items-center px-2 mt-2">
+          <label htmlFor="checkbox-1">
+            <input
+              id="checkbox-1"
+              className="mr-2"
+              type="checkbox"
+              checked={isChecked}
+              onChange={onsChangeCheck}
+            />
+            ocultar a usuario: CA
+          </label>
+        </div>
       </div>
 
       <div className="flex justify-end mt-2">
         <ButtonText
           icon="fas fa-filter fa-sm"
           text="Limpiar"
-          onclick={handleClick} />
+          onclick={() => { UiFunc.setResetFilters(true) }} />
         <ButtonText
           icon="fas fa-filter fa-sm"
           text="Filtrar"

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Select from "react-select";
 import { UiContext } from '../../../context/UiContext';
 import { ActivityContext } from '../../../context/ActivityContext';
@@ -23,9 +23,10 @@ function SelectFilter(props) {
     orderPriority,
     bgColor,
     orderAsc,
-    orderDesc } = props
+    orderDesc
+  } = props
 
-  const { states: ActState } = useContext(ActivityContext)
+  const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
   const { functions: UiFunc, states: UiState } = useContext(UiContext)
   const [selectValue, setSelectValue] = useState(initialState)
 
@@ -37,12 +38,28 @@ function SelectFilter(props) {
 
   const onChangeSelectController = (option) => {
     let filter = `${option.name}=${option.value}&`
+    setSelectValue(option)
     UiFunc.saveFiltersController('subProy', option.name, filter)
     UiFunc.setSubProject(initialState)
-    setSelectValue(option)
     newSubProjecArray = ActState.arraySubProject.filter(item => option.id === item.id)
-    flag = false
+    newSubProjecArray.unshift({
+      label: 'Todas las opciones',
+      value: '',
+      name: 'subProy',
+    })
+    option.label === 'Todas las opciones' ? flag = true : flag = false
   }
+
+  useEffect(() => {
+    if (UiState.isResetFilters) {
+      setSelectValue(initialState)
+      UiFunc.setSubProject(initialState)
+      UiFunc.setResetFilters(false)
+      UiFunc.setFilters('')
+      flag = true
+      ActFunc.getActivities('_')
+    }
+  }, [UiState.isResetFilters])
 
   return (
     <div className="flex items-center justify-between px-2">
@@ -50,7 +67,7 @@ function SelectFilter(props) {
         <label className="text-xs">{label}:</label>
         <div>
           <Select
-            placeholder="Seleccione una opcionnn"
+            placeholder="Seleccione una"
             className={`mb-2 ${width}`}
             options={iscontrollerBy ? (flag ? ActState.arraySubProject : newSubProjecArray) : options}
             onChange={isController ? onChangeSelectController : onChangeSelect}
@@ -58,7 +75,12 @@ function SelectFilter(props) {
           />
         </div>
       </div>
-      <ButtonOrderFilter orderPriority={orderPriority} bgColor={bgColor} orderAsc={orderAsc} orderDesc={orderDesc} />
+      <ButtonOrderFilter
+        orderPriority={orderPriority}
+        bgColor={bgColor}
+        orderAsc={orderAsc}
+        orderDesc={orderDesc}
+      />
     </div>
   )
 }

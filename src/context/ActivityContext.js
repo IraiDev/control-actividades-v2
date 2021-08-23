@@ -74,6 +74,11 @@ function ActivityProvider({ children }) {
           name: 'estado',
         }
       })
+      arrayState.unshift({
+        label: 'Todas las opciones',
+        value: '',
+        name: 'estado',
+      })
 
       arrayPriority = body.prioridades.map(item => {
         return {
@@ -81,6 +86,11 @@ function ActivityProvider({ children }) {
           value: item.color,
           name: 'color',
         }
+      })
+      arrayPriority.unshift({
+        label: 'Todas las opciones',
+        value: '',
+        name: 'color',
       })
 
       arrayProject = body.proyectos.map(item => {
@@ -91,6 +101,11 @@ function ActivityProvider({ children }) {
           id: item.id_proy
         }
       })
+      arrayProject.unshift({
+        label: 'Todas las opciones',
+        value: '',
+        name: 'proyecto',
+      })
 
       arraySubProject = body.subproyectos.map(item => {
         return {
@@ -100,6 +115,11 @@ function ActivityProvider({ children }) {
           id: item.id_proyecto
         }
       })
+      arraySubProject.unshift({
+        label: 'Todas las opciones',
+        value: '',
+        name: 'subProy',
+      })
 
       arrayUsersE = body.usuarios.map(item => {
         return {
@@ -107,6 +127,11 @@ function ActivityProvider({ children }) {
           value: item.abrev_user,
           name: 'encargado',
         }
+      })
+      arrayUsersE.unshift({
+        label: 'Todas las opciones',
+        value: '',
+        name: 'encargado',
       })
 
       arrayUsersS = body.usuarios.map(item => {
@@ -116,13 +141,19 @@ function ActivityProvider({ children }) {
           name: 'solicitante',
         }
       })
+      arrayUsersS.unshift({
+        label: 'Todas las opciones',
+        value: '',
+        name: 'solicitante',
+      })
     } else {
       normalAlert('warning', 'Error al obtener los filtros', 'Entiendo...')
     }
   }
 
-  const getActivities = async (filters = '') => {
+  const getActivities = async (filtersParam = '') => {
     try {
+      let filters = filtersParam === '' ? UiState.filters : filtersParam
       const resp = await fetchToken(`task/get-task-ra?${filters}`)
       const body = await resp.json()
       body.ok ? setActivitiesRA(body.tareas) :
@@ -135,7 +166,7 @@ function ActivityProvider({ children }) {
   const updatePriority = async (data) => {
     const resp = await fetchToken('task/update-priority', data, 'POST')
     const body = await resp.json()
-    body.ok ? getActivities(UiState.filters) :
+    body.ok ? getActivities() :
       normalAlert('warning', 'Error al actualizar la prioridad de la actividad', 'Entiendo...')
   }
 
@@ -150,21 +181,21 @@ function ActivityProvider({ children }) {
   const addNewNote = async (data) => {
     const resp = await fetchToken('task/create-note', data, 'POST')
     const body = await resp.json()
-    body.ok ? getActivities(UiState.filters) :
+    body.ok ? getActivities() :
       normalAlert('warning', 'Error al crear la nota', 'Entiendo...')
   }
 
   const updateNote = async (data) => {
     const resp = await fetchToken('task/update-note', data, 'PUT')
     const body = await resp.json()
-    body.ok ? getActivities(UiState.filters) :
+    body.ok ? getActivities() :
       normalAlert('warning', 'Error al actualizar la nota', 'Entiendo...')
   }
 
   const deleteNote = async (data) => {
     const resp = await fetchToken('task/delete-note', data, 'DELETE')
     const body = await resp.json()
-    body.ok ? getActivities(UiState.filters) :
+    body.ok ? getActivities() :
       normalAlert('warning', 'Error al eliminar la nota', 'Entiendo...')
   }
 
@@ -172,7 +203,7 @@ function ActivityProvider({ children }) {
     const resp = await fetchToken('task/add-task-todo', data, 'POST')
     const body = await resp.json()
     if (body.ok) {
-      await getActivities(UiState.filters)
+      await getActivities()
       alertTimer(true, 'info', 1500, 'Tarea agregada correctamente al RA')
     } else {
       if (data.desc === '') {
