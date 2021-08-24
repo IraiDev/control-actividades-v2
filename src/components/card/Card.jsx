@@ -232,7 +232,7 @@ function Card(props) {
             priority={prioridadRA} />
           <div className="flex">
             <Ptext
-              tag="f. crea:"
+              tag="F. Crea:"
               value={moment(fechaCrea).format('DD-MM-yyyy')}
               isTippy={true}
               textTippy="Fecha de creacion"
@@ -267,7 +267,7 @@ function Card(props) {
                   showModalUpdateNote();
                 }}
               >
-                Editar/Agregar Nota
+                Agregar/Editar Nota
               </MenuItem>
               <MenuItem
                 className="flex justify-between"
@@ -323,7 +323,7 @@ function Card(props) {
       <Modal size="regular" active={showModal} toggler={() => showModalFalse()}>
         <ModalHeader toggler={() => showModalFalse()}>
           {
-            updateOrAdd ? 'Agregar nueva nota' : 'Editar Nota'
+            noteActive.idNote !== null ? 'Editar Nota' : 'Agregar nueva nota'
           }
         </ModalHeader>
         <ModalBody>
@@ -387,7 +387,7 @@ function Card(props) {
               </div>)
           }
         </ModalBody>
-        <ModalFooter>s
+        <ModalFooter>
           <Button
             buttonType="link"
             size="sm"

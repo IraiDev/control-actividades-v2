@@ -1,7 +1,18 @@
 import React from 'react'
 import Tippy from '@tippyjs/react';
 
-function ButtonOrderFilter({ orderPriority, bgColor = 'bg-gray-100 rounded-full', orderAsc, orderDesc }) {
+function ButtonOrderFilter(props) {
+  const {
+    orderPriority,
+    bgColor = 'bg-gray-100 rounded-full',
+    orderAsc,
+    orderDesc,
+    isOnclickeable = true,
+    active
+  } = props
+
+  let asc = `${orderPriority}=asc&`
+  let desc = `${orderPriority}=desc&`
 
   const handleOrderASC = () => {
     orderAsc(`${orderPriority}=asc&`)
@@ -21,11 +32,11 @@ function ButtonOrderFilter({ orderPriority, bgColor = 'bg-gray-100 rounded-full'
       >
         <button
           onClick={() => {
-            handleOrderASC()
+            isOnclickeable && handleOrderASC()
           }}
           className="px-2 py-1 rounded-full hover:bg-gray-200 focus:outline-none active:outline-none"
         >
-          <i className="fas fa-chevron-up"></i>
+          <i className={`fas fa-chevron-up ${active === asc ? 'text-blue-400' : 'text-black'}`}></i>
         </button>
       </Tippy>
       <Tippy
@@ -36,11 +47,11 @@ function ButtonOrderFilter({ orderPriority, bgColor = 'bg-gray-100 rounded-full'
       >
         <button
           onClick={() => {
-            handleOrderDESC()
+            isOnclickeable && handleOrderDESC()
           }}
           className="px-2 py-1 ml-2 rounded-full hover:bg-gray-200 focus:outline-none active:outline-none"
         >
-          <i className="fas fa-chevron-down"></i>
+          <i className={`fas fa-chevron-down ${active === desc ? 'text-blue-400' : 'text-black'}`}></i>
         </button>
       </Tippy>
     </div>

@@ -13,7 +13,9 @@ function InputFilter(props) {
     orderPriority,
     bgColor,
     orderAsc,
-    orderDesc } = props
+    orderDesc,
+    active
+  } = props
 
   return (
     <div className="flex items-center justify-between p-2 mb-2 bg-gray-100 rounded-md">
@@ -55,7 +57,13 @@ function InputFilter(props) {
           </div>
         )
       }
-      <ButtonOrderFilter orderPriority={orderPriority} bgColor={bgColor} orderAsc={orderAsc} orderDesc={orderDesc} />
+      <ButtonOrderFilter
+        orderPriority={orderPriority}
+        bgColor={bgColor}
+        orderAsc={orderAsc}
+        orderDesc={orderDesc}
+        active={active}
+      />
     </div>
   )
 }

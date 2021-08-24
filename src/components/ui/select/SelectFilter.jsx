@@ -23,7 +23,8 @@ function SelectFilter(props) {
     orderPriority,
     bgColor,
     orderAsc,
-    orderDesc
+    orderDesc,
+    active
   } = props
 
   const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
@@ -80,6 +81,7 @@ function SelectFilter(props) {
         bgColor={bgColor}
         orderAsc={orderAsc}
         orderDesc={orderDesc}
+        active={active}
       />
     </div>
   )

@@ -17,8 +17,12 @@ function SideMenu() {
   const { functions: GraphFunc, states: GraphState } = useContext(GraphContext)
   const { functions: UiFunc } = useContext(UiContext)
   const [showModal, setShowModal] = useState(false)
+  const [plannerActive, setPlannerActive] = useState(false)
+  const [idTodoList, setidTodoList] = useState(null)
 
   const handleClickTodo = (idList) => {
+    setidTodoList(idList)
+    setPlannerActive(false)
     UiFunc.setIsLoading(true)
     UiFunc.setviewTodo()
     GraphFunc.getTodoTask(idList)
@@ -26,15 +30,15 @@ function SideMenu() {
   }
 
   const handleClickPlanner = () => {
+    setidTodoList(null)
+    setPlannerActive(true)
     UiFunc.setIsLoading(true)
     UiFunc.setViewPlanner()
     GraphFunc.getPlannerTask()
   }
 
   const handleCreateTodoList = () => {
-    const data = {
-      displayName: input
-    }
+    const data = { displayName: input }
     const action = () => {
       setShowModal(false)
       GraphFunc.createTodoList(data)
@@ -50,6 +54,8 @@ function SideMenu() {
   }
 
   const showModalTrue = () => {
+    setidTodoList(null)
+    setPlannerActive(false)
     setShowModal(true)
   }
 
@@ -67,6 +73,7 @@ function SideMenu() {
           icon="mr-4 far fa-user"
           actions={false}
           onclick={handleClickPlanner}
+          active={plannerActive && 'bg-gray-800'}
         />
         {
           GraphState.todoList.map(obj => {
@@ -79,6 +86,7 @@ function SideMenu() {
                   icon="mr-4 fas fa-bars"
                   actions={false}
                   onclick={handleClickTodo}
+                  active={obj.id === idTodoList && 'bg-gray-800'}
                 />
               )
             } else {
@@ -97,6 +105,7 @@ function SideMenu() {
                   title={obj.displayName}
                   icon="mr-4 fas fa-bars"
                   onclick={handleClickTodo}
+                  active={obj.id === idTodoList && 'bg-gray-800'}
                 />
               )
             } else {

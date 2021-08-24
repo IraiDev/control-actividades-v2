@@ -25,12 +25,13 @@ function UiProvider({ children }) {
   const [isViewChanged, setViewActivities, setViewPLannerTask] = useTab()
   const [isTodoOrPlanner, setviewTodo, setViewPlanner] = useTab()
   const [toggleSideBar, setToggleSideBar] = useToggle(false);
-  const [isLoading, setIsLoading] = useState(false)
   const [disbleBtnSideBar, setDisbleBtnSideBar] = useState(true)
-  const [navTab, setNavTab] = useState(initialNavTab)
-  const [subProject, setSubProject] = useState(intialSubProject)
-  const [filters, setFilters] = useState('')
   const [isResetFilters, setResetFilters] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [subProject, setSubProject] = useState(intialSubProject)
+  const [navTab, setNavTab] = useState(initialNavTab)
+  const [filters, setFilters] = useState('')
+  const [activeOrder, setActiveOrder] = useState(false)
 
   const saveFilters = (param, value = '') => {
     let clearing = clearParams(filters, param)
@@ -59,6 +60,7 @@ function UiProvider({ children }) {
   const activityView = () => {
     setDisbleBtnSideBar(false)
     setViewActivities()
+    setActiveOrder(true)
     setIsLoading(true)
     setNavTab({
       planner: '',
@@ -95,7 +97,8 @@ function UiProvider({ children }) {
       disbleBtnSideBar,
       filters,
       subProject,
-      isResetFilters
+      isResetFilters,
+      activeOrder
     },
     functions: {
       activityView,
@@ -110,7 +113,8 @@ function UiProvider({ children }) {
       saveFiltersInputs,
       setFilters,
       setResetFilters,
-      setViewActivities
+      setViewActivities,
+      setActiveOrder
     }
   }
   return (

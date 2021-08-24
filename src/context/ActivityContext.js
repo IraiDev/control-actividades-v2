@@ -30,6 +30,7 @@ function ActivityProvider({ children }) {
       } else {
         normalAlert('warning', `<p><b>Atencion: </b>${body.msg}</p>`, 'Entiendo')
       }
+      UiFunc.setIsLoading(false)
     } catch (error) {
       console.log("login error: ", error)
     }

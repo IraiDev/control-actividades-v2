@@ -7,7 +7,10 @@ function ButtonText(props) {
     icon = 'text-gray-700',
     text,
     color = 'hover:bg-gray-100 transition duration-500',
-    onclick } = props
+    onclick,
+    isOnclickeable = true,
+    type
+  } = props
 
   const handleClick = () => {
     onclick()
@@ -19,8 +22,9 @@ function ButtonText(props) {
         !disable && (
           <button
             className={`${color} rounded-full hover:shadow-lg shadow-md py-1 px-4 focus:outline-none active:outline-none`}
+            type={type}
             onClick={() => {
-              handleClick();
+              isOnclickeable && handleClick();
             }}
           >
             {text}

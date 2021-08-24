@@ -10,7 +10,20 @@ import Button from "@material-tailwind/react/Button"
 import Input from "@material-tailwind/react/Input"
 import "@material-tailwind/react/tailwind.css"
 
-function ButtonList({ idList, title, icon = 'mr-4 fas fa-bars', actions = true, onclick }) {
+let baseStyle = 'hover:bg-gray-800 rounded-md hover:shadow-inner my-1 px-4 flex justify-between items-center text-transparent hover:text-blue-400'
+
+function ButtonList(props) {
+
+  const {
+    idList,
+    title,
+    icon = 'mr-4 fas fa-bars',
+    actions = true,
+    onclick,
+    isOnclickeable = true,
+    active = ''
+  } = props
+
   const [{ input }, onChangeValues, reset] = useForm({ input: title })
   const { functions: GraphFunc } = useContext(GraphContext)
   const [showModal, setShowModal] = useState(false)
@@ -20,15 +33,13 @@ function ButtonList({ idList, title, icon = 'mr-4 fas fa-bars', actions = true, 
   }
 
   const handleUpdateList = () => {
-    const data = {
-      displayName: input
-    }
+    const data = { displayName: input }
     const aciton = () => {
       setShowModal(false)
       GraphFunc.updateTodoList(idList, data)
     }
-    const state = input === '' ? false : true
-    alertTimer(state) ? aciton() : setShowModal(true)
+    const state = input === ''
+    alertTimer(state, 'info', 1500, 'Llene el campo para actualizar') ? aciton() : setShowModal(true)
   }
 
   const handleDeleteList = () => {
@@ -50,7 +61,7 @@ function ButtonList({ idList, title, icon = 'mr-4 fas fa-bars', actions = true, 
   return (
     <>
       <div
-        className={`hover:bg-gray-800 rounded-md hover:shadow-inner my-1 px-4 flex justify-between items-center text-transparent hover:text-blue-400`}
+        className={`${baseStyle} ${active}`}
       >
         <div className="flex items-center text-white hover:text-blue-400">
           <span>
@@ -59,7 +70,7 @@ function ButtonList({ idList, title, icon = 'mr-4 fas fa-bars', actions = true, 
           <button
             className="py-3 text-left w-44 focus:outline-none"
             onClick={() => {
-              handleClick();
+              isOnclickeable && handleClick();
             }}
           >
             <p className="font-semibold">{title}</p>

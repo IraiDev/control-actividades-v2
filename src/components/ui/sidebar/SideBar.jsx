@@ -15,17 +15,20 @@ function SideBar() {
   const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
   const [{ inputId, inputAct, inputPriority }, onChangeValues, reset] = useForm(initialState)
   const [isChecked, setIsChecked] = useState(false)
+  const [active, setActive] = useState(null)
 
-  const handleClick = () => {
+  const toggleSideBar = () => {
     UiFunc.setToggleSideBar()
   }
 
   const handleOrderAsc = (param) => {
+    setActive(param)
     UiFunc.setIsLoading(true)
     ActFunc.getActivities(`${UiState.filters}${param}`)
   }
 
   const handleOrderDesc = (param) => {
+    setActive(param)
     UiFunc.setIsLoading(true)
     ActFunc.getActivities(`${UiState.filters}${param}`)
   }
@@ -40,7 +43,7 @@ function SideBar() {
   const onsChangeCheck = () => {
     UiFunc.setIsLoading(true)
     setIsChecked(!isChecked)
-    if (isChecked) {
+    if (!isChecked) {
       let hideCA = UiFunc.saveFilters('usuario_no_mostar', 'usuario_no_mostar=ca&')
       console.log('no mostrar a CA', hideCA)
       ActFunc.getActivities(hideCA)
@@ -55,9 +58,17 @@ function SideBar() {
     if (UiState.isResetFilters) {
       UiFunc.setIsLoading(true)
       setIsChecked(false)
+      setActive(null)
       reset()
     }
   }, [UiState.isResetFilters])
+
+  useEffect(() => {
+    if (UiState.activeOrder) {
+      setActive(null)
+      UiFunc.setActiveOrder(false)
+    }
+  }, [UiState.activeOrder])
 
   return (
     <div
@@ -66,7 +77,7 @@ function SideBar() {
         <h1 className="pt-2 mb-4 text-xl">Filtros:</h1>
         <ButtonUnText
           icon="p-2 text-gray-600 fas fa-times fa-lg"
-          onclick={handleClick}
+          onclick={toggleSideBar}
         />
       </div>
       <div className="mb-10 h-700 scroll-row-side-bar">
@@ -80,6 +91,7 @@ function SideBar() {
           orderPriority="orden_id"
           orderAsc={handleOrderAsc}
           orderDesc={handleOrderDesc}
+          active={active}
         />
         <InputFilter
           type="text"
@@ -90,6 +102,7 @@ function SideBar() {
           orderPriority="orden_actividad"
           orderAsc={handleOrderAsc}
           orderDesc={handleOrderDesc}
+          active={active}
         />
         <InputFilter
           isNumber={true}
@@ -101,6 +114,7 @@ function SideBar() {
           orderPriority="orden_prioridad_ra"
           orderAsc={handleOrderAsc}
           orderDesc={handleOrderDesc}
+          active={active}
         />
 
         <SelectFilter
@@ -109,6 +123,7 @@ function SideBar() {
           orderPriority="orden_encargado"
           orderAsc={handleOrderAsc}
           orderDesc={handleOrderDesc}
+          active={active}
         />
         <SelectFilter
           options={ActState.arrayPriority}
@@ -116,6 +131,7 @@ function SideBar() {
           orderPriority="orden_prioridad"
           orderAsc={handleOrderAsc}
           orderDesc={handleOrderDesc}
+          active={active}
         />
         <SelectFilter
           options={ActState.arrayState}
@@ -123,6 +139,7 @@ function SideBar() {
           orderPriority="orden_estado"
           orderAsc={handleOrderAsc}
           orderDesc={handleOrderDesc}
+          active={active}
         />
         <SelectFilter
           options={ActState.arrayProject}
@@ -131,6 +148,7 @@ function SideBar() {
           orderPriority="orden_proyecto"
           orderAsc={handleOrderAsc}
           orderDesc={handleOrderDesc}
+          active={active}
         />
         <SelectFilter
           iscontrollerBy={true}
@@ -138,6 +156,7 @@ function SideBar() {
           orderPriority="orden_sub_proyecto"
           orderAsc={handleOrderAsc}
           orderDesc={handleOrderDesc}
+          active={active}
         />
         <SelectFilter
           options={ActState.arrayUsersS}
@@ -145,6 +164,7 @@ function SideBar() {
           orderPriority="orden_solicitante"
           orderAsc={handleOrderAsc}
           orderDesc={handleOrderDesc}
+          active={active}
         />
 
         <div className="flex items-center px-2 mt-2">
