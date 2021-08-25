@@ -130,7 +130,7 @@ function SideMenu() {
             type="text"
             color="blue"
             size="regular"
-            outline={false}
+            outline={true}
             placeholder="Titulo..."
           />
           <br />
