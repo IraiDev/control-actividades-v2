@@ -38,7 +38,7 @@ function ButtonList(props) {
       setShowModal(false)
       GraphFunc.updateTodoList(idList, data)
     }
-    const state = input === ''
+    const state = input !== ''
     alertTimer(state, 'info', 1500, 'Llene el campo para actualizar') ? aciton() : setShowModal(true)
   }
 
