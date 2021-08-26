@@ -20,7 +20,7 @@ body {
   scrollbar-color: rgba(90, 81, 81, 0.5) transparent;
 }
 
-/* .scroll-row-side-bar {
+.scroll-row-side-bar {
   max-height: 5rem;
   overflow-y: auto;
   overflow-x: hidden;
@@ -31,7 +31,7 @@ body {
 
 .scroll-row-side-bar:hover{
   scrollbar-color: rgba(124, 124, 124, 0.3) transparent;
-} */
+}
 
 .scroll-row::-webkit-scrollbar {
   width: 4px;
@@ -66,9 +66,9 @@ input[type="number"]::-webkit-outer-spin-button {
   z-index: 1500;
 }
 
-/* .h-700{
+.h-700{
   min-height: 720px;
-} */
+}
 
 .w-430{
   width: 430px;
@@ -82,8 +82,8 @@ input[type="number"]::-webkit-outer-spin-button {
   z-index: 10000;
 }
 
-/* @media (min-height: 1080px) {
+@media (min-height: 1080px) {
   .h-700{
     min-height: 720px;
   }
-} */
+}
