@@ -40,16 +40,14 @@ function SideBar() {
     ActFunc.getActivities(newValues)
   }
 
-  const onsChangeCheck = () => {
+  const onChangeCheck = () => {
     UiFunc.setIsLoading(true)
     setIsChecked(!isChecked)
     if (!isChecked) {
       let hideCA = UiFunc.saveFilters('usuario_no_mostar', 'usuario_no_mostar=ca&')
-      console.log('no mostrar a CA', hideCA)
       ActFunc.getActivities(hideCA)
     } else {
       let showCA = UiFunc.saveFilters('usuario_no_mostar')
-      console.log('mostrar a CA', showCA)
       ActFunc.getActivities(showCA)
     }
   }
@@ -174,7 +172,7 @@ function SideBar() {
               className="mr-2"
               type="checkbox"
               checked={isChecked}
-              onChange={onsChangeCheck}
+              onChange={onChangeCheck}
             />
             ocultar a usuario: CA
           </label>

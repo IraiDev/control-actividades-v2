@@ -16,7 +16,6 @@ import PDefaultNotes from '../ui/text/PDefaultNotes';
 import { alertTimer } from '../../helpers/alerts';
 import moment from 'moment';
 
-let dateColor, textColor, lineColor, bgColor, actPriority, actPlay, isActPlay
 let initialState = { inputEdit: '', inputAdd: '' }
 let today = new Date()
 today = moment(today).format('yyyy-MM-DD')
@@ -32,7 +31,7 @@ function Card(props) {
     ticket,
     proyecto,
     subProyecto,
-    pausa,
+    pausas,
     prioridad,
     prioridadRA,
     notas,
@@ -47,6 +46,7 @@ function Card(props) {
 
   let dateTo = moment(fechaCrea)
   let days = dateTo.diff(today, 'days') - (dateTo.diff(today, 'days') * 2)
+  let dateColor, textColor, lineColor, bgColor, actPriority, actPlay = '', isActPlay = false
 
   switch (prioridad) {
     case 600:
@@ -79,13 +79,11 @@ function Card(props) {
       break;
   }
 
-  if (pausa.length > 0) {
-    if (pausa[pausa.length - 1].boton === 2) {
+  if (pausas.length >= 1 && estado === 2) {
+    let pos = pausas.length - 1
+    if (pausas[pos].boton === 2) {
       isActPlay = true
       actPlay = 'border-4 border-black border-opacity-25'
-    } else {
-      isActPlay = false
-      actPlay = ''
     }
   }
 
@@ -185,12 +183,16 @@ function Card(props) {
             />
             <Ptext
               tag="Est:"
-              value={estado === 1 ? "Pendiente" : estado === 2 ? "En trabajo" : ""}
+              value={estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"}
               isTippy={true}
               textTippy="Estado"
             />
+            <Ptext
+              tag="ID:"
+              value={id}
+              isTippy={true}
+              textTippy="ID Actividad" />
             <Ptext tag="Ticket:" value={ticket} />
-            <Ptext tag="ID:" value={id} />
           </div>
           <div className="col-span-4 2xl:col-span-5">
             <Ptext tag="Descripcion:" />

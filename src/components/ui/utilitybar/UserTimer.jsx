@@ -8,7 +8,7 @@ function UserTimer({ user, time, isPause }) {
   useEffect(() => {
     timeRef.current && clearInterval(timeRef.current)
     timeRef.current = setInterval(() => setSec(s => s + 1), 1000)
-  })
+  }, [])
 
   if (isPause) {
     userTime = new Date((time + sec) * 1000).toISOString().substr(11, 8)

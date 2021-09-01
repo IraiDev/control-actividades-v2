@@ -12,7 +12,7 @@ function ActivitiesScreen() {
 
   return (
     <div className="container mx-auto my-5">
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-5 xl:grid-cols-2 lg:grid-cols-1">
         {ActState.activitiesRA.length > 0 ? (
           ActState.activitiesRA.map((obj) => {
             let subProyecto = obj.subproyectos_tareas !== null ?
@@ -31,7 +31,7 @@ function ActivitiesScreen() {
                 subProyecto={subProyecto}
                 bgColor={obj.color_prioridad}
                 notas={obj.notas}
-                pausa={obj.pausas}
+                pausas={obj.pausas}
                 prioridad={obj.prioridad_etiqueta}
                 prioridadRA={obj.num_prioridad}
                 fechaCrea={obj.fecha_tx}

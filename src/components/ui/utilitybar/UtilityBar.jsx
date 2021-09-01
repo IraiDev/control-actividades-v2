@@ -102,6 +102,8 @@ function UtilityBar() {
 
   const handleUserWorking = () => {
     UiFunc.setIsLoading(true)
+    ActFunc.getTimes()
+    ActFunc.getNotify()
     toggleIsWorking(!isWorking)
     if (!isWorking) {
       let param = UiFunc.saveFilters('entrabajo', 'entrabajo=2&')
