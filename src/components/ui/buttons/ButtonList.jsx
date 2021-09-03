@@ -76,27 +76,25 @@ function ButtonList(props) {
           </button>
         </div>
         {
-          actions ?
-            (
-              <div className="flex justify-between hover:text-blue-400">
-                <button
-                  className="active:outline-none focus:outline-none"
-                  onClick={() => {
-                    setShowModal(true);
-                  }}
-                >
-                  <i className="fas fa-pen hover:text-green-400"></i>
-                </button>
-                <button
-                  className="active:outline-none focus:outline-none"
-                  onClick={async () => {
-                    handleDeleteList();
-                  }}
-                >
-                  <i className="ml-3 fas fa-trash hover:text-red-400"></i>
-                </button>
-              </div>
-            ) : ''
+          actions &&
+          <div className="flex justify-between hover:text-blue-400">
+            <button
+              className="active:outline-none focus:outline-none"
+              onClick={() => {
+                setShowModal(true);
+              }}
+            >
+              <i className="fas fa-pen hover:text-green-400"></i>
+            </button>
+            <button
+              className="active:outline-none focus:outline-none"
+              onClick={async () => {
+                handleDeleteList();
+              }}
+            >
+              <i className="ml-3 fas fa-trash hover:text-red-400"></i>
+            </button>
+          </div>
         }
       </div>
 

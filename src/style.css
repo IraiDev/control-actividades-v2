@@ -82,6 +82,10 @@ input[type="number"]::-webkit-outer-spin-button {
   z-index: 10000;
 }
 
+.w-max-card{
+  max-width: 850px;
+}
+
 @media (min-height: 1080px) {
   .h-700{
     min-height: 720px;
