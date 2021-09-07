@@ -18,6 +18,7 @@ import Button from "@material-tailwind/react/Button"
 import PColor from '../text/PColor';
 import "@szhsin/react-menu/dist/index.css";
 import "@material-tailwind/react/tailwind.css"
+import moment from 'moment';
 
 const colorArray = [
   { id: "bg-gray-500", colorButton: "bg-gray-500" },
@@ -147,7 +148,8 @@ function UtilityBar() {
               overflow="auto"
               position="anchor"
               menuButton={
-                <MenuButton className="focus:outline-none active:outline-none">
+                <MenuButton className="relative focus:outline-none active:outline-none">
+                  <label className="absolute -right-1 px-1.5 text-xs text-white bg-red-600 rounded-full h-min w-min -top-0">{ActState.userNotify.length}</label>
                   <Tippy
                     offset={[0, 2]}
                     delay={[200, 0]}
@@ -166,8 +168,9 @@ function UtilityBar() {
                       <MenuItem key={index}>
                         <p className="pb-3 text-sm border-b">
                           <strong>{obj.user_crea_nota.abrev_user}</strong> ha
-                          creado una nota en la Actividad ID:{" "}
-                          <strong>{obj.id_det}</strong>
+                          creado una nota en la Actividad ID: <strong>{obj.id_det}</strong>,
+                          con fecha <strong>{moment(obj.fecha_hora_crea).format('DD-MM-yyyy, HH:mm')}</strong>
+                          <i className="ml-2 text-gray-400 fas fa-eye"></i>
                         </p>
                       </MenuItem>
                     );
@@ -180,7 +183,17 @@ function UtilityBar() {
               </MenuGroup>
               <MenuDivider />
               <MenuItem>
-                <p className="px-3 hover:text-red-500">Marcar como vistas</p>
+                <Tippy
+                  offset={[0, 2]}
+                  delay={[200, 0]}
+                  placement={"bottom"}
+                  content={<span>Funcion aun no disponible</span>}
+                >
+                  <div className="flex items-center mx-auto text-gray-400 hover:text-red-500">
+                    <p>Marcar como vistas</p>
+                    <i className="ml-3 fas fa-eye-slash"></i>
+                  </div>
+                </Tippy>
               </MenuItem>
             </Menu>
             <ButtonUnText

@@ -43,9 +43,13 @@ function ActivityProvider({ children }) {
   // obtener tiempos de los usuarios en play (detenciones en RA)
   const getTimes = async () => {
     try {
+
       const resp = await fetchToken('task/get-times')
       const body = await resp.json()
+      console.log('resp tiempos: ', body)
+
       body.ok ? setUsersTimes(body.tiempos) : normalAlert('warning', 'error tiempos', 'Entiendo')
+
     } catch (error) {
       console.log("getTimes error: ", error)
     }
@@ -53,10 +57,13 @@ function ActivityProvider({ children }) {
 
   const getNotify = async () => {
     try {
+
       const resp = await fetchToken('task/get-notifications')
       const body = await resp.json()
+
       body.ok ? setUserNotify(body.notificaciones) :
         normalAlert('warning', 'Error al obtener las notificaciones', 'Entiendo')
+
     } catch (error) {
       console.log(error)
     }

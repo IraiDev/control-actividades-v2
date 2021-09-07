@@ -1,14 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Providers, LocalizationHelper } from '@microsoft/mgt-element';
-import { Msal2Provider } from '@microsoft/mgt-msal2-provider';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Providers, LocalizationHelper } from '@microsoft/mgt-element'
+import { Msal2Provider } from '@microsoft/mgt-msal2-provider'
 import ActivityProvider from './context/ActivityContext'
 import GraphProvider from './context/GraphContext'
 import UiProvider from './context/UiContext'
-import App from './App';
-import './index.css';
+import App from './App'
+import './index.css'
 import './style.css'
 import 'tippy.js/dist/tippy.css'
+import * as serviceWorkerRegistration from './serviceWorkerRegistration'
+import reportWebVitals from './reportWebVitals'
 
 Providers.globalProvider = new Msal2Provider({
   clientId: 'b71117b7-2266-427c-b1c8-9e7f367cacc3',
@@ -24,7 +26,7 @@ Providers.globalProvider = new Msal2Provider({
     "Tasks.ReadWrite",
     "Presence.Read.All",
   ],
-});
+})
 
 LocalizationHelper.strings = {
   _components: {
@@ -33,7 +35,7 @@ LocalizationHelper.strings = {
       signOutLinkSubtitle: "Cerrar sesion",
     },
   },
-};
+}
 
 ReactDOM.render(
   <React.StrictMode>
@@ -46,4 +48,6 @@ ReactDOM.render(
     </UiProvider>
   </React.StrictMode>,
   document.getElementById('root')
-);
+)
+serviceWorkerRegistration.unregister()
+reportWebVitals()
