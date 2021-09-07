@@ -226,12 +226,21 @@ function Card(props) {
           </div>
         </div>
         <div className="flex justify-between mt-2">
-          <Ptext
-            tag="Prioridad:"
-            value={actPriority}
-            font="font-bold"
-            isPriority={true}
-            priority={prioridadRA} />
+          <div className="flex">
+            <Ptext
+              tag="Prioridad:"
+              font="font-bold mr-1" />
+            <Ptext
+              tag={actPriority}
+              font="font-bold mr-1"
+              isTippy={true}
+              textTippy="Prioridad ToDo" />
+            <Ptext
+              tag={`(${prioridadRA})`}
+              font="font-bold"
+              isTippy={true}
+              textTippy="Prioridad RA" />
+          </div>
           <div className="flex">
             <Ptext
               tag="F. Crea:"

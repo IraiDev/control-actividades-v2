@@ -7,9 +7,9 @@ function Ptext({ isTippy = false, textTippy = '', tag, value, font = '', priorit
       <p>
         <Tippy
           disabled={!isTippy}
-          offset={[0, 2]}
+          offset={[0, 6]}
           placement="top"
-          delay={[500, 0]}
+          delay={[100, 0]}
           content={<span>{textTippy}</span>}
         >
           <strong className="font-bold">{tag} </strong>

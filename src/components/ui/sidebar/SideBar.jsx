@@ -35,6 +35,7 @@ function SideBar() {
 
   const handleFilter = () => {
     UiFunc.setIsLoading(true)
+    setActive(null)
     let inputValues = `id_actividad=${inputId}&titulo=${inputAct}&prioridad_ra=${inputPriority}&`
     let newValues = UiFunc.saveFiltersInputs('id_actividad', 'titulo', 'prioridad_ra', inputValues)
     ActFunc.getActivities(newValues)
@@ -42,7 +43,9 @@ function SideBar() {
 
   const onChangeCheck = () => {
     UiFunc.setIsLoading(true)
+    setActive(null)
     setIsChecked(!isChecked)
+
     if (!isChecked) {
       let hideCA = UiFunc.saveFilters('usuario_no_mostar', 'usuario_no_mostar=ca&')
       ActFunc.getActivities(hideCA)
@@ -53,6 +56,7 @@ function SideBar() {
   }
 
   useEffect(() => {
+    console.log('reseteando filtros')
     if (UiState.isResetFilters) {
       UiFunc.setIsLoading(true)
       setIsChecked(false)

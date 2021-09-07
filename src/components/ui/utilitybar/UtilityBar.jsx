@@ -87,6 +87,7 @@ function UtilityBar() {
 
   const updatePlannerComponents = () => {
     UiFunc.setViewPlanner()
+    UiFunc.setActiveOrder(true)
     UiFunc.setIsLoading(true)
     GraphFunc.getPlannerTask()
     ActFunc.getTimes()
@@ -95,6 +96,7 @@ function UtilityBar() {
 
   const updateActivityComponents = () => {
     UiFunc.setViewActivities()
+    UiFunc.setActiveOrder(true)
     UiFunc.setIsLoading(true)
     ActFunc.getActivities()
     ActFunc.getTimes()
@@ -103,6 +105,7 @@ function UtilityBar() {
 
   const handleUserWorking = () => {
     UiFunc.setIsLoading(true)
+    UiFunc.setActiveOrder(true)
     ActFunc.getTimes()
     ActFunc.getNotify()
     toggleIsWorking(!isWorking)
@@ -149,7 +152,7 @@ function UtilityBar() {
               position="anchor"
               menuButton={
                 <MenuButton className="relative focus:outline-none active:outline-none">
-                  <label className="absolute -right-1 px-1.5 text-xs text-white bg-red-600 rounded-full h-min w-min -top-0">{ActState.userNotify.length}</label>
+                  <label className="absolute -right-1 px-1.5 text-xs text-white bg-red-500 rounded-full h-min w-min -top-0">{ActState.userNotify.length}</label>
                   <Tippy
                     offset={[0, 2]}
                     delay={[200, 0]}
