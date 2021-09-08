@@ -22,20 +22,21 @@ function SideBar() {
   }
 
   const handleOrderAsc = (param) => {
-    setActive(param)
     UiFunc.setIsLoading(true)
-    ActFunc.getActivities(`${UiState.filters}${param}`)
+    setActive(param)
+    let newValue = UiFunc.saveFilters('orden', param)
+    ActFunc.getActivities(newValue)
   }
 
   const handleOrderDesc = (param) => {
-    setActive(param)
     UiFunc.setIsLoading(true)
-    ActFunc.getActivities(`${UiState.filters}${param}`)
+    setActive(param)
+    let newValue = UiFunc.saveFilters('orden', param)
+    ActFunc.getActivities(newValue)
   }
 
   const handleFilter = () => {
     UiFunc.setIsLoading(true)
-    setActive(null)
     let inputValues = `id_actividad=${inputId}&titulo=${inputAct}&prioridad_ra=${inputPriority}&`
     let newValues = UiFunc.saveFiltersInputs('id_actividad', 'titulo', 'prioridad_ra', inputValues)
     ActFunc.getActivities(newValues)
@@ -43,7 +44,6 @@ function SideBar() {
 
   const onChangeCheck = () => {
     UiFunc.setIsLoading(true)
-    setActive(null)
     setIsChecked(!isChecked)
 
     if (!isChecked) {
@@ -56,7 +56,6 @@ function SideBar() {
   }
 
   useEffect(() => {
-    console.log('reseteando filtros')
     if (UiState.isResetFilters) {
       UiFunc.setIsLoading(true)
       setIsChecked(false)

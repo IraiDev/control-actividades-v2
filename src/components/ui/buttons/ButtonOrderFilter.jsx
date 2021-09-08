@@ -15,11 +15,11 @@ function ButtonOrderFilter(props) {
   let desc = `${orderPriority}=desc&`
 
   const handleOrderASC = () => {
-    orderAsc(`${orderPriority}=asc&`)
+    orderAsc(`${orderPriority}=asc&`, orderPriority)
   }
 
   const handleOrderDESC = () => {
-    orderDesc(`${orderPriority}=desc&`)
+    orderDesc(`${orderPriority}=desc&`, orderPriority)
   }
 
   return (

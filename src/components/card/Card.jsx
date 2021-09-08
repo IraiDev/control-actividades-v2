@@ -35,7 +35,8 @@ function Card(props) {
     prioridad,
     prioridadRA,
     notas,
-    fechaCrea
+    fechaCrea,
+    numberCard
   } = props;
 
   const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
@@ -151,7 +152,10 @@ function Card(props) {
       <div className={`rounded p-4 shadow-md text-sm ${bgColor} ${textColor} ${actPlay}`}>
         <div className="flex items-center justify-between pb-2 text-base">
           <Ptext tag="Actividad:" value={actividad} font="font-bold" />
-          {isActPlay && (<i className="fas fa-user-clock"></i>)}
+          <div className="flex items-center">
+            {isActPlay && (<i className="fas fa-user-clock"></i>)}
+            <p className="ml-4 font-bold text-md">{numberCard}</p>
+          </div>
         </div>
         <div className={`grid grid-cols-12 mb-2 h-48 border-b pb-3 gap-2 ${lineColor}`}>
           <div className="col-span-3 md:col-span-2 lg:col-span-3 2xl:col-span-2">

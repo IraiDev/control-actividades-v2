@@ -87,7 +87,6 @@ function UtilityBar() {
 
   const updatePlannerComponents = () => {
     UiFunc.setViewPlanner()
-    UiFunc.setActiveOrder(true)
     UiFunc.setIsLoading(true)
     GraphFunc.getPlannerTask()
     ActFunc.getTimes()
@@ -96,7 +95,6 @@ function UtilityBar() {
 
   const updateActivityComponents = () => {
     UiFunc.setViewActivities()
-    UiFunc.setActiveOrder(true)
     UiFunc.setIsLoading(true)
     ActFunc.getActivities()
     ActFunc.getTimes()
@@ -105,7 +103,6 @@ function UtilityBar() {
 
   const handleUserWorking = () => {
     UiFunc.setIsLoading(true)
-    UiFunc.setActiveOrder(true)
     ActFunc.getTimes()
     ActFunc.getNotify()
     toggleIsWorking(!isWorking)

@@ -46,7 +46,6 @@ function ActivityProvider({ children }) {
 
       const resp = await fetchToken('task/get-times')
       const body = await resp.json()
-      console.log('resp tiempos: ', body)
 
       body.ok ? setUsersTimes(body.tiempos) : normalAlert('warning', 'error tiempos', 'Entiendo')
 

@@ -14,7 +14,7 @@ function ActivitiesScreen() {
     <div className="container mx-auto my-5">
       <div className="grid gap-5 xl:grid-cols-2 lg:grid-cols-1">
         {ActState.activitiesRA.length > 0 ? (
-          ActState.activitiesRA.map((obj) => {
+          ActState.activitiesRA.map((obj, index) => {
             let subProyecto = obj.subproyectos_tareas !== null ?
               obj.subproyectos_tareas.nombre_sub_proy : ""
             return (
@@ -35,6 +35,7 @@ function ActivitiesScreen() {
                 prioridad={obj.prioridad_etiqueta}
                 prioridadRA={obj.num_prioridad}
                 fechaCrea={obj.fecha_tx}
+                numberCard={index + 1}
               />
             );
           })
