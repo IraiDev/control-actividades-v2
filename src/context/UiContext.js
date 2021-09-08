@@ -14,13 +14,6 @@ const initialNavTab = {
   filterPayActiviies: true
 }
 
-const initialSubProject = {
-  label: 'Seleccione una opcion',
-  value: '',
-  id: null,
-  name: ''
-}
-
 function UiProvider({ children }) {
   const [isViewChanged, setViewActivities, setViewPLannerTask] = useTab()
   const [isTodoOrPlanner, setViewTodo, setViewPlanner] = useTab()
@@ -28,7 +21,7 @@ function UiProvider({ children }) {
   const [disableBtnSideBar, setDisableBtnSideBar] = useState(true)
   const [isResetFilters, setResetFilters] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [subProject, setSubProject] = useState(initialSubProject)
+  const [subProject, setSubProject] = useState(null)
   const [navTab, setNavTab] = useState(initialNavTab)
   const [filters, setFilters] = useState('')
   const [activeOrder, setActiveOrder] = useState(false)

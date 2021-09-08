@@ -5,12 +5,6 @@ import { ActivityContext } from '../../../context/ActivityContext';
 import ButtonOrderFilter from '../buttons/ButtonOrderFilter';
 
 let flag = true, stop = 0
-const initialState = {
-  label: 'Seleccione una opcion',
-  value: '',
-  id: null,
-  name: ''
-}
 let newSubProjecArray = []
 
 function SelectFilter(props) {
@@ -24,12 +18,15 @@ function SelectFilter(props) {
     bgColor,
     orderAsc,
     orderDesc,
-    active
+    active,
+    isMulti = false,
+    closeMenuOnSelect = true
   } = props
 
   const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
   const { functions: UiFunc, states: UiState } = useContext(UiContext)
-  const [selectValue, setSelectValue] = useState(initialState)
+  const [selectValue, setSelectValue] = useState(null)
+  const [multiSelectValue, setMultiSelectValue] = useState(null)
 
   const onChangeSelect = (option) => {
     let filter = `${option.name}=${option.value}&`
@@ -37,24 +34,30 @@ function SelectFilter(props) {
     iscontrollerBy ? UiFunc.setSubProject(option) : setSelectValue(option)
   }
 
+  const onChangeMultiSelect = (option) => {
+    console.log('multi select seleccion: ', option)
+    setMultiSelectValue(option)
+  }
+
   const onChangeSelectController = (option) => {
     let filter = `${option.name}=${option.value}&`
     setSelectValue(option)
     UiFunc.saveFiltersController('subProy', option.name, filter)
-    UiFunc.setSubProject(initialState)
+    UiFunc.setSubProject(null)
     newSubProjecArray = ActState.arraySubProject.filter(item => option.id === item.id)
     newSubProjecArray.unshift({
-      label: 'Todas las opciones',
+      label: 'Todas',
       value: '',
       name: 'subProy',
     })
-    option.label === 'Todas las opciones' ? flag = true : flag = false
+    option.label === 'Todas' ? flag = true : flag = false
   }
 
   useEffect(() => {
     if (UiState.isResetFilters) {
-      setSelectValue(initialState)
-      UiFunc.setSubProject(initialState)
+      setSelectValue(null)
+      setMultiSelectValue(null)
+      UiFunc.setSubProject(null)
       UiFunc.setResetFilters(false)
       UiFunc.setFilters('')
       flag = true
@@ -72,11 +75,13 @@ function SelectFilter(props) {
         <label className="text-xs">{label}:</label>
         <div>
           <Select
-            placeholder="Seleccione una"
+            isMulti={isMulti}
+            placeholder={'Seleccione una opcion'}
+            closeMenuOnSelect={closeMenuOnSelect}
             className={`mb-2 ${width}`}
             options={iscontrollerBy ? (flag ? ActState.arraySubProject : newSubProjecArray) : options}
-            onChange={isController ? onChangeSelectController : onChangeSelect}
-            value={iscontrollerBy ? UiState.subProject : selectValue}
+            onChange={isMulti ? onChangeMultiSelect : isController ? onChangeSelectController : onChangeSelect}
+            value={isMulti ? multiSelectValue : iscontrollerBy ? UiState.subProject : selectValue}
           />
         </div>
       </div>

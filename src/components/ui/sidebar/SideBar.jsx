@@ -167,6 +167,16 @@ function SideBar() {
           orderDesc={handleOrderDesc}
           active={active}
         />
+        <SelectFilter
+          isMulti={true}
+          closeMenuOnSelect={false}
+          options={ActState.arrayUsersS}
+          label="test"
+          orderPriority="orden_solicitante"
+          orderAsc={handleOrderAsc}
+          orderDesc={handleOrderDesc}
+          active={active}
+        />
 
         <div className="flex items-center px-2 mt-2">
           <label htmlFor="checkbox-11111">

@@ -81,7 +81,7 @@ function ActivityProvider({ children }) {
         }
       })
       arrayState.unshift({
-        label: 'Todas las opciones',
+        label: 'Todas',
         value: '',
         name: 'estado',
       })
@@ -94,7 +94,7 @@ function ActivityProvider({ children }) {
         }
       })
       arrayPriority.unshift({
-        label: 'Todas las opciones',
+        label: 'Todas',
         value: '',
         name: 'color',
       })
@@ -108,7 +108,7 @@ function ActivityProvider({ children }) {
         }
       })
       arrayProject.unshift({
-        label: 'Todas las opciones',
+        label: 'Todas',
         value: '',
         name: 'proyecto',
       })
@@ -122,7 +122,7 @@ function ActivityProvider({ children }) {
         }
       })
       arraySubProject.unshift({
-        label: 'Todas las opciones',
+        label: 'Todas',
         value: '',
         name: 'subProy',
       })
@@ -135,7 +135,7 @@ function ActivityProvider({ children }) {
         }
       })
       arrayUsersE.unshift({
-        label: 'Todas las opciones',
+        label: 'Todas',
         value: '',
         name: 'encargado',
       })
@@ -148,7 +148,7 @@ function ActivityProvider({ children }) {
         }
       })
       arrayUsersS.unshift({
-        label: 'Todas las opciones',
+        label: 'Todas',
         value: '',
         name: 'solicitante',
       })
