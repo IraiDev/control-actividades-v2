@@ -61,7 +61,7 @@ function UtilityBar() {
     setPriority(option)
   }
 
-  const handleSelecColor = (color) => {
+  const handleSelectColor = (color) => {
     setColorSelected(color)
   }
 
@@ -127,11 +127,11 @@ function UtilityBar() {
         className={`flex flex-col lg:flex-row bg-white shadow sticky top-14 z-20 pt-5 px-10`}>
         <div className="flex justify-between order-last w-full pb-5 lg:order-first">
           <div>
-            <ButtonText disable={UiState.disbleBtnSideBar} icon="fas fa-filter fa-sm" text="Filtrar" onclick={handleSideBar} />
+            <ButtonText disable={UiState.disableBtnSideBar} icon="fas fa-filter fa-sm" text="Filtrar" onclick={handleSideBar} />
           </div>
           <div className="flex">
             <ButtonUnText
-              disable={UiState.navTab.filterPayActiviies}
+              disable={UiState.navTab.filterPayActivities}
               icon="fas fa-user-clock"
               tippyText={isWorking ? "Todas las actividades" : "Mostrar actividades en Play"}
               color={isWorking && 'text-blue-500'}
@@ -257,7 +257,7 @@ function UtilityBar() {
                   <ButtonColor
                     key={obj.id}
                     color={obj.colorButton}
-                    setColor={handleSelecColor}
+                    setColor={handleSelectColor}
                   />
                 );
               })}

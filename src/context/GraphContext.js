@@ -8,7 +8,7 @@ function GraphProvider({ children }) {
   const [userEmail, setUserEmail] = useState(null)
   const [plannerTask, setPlannerTask] = useState([])
   const [todoTask, setTodoTask] = useState([])
-  const [todoList, settodoList] = useState([])
+  const [todoList, setTodoList] = useState([])
   const [idListSelected, setIdListSelected] = useState(null)
   const { functions: UiFunc } = useContext(UiContext)
 
@@ -54,7 +54,7 @@ function GraphProvider({ children }) {
 
   const getTodoList = async () => {
     await getFetch('/me/todo/lists')
-      .then(resp => settodoList(resp.value))
+      .then(resp => setTodoList(resp.value))
     UiFunc.setIsLoading(false)
   }
 

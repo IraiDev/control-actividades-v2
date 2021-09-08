@@ -4,7 +4,7 @@ import { UiContext } from '../../../context/UiContext';
 import { ActivityContext } from '../../../context/ActivityContext';
 import ButtonOrderFilter from '../buttons/ButtonOrderFilter';
 
-let flag = true
+let flag = true, stop = 0
 const initialState = {
   label: 'Seleccione una opcion',
   value: '',
@@ -58,7 +58,11 @@ function SelectFilter(props) {
       UiFunc.setResetFilters(false)
       UiFunc.setFilters('')
       flag = true
-      ActFunc.getActivities('_')
+      stop = stop + 1
+      if (stop === 6) {
+        ActFunc.getActivities('_')
+        stop = 0
+      }
     }
   }, [UiState.isResetFilters])
 

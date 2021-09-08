@@ -14,7 +14,7 @@ function NavBar() {
       </div>
       <div className="flex items-center">
         <button disabled={UiState.navTab.disableActivityTab}
-          className={`hover:text-blue-700 focus:outline-none hover:bg-gray-100 rounded-full px-4 py-2 ${UiState.navTab.acivities}`}
+          className={`hover:text-blue-700 focus:outline-none hover:bg-gray-100 rounded-full px-4 py-2 ${UiState.navTab.activities}`}
           onClick={() => { UiFunc.activityView() }}
         >
           Actividades

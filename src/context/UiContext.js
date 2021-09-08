@@ -14,7 +14,7 @@ const initialNavTab = {
   filterPayActiviies: true
 }
 
-const intialSubProject = {
+const initialSubProject = {
   label: 'Seleccione una opcion',
   value: '',
   id: null,
@@ -23,12 +23,12 @@ const intialSubProject = {
 
 function UiProvider({ children }) {
   const [isViewChanged, setViewActivities, setViewPLannerTask] = useTab()
-  const [isTodoOrPlanner, setviewTodo, setViewPlanner] = useTab()
+  const [isTodoOrPlanner, setViewTodo, setViewPlanner] = useTab()
   const [toggleSideBar, setToggleSideBar] = useToggle(false);
-  const [disbleBtnSideBar, setDisbleBtnSideBar] = useState(true)
+  const [disableBtnSideBar, setDisableBtnSideBar] = useState(true)
   const [isResetFilters, setResetFilters] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [subProject, setSubProject] = useState(intialSubProject)
+  const [subProject, setSubProject] = useState(initialSubProject)
   const [navTab, setNavTab] = useState(initialNavTab)
   const [filters, setFilters] = useState('')
   const [activeOrder, setActiveOrder] = useState(false)
@@ -37,7 +37,7 @@ function UiProvider({ children }) {
     let clearing = clearParams(filters, param)
     let newValue = `${clearing}${value}`
     setFilters(newValue)
-    return newValue
+    return newValue === '' ? '_' : newValue
   }
 
   const saveFiltersController = (param1, param2, value = '') => {
@@ -58,32 +58,32 @@ function UiProvider({ children }) {
   }
 
   const activityView = () => {
-    setDisbleBtnSideBar(false)
+    setDisableBtnSideBar(false)
     setViewActivities()
     setActiveOrder(true)
     setIsLoading(true)
     setNavTab({
       planner: '',
-      acivities: 'text-blue-600 font-bold',
+      activities: 'text-blue-600 font-bold',
       disableActivityTab: true,
       disablePlannerTab: false,
       activeTab: true,
-      filterPayActiviies: false
+      filterPayActivities: false
     })
   }
 
   const plannerView = () => {
     toggleSideBar && setToggleSideBar()
-    setDisbleBtnSideBar(true)
+    setDisableBtnSideBar(true)
     setViewPLannerTask()
     setIsLoading(true)
     setNavTab({
-      acivities: '',
+      activities: '',
       planner: 'text-blue-600 font-bold',
       disableActivityTab: false,
       disablePlannerTab: true,
       activeTab: false,
-      filterPayActiviies: true
+      filterPayActivities: true
     })
   }
 
@@ -94,7 +94,7 @@ function UiProvider({ children }) {
       isTodoOrPlanner,
       toggleSideBar,
       isLoading,
-      disbleBtnSideBar,
+      disableBtnSideBar,
       filters,
       subProject,
       isResetFilters,
@@ -104,7 +104,7 @@ function UiProvider({ children }) {
       activityView,
       plannerView,
       setViewPlanner,
-      setviewTodo,
+      setViewTodo,
       setToggleSideBar,
       setIsLoading,
       saveFilters,

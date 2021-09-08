@@ -18,19 +18,19 @@ function SideMenu() {
   const { functions: UiFunc } = useContext(UiContext)
   const [showModal, setShowModal] = useState(false)
   const [plannerActive, setPlannerActive] = useState(false)
-  const [idTodoList, setidTodoList] = useState(null)
+  const [idTodoList, setIdTodoList] = useState(null)
 
   const handleClickTodo = (idList) => {
-    setidTodoList(idList)
+    setIdTodoList(idList)
     setPlannerActive(false)
     UiFunc.setIsLoading(true)
-    UiFunc.setviewTodo()
+    UiFunc.setViewTodo()
     GraphFunc.getTodoTask(idList)
     GraphFunc.setIdListSelected(idList)
   }
 
   const handleClickPlanner = () => {
-    setidTodoList(null)
+    setIdTodoList(null)
     setPlannerActive(true)
     UiFunc.setIsLoading(true)
     UiFunc.setViewPlanner()
@@ -54,7 +54,7 @@ function SideMenu() {
   }
 
   const showModalTrue = () => {
-    setidTodoList(null)
+    setIdTodoList(null)
     setPlannerActive(false)
     setShowModal(true)
   }

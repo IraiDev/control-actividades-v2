@@ -64,12 +64,12 @@ function SideBar() {
     }
   }, [UiState.isResetFilters])
 
-  useEffect(() => {
-    if (UiState.activeOrder) {
-      setActive(null)
-      UiFunc.setActiveOrder(false)
-    }
-  }, [UiState.activeOrder])
+  // useEffect(() => {
+  //   if (UiState.activeOrder) {
+  //     setActive(null)
+  //     UiFunc.setActiveOrder(false)
+  //   }
+  // }, [UiState.activeOrder])
 
   return (
     <div
@@ -169,9 +169,9 @@ function SideBar() {
         />
 
         <div className="flex items-center px-2 mt-2">
-          <label htmlFor="checkbox-1">
+          <label htmlFor="checkbox-11111">
             <input
-              id="checkbox-1"
+              id="checkbox-11111"
               className="mr-2"
               type="checkbox"
               checked={isChecked}
