@@ -162,7 +162,7 @@ function ActivityProvider({ children }) {
 
     let data = {}
 
-    if (filtersParam !== 'nada') {
+    if (filtersParam !== 'nada' || filtersParam !== '_') {
       data = {
         encargado: UiState.multiEncargados,
         solicitante: UiState.multiSolicitantes,

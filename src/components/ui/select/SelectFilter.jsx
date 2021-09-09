@@ -30,6 +30,7 @@ function SelectFilter(props) {
   const onChangeSelect = (option) => {
     let filter = `${option.name}=${option.value}&`
     UiFunc.saveFilters(option.name, filter)
+    setSelectValue(option)
   }
 
   const onChangeMultiSelect = (option) => {

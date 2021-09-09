@@ -175,13 +175,14 @@ function SideBar() {
         <div className="flex items-center px-2 mt-2">
           <label htmlFor="checkbox-11111">
             <input
+              disabled
               id="checkbox-11111"
               className="mr-2"
               type="checkbox"
               checked={isChecked}
               onChange={onChangeCheck}
             />
-            ocultar a usuario: CA
+            ocultar a usuario: CA (no disponible...)
           </label>
         </div>
       </div>
