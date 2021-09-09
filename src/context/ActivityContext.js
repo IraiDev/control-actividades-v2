@@ -125,6 +125,7 @@ function ActivityProvider({ children }) {
         label: 'Todas',
         value: '',
         name: 'subProy',
+        id: null
       })
 
       arrayUsersE = body.usuarios.map(item => {
@@ -158,9 +159,29 @@ function ActivityProvider({ children }) {
   }
 
   const getActivities = async (filtersParam = '') => {
+
+    let data = {}
+
+    if (filtersParam !== 'nada') {
+      data = {
+        encargado: UiState.multiEncargados,
+        solicitante: UiState.multiSolicitantes,
+        proyecto: UiState.multiProyectos,
+        subProy: UiState.multiSubProyectos
+      }
+    }
+    else {
+      data = {
+        encargado: [],
+        solicitante: [],
+        proyecto: [],
+        subProy: []
+      }
+    }
+
     try {
       let filters = filtersParam === '' ? UiState.filters : filtersParam
-      const resp = await fetchToken(`task/get-task-ra?${filters}`)
+      const resp = await fetchToken(`task/get-task-ra?${filters}`, data, 'POST')
       const body = await resp.json()
       if (body.ok) {
         setActivitiesRA(body.tareas)

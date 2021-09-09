@@ -23,8 +23,13 @@ function UiProvider({ children }) {
   const [isLoading, setIsLoading] = useState(false)
   const [subProject, setSubProject] = useState(null)
   const [navTab, setNavTab] = useState(initialNavTab)
-  const [filters, setFilters] = useState('')
   const [activeOrder, setActiveOrder] = useState(false)
+  //filtros en formato string y array
+  const [filters, setFilters] = useState('')
+  const [multiEncargados, setMultiEncargados] = useState([])
+  const [multiProyectos, setMultiProyectos] = useState([])
+  const [multiSubProyectos, setMultiSubProyectos] = useState([])
+  const [multiSolicitantes, setMultiSolicitantes] = useState([])
 
   const saveFilters = (param, value = '') => {
     let clearing = clearParams(filters, param)
@@ -91,7 +96,11 @@ function UiProvider({ children }) {
       filters,
       subProject,
       isResetFilters,
-      activeOrder
+      activeOrder,
+      multiEncargados,
+      multiProyectos,
+      multiSubProyectos,
+      multiSolicitantes
     },
     functions: {
       activityView,
@@ -107,7 +116,11 @@ function UiProvider({ children }) {
       setFilters,
       setResetFilters,
       setViewActivities,
-      setActiveOrder
+      setActiveOrder,
+      setMultiEncargados,
+      setMultiProyectos,
+      setMultiSubProyectos,
+      setMultiSolicitantes
     }
   }
   return (

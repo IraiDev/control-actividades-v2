@@ -119,6 +119,7 @@ function SideBar() {
         />
 
         <SelectFilter
+          isMulti={true}
           options={ActState.arrayUsersE}
           label="Encargado"
           orderPriority="orden_encargado"
@@ -143,6 +144,7 @@ function SideBar() {
           active={active}
         />
         <SelectFilter
+          isMulti={true}
           options={ActState.arrayProject}
           isController={true}
           label="Proyecto"
@@ -152,6 +154,7 @@ function SideBar() {
           active={active}
         />
         <SelectFilter
+          isMulti={true}
           iscontrollerBy={true}
           label="Sub proyecto"
           orderPriority="orden_sub_proyecto"
@@ -160,18 +163,9 @@ function SideBar() {
           active={active}
         />
         <SelectFilter
+          isMulti={true}
           options={ActState.arrayUsersS}
           label="Solicitante"
-          orderPriority="orden_solicitante"
-          orderAsc={handleOrderAsc}
-          orderDesc={handleOrderDesc}
-          active={active}
-        />
-        <SelectFilter
-          isMulti={true}
-          closeMenuOnSelect={false}
-          options={ActState.arrayUsersS}
-          label="test"
           orderPriority="orden_solicitante"
           orderAsc={handleOrderAsc}
           orderDesc={handleOrderDesc}
