@@ -47,10 +47,10 @@ function SideBar() {
     setIsChecked(!isChecked)
 
     if (!isChecked) {
-      let hideCA = UiFunc.saveFilters('usuario_no_mostar', 'usuario_no_mostar=ca&')
+      let hideCA = UiFunc.saveFilters('usuario_no_mostrar', 'usuario_no_mostrar=ca&')
       ActFunc.getActivities(hideCA)
     } else {
-      let showCA = UiFunc.saveFilters('usuario_no_mostar')
+      let showCA = UiFunc.saveFilters('usuario_no_mostrar')
       ActFunc.getActivities(showCA)
     }
   }
@@ -175,14 +175,13 @@ function SideBar() {
         <div className="flex items-center px-2 mt-2">
           <label htmlFor="checkbox-11111">
             <input
-              disabled
               id="checkbox-11111"
               className="mr-2"
               type="checkbox"
               checked={isChecked}
               onChange={onChangeCheck}
             />
-            ocultar a usuario: CA (no disponible...)
+            ocultar a usuario: CA
           </label>
         </div>
       </div>

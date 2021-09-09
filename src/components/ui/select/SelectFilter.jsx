@@ -141,7 +141,6 @@ function SelectFilter(props) {
       setMultiSelectValue(null)
 
       UiFunc.setSubProject(null)
-      UiFunc.setResetFilters(false)
       UiFunc.setFilters('')
       UiFunc.setMultiEncargados([])
       UiFunc.setMultiProyectos([])
@@ -156,6 +155,7 @@ function SelectFilter(props) {
         ActFunc.getActivities('nada')
         stop = 0
       }
+      UiFunc.setResetFilters(false)
     }
   }, [UiState.isResetFilters])
 
