@@ -81,8 +81,7 @@ function Card(props) {
   }
 
   if (pausas.length >= 1 && estado === 2) {
-    let pos = pausas.length - 1
-    if (pausas[pos].boton === 2) {
+    if (pausas[pausas.length - 1].boton === 2) {
       isActPlay = true
       actPlay = 'border-4 border-black border-opacity-25'
     }

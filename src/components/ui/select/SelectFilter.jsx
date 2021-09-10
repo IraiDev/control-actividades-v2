@@ -9,7 +9,7 @@ let newSubProjectArray = []
 
 function SelectFilter(props) {
   const {
-    iscontrollerBy = false,
+    isControllerBy = false,
     isController = false,
     width = 'w-60',
     options,
@@ -36,7 +36,7 @@ function SelectFilter(props) {
   const onChangeMultiSelect = (option) => {
     let arrayFilters = []
 
-    iscontrollerBy ? UiFunc.setSubProject(option) : setMultiSelectValue(option)
+    isControllerBy ? UiFunc.setSubProject(option) : setMultiSelectValue(option)
 
     if (option.length > 0) {
 
@@ -168,9 +168,9 @@ function SelectFilter(props) {
             isMulti={isMulti}
             placeholder={'Seleccione una opcion'}
             className={`mb-2 ${width}`}
-            options={iscontrollerBy ? flag ? newSubProjectArray : ActState.arraySubProject : options}
+            options={isControllerBy ? flag ? newSubProjectArray : ActState.arraySubProject : options}
             onChange={isMulti ? isController ? onChangeSelectController : onChangeMultiSelect : onChangeSelect}
-            value={isMulti ? iscontrollerBy ? UiState.subProject : multiSelectValue : selectValue}
+            value={isMulti ? isControllerBy ? UiState.subProject : multiSelectValue : selectValue}
           />
         </div>
       </div>
