@@ -131,7 +131,7 @@ function UtilityBar() {
           </div>
           <div className="flex">
             <ButtonUnText
-              disable={UiState.navTab.filterPayActivities}
+              disable={UiState.navTab.filterPlayActivities}
               icon="fas fa-user-clock"
               tippyText={isWorking ? "Todas las actividades" : "Mostrar actividades en Play"}
               color={isWorking && 'text-blue-500'}

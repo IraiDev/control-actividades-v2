@@ -6,12 +6,12 @@ import useToggle from '../hooks/useToggle'
 export const UiContext = createContext()
 
 const initialNavTab = {
-  acivities: '',
+  activities: '',
   planner: 'text-blue-600 font-bold',
   disableActivityTab: false,
   disablePlannerTab: true,
   activeTab: false,
-  filterPayActiviies: true
+  filterPlayActivities: true
 }
 
 function UiProvider({ children }) {
@@ -66,7 +66,7 @@ function UiProvider({ children }) {
       disableActivityTab: true,
       disablePlannerTab: false,
       activeTab: true,
-      filterPayActivities: false
+      filterPlayActivities: false
     })
   }
 
@@ -81,7 +81,7 @@ function UiProvider({ children }) {
       disableActivityTab: false,
       disablePlannerTab: true,
       activeTab: false,
-      filterPayActivities: true
+      filterPlayActivities: true
     })
   }
 
