@@ -16,7 +16,7 @@ function ActivitiesScreen() {
         {ActState.activitiesRA.length > 0 ? (
           ActState.activitiesRA.map((obj, index) => {
             let subProyecto = obj.subproyectos_tareas !== null ?
-              obj.subproyectos_tareas.nombre_sub_proy : ""
+              obj.subproyectos_tareas.nombre_sub_proy : 'Ninguno'
             return (
               <Card
                 key={obj.id_det}

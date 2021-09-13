@@ -15,6 +15,10 @@ import "@material-tailwind/react/tailwind.css"
 import PDefaultNotes from '../ui/text/PDefaultNotes';
 import { alertTimer } from '../../helpers/alerts';
 import moment from 'moment';
+import ButtonUnText from '../ui/buttons/ButtonUnText';
+import ButtonColor from '../ui/buttons/ButtonColor';
+import InputField from '../ui/inputs/InputField';
+import PTimes from '../ui/text/PTimes';
 
 let initialState = { inputEdit: '', inputAdd: '' }
 let today = new Date()
@@ -42,6 +46,8 @@ function Card(props) {
   const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
   const [{ inputEdit, inputAdd }, onChangeValues, reset] = useForm(initialState)
   const [showModal, setShowModal] = useState(false)
+  const [showModalDetails, setShowModalDetails] = useState(false)
+  const [flagOpenDetails, setFlagOpenDetails] = useState(false)
   const [updateOrAdd, setUpdateOrAdd] = useState(false)
   const [noteActive, setNoteActive] = useState({ idNote: null, description: '' })
 
@@ -100,7 +106,8 @@ function Card(props) {
       showModalFalse()
     }
     let state = inputAdd !== ''
-    alertTimer(state, 'info', 1500, 'No puedes agregar una nota vacia') && action()
+    alertTimer(state, 'info', 1500, 'No puedes agregar una nota vacia') && action();
+    if (flagOpenDetails && inputAdd !== '') setShowModalDetails(true)
   }
 
   const handleUpdateNote = () => {
@@ -121,14 +128,17 @@ function Card(props) {
       let state = inputEdit !== ''
       alertTimer(state, 'info', 1500, 'No puedes agregar una nota vacia') && actionAdd()
     }
+    if (flagOpenDetails && inputEdit !== '') setShowModalDetails(true)
   }
 
   const showModalUpdateNote = () => {
+    setShowModalDetails(false)
     setShowModal(true)
     setUpdateOrAdd(false)
   }
 
   const showModalAddNote = () => {
+    setShowModalDetails(false)
     setShowModal(true)
     setUpdateOrAdd(true)
   }
@@ -137,18 +147,32 @@ function Card(props) {
     initialState.inputEdit = ''
     setNoteActive({ idNote: null, description: '' })
     setShowModal(false)
+    flagOpenDetails ? setShowModalDetails(true) : setShowModalDetails(false)
     reset()
   }
 
-  const handleGetidNote = (idNote, description) => {
+  const showModalDetailsFalse = () => {
+    setShowModalDetails(false)
+    setFlagOpenDetails(false)
+  }
+
+  const handleGetIdNote = (idNote, description) => {
     reset()
     setNoteActive({ idNote, description })
     initialState.inputEdit = description
   }
 
+  const handleOpenDetails = () => {
+    setShowModalDetails(true)
+    setFlagOpenDetails(true)
+    console.log('modal detalles', id)
+  }
+
   return (
     <>
-      <div className={`rounded p-4 shadow-md text-sm ${bgColor} ${textColor} ${actPlay}`}>
+      <div
+        className={`rounded p-4 shadow-md text-sm ${bgColor} ${textColor} ${actPlay}`}
+        onDoubleClick={() => handleOpenDetails()} >
         <div className="flex items-center justify-between pb-2 text-base">
           <Ptext tag="Actividad:" value={actividad} font="font-bold" />
           <div className="flex items-center">
@@ -378,7 +402,7 @@ function Card(props) {
                             date={obj.fecha_hora_crea}
                             user={obj.user_crea}
                             dateColor={dateColor}
-                            onclick={handleGetidNote}
+                            onclick={handleGetIdNote}
                             activeColor={noteActive.idNote === obj.id_nota ? 'text-green-600' : 'text-gray-500'}
                           />
                         )
@@ -414,6 +438,170 @@ function Card(props) {
           </Button>
         </ModalFooter>
       </Modal>
+
+      {/* modal activity details */}
+
+      <Modal size="lg" active={showModalDetails} toggler={() => { }}>
+        <ModalBody>
+          <div className="flex items-center justify-between mb-5">
+            <div className="text-2xl font-bold text-gray-700 capitalize">
+              Detalle actividad: {id}, {actividad}
+            </div>
+            <div className="rounded-full p-1 bg-gray-100">
+              <ButtonColor
+                color="bg-gray-300"
+                isUpdate={true}
+                priority={1000}
+                id={id}
+                updatePriority={handleUpdatePriority}
+                isTippy={true}
+                tippyText="Sin Prioridad"
+                offSet={10}
+                hwBtn="5" />
+
+              <ButtonColor
+                color={ActState.userData.usuario.color_prioridad_baja}
+                isUpdate={true}
+                priority={600}
+                id={id}
+                updatePriority={handleUpdatePriority}
+                isTippy={true}
+                tippyText="Prioridad Baja"
+                offSet={10}
+                hwBtn="5" />
+
+              <ButtonColor
+                color={ActState.userData.usuario.color_prioridad_media}
+                isUpdate={true}
+                priority={400}
+                id={id}
+                updatePriority={handleUpdatePriority}
+                isTippy={true}
+                tippyText="Prioridad Media"
+                offSet={10}
+                hwBtn="5" />
+
+              <ButtonColor
+                color={ActState.userData.usuario.color_prioridad_alta}
+                isUpdate={true}
+                priority={100}
+                id={id}
+                updatePriority={handleUpdatePriority}
+                isTippy={true}
+                tippyText="Prioridad Alta"
+                offSet={10}
+                hwBtn="5" />
+            </div>
+          </div>
+          <div className="w-screen"></div>
+          <div className="grid grid-cols-3">
+            <div className="col-span-1">
+              <Ptext tag="Encargado:" value={encargado}
+              />
+              <Ptext tag="Proyecto:" value={proyecto}
+              />
+              <Ptext tag="Sub Proyecto:" value={subProyecto}
+              />
+              <Ptext tag="Solicitante:" value={solicitante}
+              />
+              <Ptext tag="Estado:" value={estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"}
+              />
+              <Ptext tag="ID actividad:" value={id}
+              />
+              <Ptext tag="Ticket:" value={ticket === 0 ? 'Ninguno' : ticket} />
+              <div className="flex">
+                <Ptext tag="Fecha de Creacion:" value={moment(fechaCrea).format('DD-MM-yyyy')}
+                />
+                <Ptext tag={`(${days})`} isTippy={true} textTippy="Dias transcurridos"
+                />
+              </div>
+              <div className="flex items-center">
+                <Ptext tag="Prioridad:" value={actPriority} />
+                <p className={`${bgColor} h-5 w-5 rounded-full ml-2`}></p>
+              </div>
+              <Ptext tag="Prioridad RA:" value={prioridadRA} />
+            </div>
+            <div className="col-span-2 bg-gray-100 py-2 px-4 rounded-md border">
+              <div className="flex justify-between">
+                <Ptext tag="Informes Diarios (notas):" />
+                <div>
+                  <ButtonUnText icon="fas fa-plus" onclick={showModalAddNote} />
+                  <ButtonUnText icon="fas fa-pen" onclick={showModalUpdateNote} />
+                </div>
+              </div>
+              <div className="scroll-row h-card-details">
+                <ul className="mt-1">
+                  {notas.length > 0 ?
+                    notas.map(obj => {
+                      return (
+                        <ListNote
+                          key={obj.id_nota}
+                          desc={obj.desc_nota}
+                          date={obj.fecha_hora_crea}
+                          user={obj.user_crea}
+                          dateColor={dateColor}
+                          styleList="font-normal text-justify"
+                        />
+                      )
+                    }).reverse()
+                    :
+                    <li>Sin notas</li>
+                  }
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 mt-6 bg-gray-100 rounded-md py-2 px-4 border">
+            <div className="flex justify-between">
+              <Ptext tag="Descripcion:" />
+              <ButtonUnText
+                icon="fas fa-pen"
+                isTippy={true}
+                tippyText="no disponible"
+                isOnclickeable={false} />
+            </div>
+            <div className="max-h-48 scroll-row">
+              <p className="p-2 leading-tight text-justify">{desc}</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 mt-6">
+            <Ptext tag="Opciones Registro de Avance:" />
+            <div className="mt-4 grid grid-cols-4 gap-10 px-5">
+              <div className="col-span-1 border-r">
+                <InputField disabled={false} tag="Nᵒ prioridad" value="150" />
+                <InputField tag="tiempo estimado" value="2" />
+                <InputField tag="tiempo trabajado" value="3" />
+                <InputField tag="tiempo cotizado" value="2" />
+              </div>
+              <div className="col-span-3">
+                <div>
+
+                </div>
+                <div className="grid grid-cols-4">
+                  <PTimes user="RD" />
+                  <PTimes user="SA" />
+                  <PTimes user="IA" />
+                  <PTimes user="FM" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            color="lightBlue"
+            buttonType="link"
+            size="regular"
+            rounded={true}
+            block={false}
+            iconOnly={false}
+            onClick={() => showModalDetailsFalse()}
+            ripple="dark">
+            cerrar
+          </Button>
+        </ModalFooter>
+      </Modal>
+
     </>
   )
 }
