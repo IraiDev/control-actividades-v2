@@ -7,20 +7,21 @@ function InputField(props) {
     tag,
     value,
     name,
-    onChange,
+    onchange,
     disabled = true
   } = props
 
   return (
-    <div className="mt-2">
+    <div>
       <p className="capitalize text-sm text-gray-500">{tag}:</p>
       <input
         disabled={disabled}
-        className={`${disabled ? 'bg-white' : 'bg-gray-100 border'} block mt-1 w-20 rounded-md py-1 px-2 focus:border-2 focus:outline-none focus:border-blue-400`}
+        className={`${disabled ? 'bg-white' : 'bg-gray-100 border'} block mt-1 w-full rounded-md py-1 px-2 focus:border-2 focus:outline-none focus:border-blue-400`}
         type={type}
         name={name}
-        value={value}
-        onChange={onChange} />
+        // value={value}
+        onChange={onchange}
+      />
     </div>
   )
 }

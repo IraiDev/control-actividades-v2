@@ -19,6 +19,7 @@ import ButtonUnText from '../ui/buttons/ButtonUnText';
 import ButtonColor from '../ui/buttons/ButtonColor';
 import InputField from '../ui/inputs/InputField';
 import PTimes from '../ui/text/PTimes';
+import Select from "react-select";
 
 let initialState = { inputEdit: '', inputAdd: '' }
 let today = new Date()
@@ -567,17 +568,32 @@ function Card(props) {
           <div className="grid grid-cols-1 mt-6">
             <Ptext tag="Opciones Registro de Avance:" />
             <div className="mt-4 grid grid-cols-4 gap-10 px-5">
-              <div className="col-span-1 border-r">
-                <InputField disabled={false} tag="Nᵒ prioridad" value="150" />
-                <InputField tag="tiempo estimado" value="2" />
-                <InputField tag="tiempo trabajado" value="3" />
-                <InputField tag="tiempo cotizado" value="2" />
+              <div className="col-span-1 border-r grid grid-cols-1 gap-2 pr-5 place-content-between">
+                <div>
+                  <label className="text-xs">Proyecto:</label>
+                  <Select placeholder="Seleccione una opcion" />
+                </div>
+                <div>
+                  <label className="text-xs">Sub Proyecto:</label>
+                  <Select placeholder="Seleccione una opcion" />
+                </div>
+                <div>
+                  <label className="text-xs">Solicita:</label>
+                  <Select placeholder="Seleccione una opcion" />
+                </div>
+                <div>
+                  <label className="text-xs">Encargado:</label>
+                  <Select placeholder="Seleccione una opcion" />
+                </div>
               </div>
               <div className="col-span-3">
-                <div>
-
+                <div className="flex mb-5 gap-5 justify-center">
+                  <InputField disabled={false} tag="Nᵒ prioridad" value="150" />
+                  <InputField disabled={false} tag="Ticket" />
+                  <InputField disabled={false} tag="tiempo estimado (horas)" value="3" />
                 </div>
-                <div className="grid grid-cols-4">
+                <hr />
+                <div className="grid grid-cols-4 mt-5">
                   <PTimes user="RD" />
                   <PTimes user="SA" />
                   <PTimes user="IA" />
