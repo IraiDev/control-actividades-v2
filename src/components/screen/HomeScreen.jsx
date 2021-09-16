@@ -9,6 +9,9 @@ import UtilityBar from '../ui/utilitybar/UtilityBar'
 import ActivitiesScreen from './ActivitiesScreen'
 import PlannerScreen from './PlannerScreen'
 import useIsSignedIn from '../../hooks/useSignedIn'
+import { types } from '../../types/routes'
+
+const { plannerView, activitiesView, timesView } = types
 
 function HomeScreen() {
   const [isSignedIn] = useIsSignedIn()
@@ -39,7 +42,10 @@ function HomeScreen() {
       <SideBar />
       <UtilityBar />
       {
-        !UiState.isViewChanged ? <PlannerScreen /> : <ActivitiesScreen />
+        // !UiState.isViewChanged ? <PlannerScreen /> : <ActivitiesScreen />
+        UiState.tabs === plannerView ? <PlannerScreen /> :
+          UiState.tabs === activitiesView ? <ActivitiesScreen /> :
+            UiState.tabs === timesView && <div>soy time</div>
       }
     </>
   )

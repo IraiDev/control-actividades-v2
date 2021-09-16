@@ -2,6 +2,9 @@ import React, { createContext, useState } from 'react'
 import { clearParams } from '../helpers/auxFunctions'
 import useTab from '../hooks/useTab'
 import useToggle from '../hooks/useToggle'
+import { types } from '../types/routes'
+
+const { plannerView: plannerScreen, activitiesView: actView, timesView: timeView } = types
 
 export const UiContext = createContext()
 
@@ -15,6 +18,9 @@ const initialNavTab = {
 }
 
 function UiProvider({ children }) {
+
+  const [tabs, setTabs] = useState('/planner')
+
   const [isViewChanged, setViewActivities, setViewPLannerTask] = useTab()
   const [isTodoOrPlanner, setViewTodo, setViewPlanner] = useTab()
   const [toggleSideBar, setToggleSideBar] = useToggle(false);
@@ -56,6 +62,7 @@ function UiProvider({ children }) {
   }
 
   const activityView = () => {
+    setTabs(actView)
     setDisableBtnSideBar(false)
     setViewActivities()
     setActiveOrder(true)
@@ -63,14 +70,17 @@ function UiProvider({ children }) {
     setNavTab({
       planner: '',
       activities: 'text-blue-600 font-bold',
+      times: '',
       disableActivityTab: true,
       disablePlannerTab: false,
+      disableTime: false,
       activeTab: true,
       filterPlayActivities: false
     })
   }
 
   const plannerView = () => {
+    setTabs(plannerScreen)
     toggleSideBar && setToggleSideBar()
     setDisableBtnSideBar(true)
     setViewPLannerTask()
@@ -78,8 +88,28 @@ function UiProvider({ children }) {
     setNavTab({
       activities: '',
       planner: 'text-blue-600 font-bold',
+      times: '',
       disableActivityTab: false,
       disablePlannerTab: true,
+      disableTime: false,
+      activeTab: false,
+      filterPlayActivities: true
+    })
+  }
+
+  const timesView = () => {
+    setTabs(timeView)
+    toggleSideBar && setToggleSideBar()
+    setDisableBtnSideBar(true)
+    setViewPLannerTask()
+    setIsLoading(true)
+    setNavTab({
+      activities: '',
+      planner: '',
+      times: 'text-blue-600 font-bold',
+      disableActivityTab: false,
+      disablePlannerTab: false,
+      disableTime: true,
       activeTab: false,
       filterPlayActivities: true
     })
@@ -100,7 +130,8 @@ function UiProvider({ children }) {
       multiEncargados,
       multiProyectos,
       multiSubProyectos,
-      multiSolicitantes
+      multiSolicitantes,
+      tabs
     },
     functions: {
       activityView,
@@ -120,7 +151,8 @@ function UiProvider({ children }) {
       setMultiEncargados,
       setMultiProyectos,
       setMultiSubProyectos,
-      setMultiSolicitantes
+      setMultiSolicitantes,
+      timesView
     }
   }
   return (
