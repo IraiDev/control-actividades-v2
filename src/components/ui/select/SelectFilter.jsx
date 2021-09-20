@@ -166,7 +166,7 @@ function SelectFilter(props) {
         <div>
           <Select
             isMulti={isMulti}
-            placeholder={'Seleccione una opcion'}
+            placeholder="Seleccione una opcion"
             className={`mb-2 ${width}`}
             options={isControllerBy ? flag ? newSubProjectArray : ActState.arraySubProject : options}
             onChange={isMulti ? isController ? onChangeSelectController : onChangeMultiSelect : onChangeSelect}

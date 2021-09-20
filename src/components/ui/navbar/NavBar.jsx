@@ -1,10 +1,30 @@
 import React, { useContext } from 'react'
 import { Login } from '@microsoft/mgt-react'
 import { UiContext } from '../../../context/UiContext'
+import { ActivityContext } from '../../../context/ActivityContext'
 import logo25x25 from '../../../assets/logo/logo25x25.png'
 
 function NavBar() {
   const { functions: UiFunc, states: UiState } = useContext(UiContext)
+  const { functions: ActFunc, states: ActState } = useContext(ActivityContext)
+
+  const handleActivityView = () => {
+    UiFunc.activityView()
+    ActFunc.getNotify()
+    ActFunc.getTimes()
+  }
+
+  const handlePlannerView = () => {
+    UiFunc.plannerView()
+    ActFunc.getNotify()
+    ActFunc.getTimes()
+  }
+
+  const handleTimesView = () => {
+    UiFunc.timesView()
+    ActFunc.getNotify()
+    ActFunc.getTimes()
+  }
 
   return (
     <div className="sticky top-0 z-40 flex items-center justify-between bg-white shadow-md h-14">
@@ -15,15 +35,21 @@ function NavBar() {
       <div className="flex items-center">
         <button disabled={UiState.navTab.disableActivityTab}
           className={`hover:text-blue-700 focus:outline-none hover:bg-gray-100 rounded-full px-4 py-2 ${UiState.navTab.activities}`}
-          onClick={() => { UiFunc.activityView() }}
+          onClick={() => { handleActivityView() }}
         >
           Actividades
         </button>
         <button disabled={UiState.navTab.disablePlannerTab}
           className={`hover:text-blue-700 focus:outline-none hover:bg-gray-100 rounded-full px-4 py-2 ${UiState.navTab.planner}`}
-          onClick={() => { UiFunc.plannerView() }}
+          onClick={() => { handlePlannerView() }}
         >
           Planner
+        </button>
+        <button disabled={UiState.navTab.disableTimesTab}
+          className={`hover:text-blue-700 focus:outline-none hover:bg-gray-100 rounded-full px-4 py-2 ${UiState.navTab.times}`}
+          onClick={() => { handleTimesView() }}
+        >
+          Informe de Tiempos
         </button>
       </div>
       <button>

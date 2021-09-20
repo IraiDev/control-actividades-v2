@@ -40,7 +40,6 @@ function ActivityProvider({ children }) {
     localStorage.removeItem('tokenBackend')
   }
 
-  // obtener tiempos de los usuarios en play (detenciones en RA)
   const getTimes = async () => {
     try {
 
@@ -183,6 +182,8 @@ function ActivityProvider({ children }) {
       let filters = filtersParam === '' ? UiState.filters : filtersParam
       const resp = await fetchToken(`task/get-task-ra?${filters}`, data, 'POST')
       const body = await resp.json()
+
+      console.log(body.tareas)
       if (body.ok) {
         setActivitiesRA(body.tareas)
       } else {
@@ -192,6 +193,13 @@ function ActivityProvider({ children }) {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const getInfoTimes = async (param) => {
+    const resp = await fetchToken(`times/get-times-info?${param}`)
+    const body = await resp.json()
+
+    console.log(body)
   }
 
   const updatePriority = async (data) => {
@@ -250,6 +258,14 @@ function ActivityProvider({ children }) {
     }
   }
 
+  const markNotifications = async (data) => {
+    const resp = await fetchToken('task/update-notification', data, 'POST')
+    const body = await resp.json()
+
+    body.ok ? setUserNotify([]) :
+      normalAlert('warning', 'Error al marcar las notificaciones', 'Entiendo...')
+  }
+
   const value = {
     states: {
       userData,
@@ -275,7 +291,9 @@ function ActivityProvider({ children }) {
       updateNote,
       deleteNote,
       addTaskToRA,
-      getFilters
+      getFilters,
+      getInfoTimes,
+      markNotifications
     }
   }
   return (

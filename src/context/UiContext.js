@@ -20,7 +20,6 @@ const initialNavTab = {
 function UiProvider({ children }) {
 
   const [tabs, setTabs] = useState('/planner')
-
   const [isViewChanged, setViewActivities, setViewPLannerTask] = useTab()
   const [isTodoOrPlanner, setViewTodo, setViewPlanner] = useTab()
   const [toggleSideBar, setToggleSideBar] = useToggle(false);
@@ -73,6 +72,7 @@ function UiProvider({ children }) {
       times: '',
       disableActivityTab: true,
       disablePlannerTab: false,
+      disableTimesTab: false,
       disableTime: false,
       activeTab: true,
       filterPlayActivities: false
@@ -91,6 +91,7 @@ function UiProvider({ children }) {
       times: '',
       disableActivityTab: false,
       disablePlannerTab: true,
+      disableTimesTab: false,
       disableTime: false,
       activeTab: false,
       filterPlayActivities: true
@@ -102,13 +103,14 @@ function UiProvider({ children }) {
     toggleSideBar && setToggleSideBar()
     setDisableBtnSideBar(true)
     setViewPLannerTask()
-    setIsLoading(true)
+    // setIsLoading(true)
     setNavTab({
       activities: '',
       planner: '',
       times: 'text-blue-600 font-bold',
       disableActivityTab: false,
       disablePlannerTab: false,
+      disableTimesTab: true,
       disableTime: true,
       activeTab: false,
       filterPlayActivities: true

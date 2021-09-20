@@ -222,7 +222,7 @@ function Card(props) {
                     } else {
                       return ''
                     }
-                  }).reverse()
+                  })
                 }
               </ul>
             </div>
@@ -385,7 +385,7 @@ function Card(props) {
                       } else {
                         return 'No hay notas...'
                       }
-                    }).reverse()
+                    })
                   }
                 </ul>
                 <br />

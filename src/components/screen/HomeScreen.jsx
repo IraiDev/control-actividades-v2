@@ -10,6 +10,7 @@ import ActivitiesScreen from './ActivitiesScreen'
 import PlannerScreen from './PlannerScreen'
 import useIsSignedIn from '../../hooks/useSignedIn'
 import { types } from '../../types/routes'
+import TimeScreen from './TimeScreen'
 
 const { plannerView, activitiesView, timesView } = types
 
@@ -45,7 +46,7 @@ function HomeScreen() {
         // !UiState.isViewChanged ? <PlannerScreen /> : <ActivitiesScreen />
         UiState.tabs === plannerView ? <PlannerScreen /> :
           UiState.tabs === activitiesView ? <ActivitiesScreen /> :
-            UiState.tabs === timesView && <div>soy time</div>
+            UiState.tabs === timesView && <TimeScreen />
       }
     </>
   )

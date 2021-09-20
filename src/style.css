@@ -86,8 +86,15 @@ input[type="number"]::-webkit-outer-spin-button {
   max-width: 850px;
 }
 
-@media (min-height: 1080px) {
+.h-table{
+  min-height: 1000px;
+}
+
+@media only screen and (max-width: 1920px) {
   .h-700{
     min-height: 720px;
+  }
+  .h-table{
+    min-height: 600px;
   }
 }

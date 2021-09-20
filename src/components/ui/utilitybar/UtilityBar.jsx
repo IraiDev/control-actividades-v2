@@ -115,6 +115,10 @@ function UtilityBar() {
     ActFunc.getActivities(param)
   }
 
+  const handleMarkNotifications = () => {
+    ActFunc.markNotifications()
+  }
+
   useEffect(() => {
     if (UiState.isResetFilters) {
       toggleIsWorking(false)
@@ -149,7 +153,13 @@ function UtilityBar() {
               position="anchor"
               menuButton={
                 <MenuButton className="relative focus:outline-none active:outline-none">
-                  <label className="absolute -right-1 px-1.5 text-xs text-white bg-red-500 rounded-full h-min w-min -top-0">{ActState.userNotify.length}</label>
+                  {
+                    ActState.userNotify.length > 0 &&
+                    <label
+                      className="absolute -right-1 px-1.5 text-xs text-white bg-red-500 rounded-full h-min w-min -top-0">
+                      {ActState.userNotify.length}
+                    </label>
+                  }
                   <Tippy
                     offset={[0, 2]}
                     delay={[200, 0]}
@@ -182,18 +192,14 @@ function UtilityBar() {
                 )}
               </MenuGroup>
               <MenuDivider />
-              <MenuItem>
-                <Tippy
-                  offset={[0, 2]}
-                  delay={[200, 0]}
-                  placement={"bottom"}
-                  content={<span>Funcion aun no disponible</span>}
-                >
-                  <div className="flex items-center mx-auto text-gray-400 hover:text-red-500">
-                    <p>Marcar como vistas</p>
-                    <i className="ml-3 fas fa-eye-slash"></i>
-                  </div>
-                </Tippy>
+              <MenuItem
+                disabled={ActState.userNotify.length <= 0}
+                onClick={() => handleMarkNotifications()}
+              >
+                <div className={`flex items-center mx-auto text-gray-400 ${ActState.userNotify.length > 0 && 'hover:text-red-500'}`}>
+                  Marcar como vistas
+                  <i className="ml-3 fas fa-eye-slash"></i>
+                </div>
               </MenuItem>
             </Menu>
             <ButtonUnText
