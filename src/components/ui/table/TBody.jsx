@@ -11,7 +11,7 @@ function TBody(props) {
   } = props
 
   return (
-    <div className={`grid grid-cols-${ActState.colCount} text-sm mt-2 text-right shadow-md rounded-md`}>
+    <div className={`grid grid-cols-7 text-sm mt-2 text-right shadow-md rounded-md`}>
       <div className="p-2 text-sm bg-white rounded-l-lg text-center">
         {project}
       </div>

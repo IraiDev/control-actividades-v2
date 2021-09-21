@@ -7,7 +7,7 @@ function THead() {
   const { states: ActState } = useContext(ActivityContext)
 
   return (
-    <div className={`grid grid-cols-${ActState.colCount}`}>
+    <div className={`grid grid-cols-7`}>
       <ColTable />
       {
         ActState.infoTimes.length > 0 &&
