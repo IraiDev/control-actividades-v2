@@ -175,7 +175,9 @@ function UtilityBar() {
                 {ActState.userNotify.length > 0 ? (
                   ActState.userNotify.map((obj, index) => {
                     return (
-                      <MenuItem key={index}>
+                      <MenuItem
+                        onClick={() => console.log('una notificaiones mas su id: ')}
+                        key={index}>
                         <p className="pb-3 text-sm border-b">
                           <strong>{obj.user_crea_nota.abrev_user}</strong> ha
                           creado una nota en la Actividad ID: <strong>{obj.id_det}</strong>,

@@ -2,7 +2,7 @@ import React, { createContext, useState } from 'react'
 import { clearParams } from '../helpers/auxFunctions'
 import useTab from '../hooks/useTab'
 import useToggle from '../hooks/useToggle'
-import { types } from '../types/routes'
+import { types } from '../types/types'
 
 const { plannerView: plannerScreen, activitiesView: actView, timesView: timeView } = types
 
@@ -103,7 +103,7 @@ function UiProvider({ children }) {
     toggleSideBar && setToggleSideBar()
     setDisableBtnSideBar(true)
     setViewPLannerTask()
-    // setIsLoading(true)
+    setIsLoading(true)
     setNavTab({
       activities: '',
       planner: '',

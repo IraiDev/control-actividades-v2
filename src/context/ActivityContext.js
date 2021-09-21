@@ -11,6 +11,7 @@ let arrayProject = []
 let arraySubProject = []
 let arrayUsersE = []
 let arrayUsersS = []
+let colCount = 0
 
 function ActivityProvider({ children }) {
   const { states: UiState, functions: UiFunc } = useContext(UiContext)
@@ -18,6 +19,7 @@ function ActivityProvider({ children }) {
   const [usersTimes, setUsersTimes] = useState([])
   const [userNotify, setUserNotify] = useState([])
   const [activitiesRA, setActivitiesRA] = useState([])
+  const [infoTimes, setInfoTimes] = useState([])
 
   const login = async (email) => {
     try {
@@ -183,7 +185,6 @@ function ActivityProvider({ children }) {
       const resp = await fetchToken(`task/get-task-ra?${filters}`, data, 'POST')
       const body = await resp.json()
 
-      console.log(body.tareas)
       if (body.ok) {
         setActivitiesRA(body.tareas)
       } else {
@@ -199,7 +200,14 @@ function ActivityProvider({ children }) {
     const resp = await fetchToken(`times/get-times-info?${param}`)
     const body = await resp.json()
 
-    console.log(body)
+    if (body.ok) {
+      colCount = body.arregloNode[0].Usuarios.length + 1
+      setInfoTimes(body.msg[0])
+    }
+    else {
+      normalAlert('warning', 'Error al obtener informe de tiempos', 'Entiendo...')
+    }
+    UiFunc.setIsLoading(false)
   }
 
   const updatePriority = async (data) => {
@@ -262,8 +270,14 @@ function ActivityProvider({ children }) {
     const resp = await fetchToken('task/update-notification', data, 'POST')
     const body = await resp.json()
 
-    body.ok ? setUserNotify([]) :
+    if (body.ok) {
+      setUserNotify([])
+
+    }
+    else {
       normalAlert('warning', 'Error al marcar las notificaciones', 'Entiendo...')
+    }
+
   }
 
   const value = {
@@ -278,6 +292,8 @@ function ActivityProvider({ children }) {
       arrayProject,
       arrayPriority,
       arrayState,
+      infoTimes,
+      colCount
     },
     functions: {
       login,

@@ -9,7 +9,7 @@ import UtilityBar from '../ui/utilitybar/UtilityBar'
 import ActivitiesScreen from './ActivitiesScreen'
 import PlannerScreen from './PlannerScreen'
 import useIsSignedIn from '../../hooks/useSignedIn'
-import { types } from '../../types/routes'
+import { types } from '../../types/types'
 import TimeScreen from './TimeScreen'
 
 const { plannerView, activitiesView, timesView } = types

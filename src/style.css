@@ -87,14 +87,14 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .h-table{
-  min-height: 1000px;
+  min-height: 980px;
 }
 
-@media only screen and (max-width: 1920px) {
+@media only screen and (max-height: 1080px) {
   .h-700{
     min-height: 720px;
   }
   .h-table{
-    min-height: 600px;
+    min-height: 780px;
   }
 }
