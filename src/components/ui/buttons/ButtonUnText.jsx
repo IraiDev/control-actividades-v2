@@ -8,7 +8,9 @@ function ButtonUnText(props) {
     icon,
     tippyText = '',
     isTippy = false,
-    color,
+    color = 'text-gray-700',
+    bgColor,
+    hoverBgColor = 'hover:bg-gray-200',
     onclick,
     isOnclickeable = true
   } = props
@@ -34,7 +36,7 @@ function ButtonUnText(props) {
                 isOnclickeable && handleClick();
               }}
             >
-              <i className={`p-2 text-gray-700 transition duration-500 rounded-full hover:bg-gray-200 ${icon} ${color}`}></i>
+              <i className={`p-2 transition duration-500 rounded-full ${bgColor} ${hoverBgColor} ${icon} ${color}`}></i>
             </button>
           </Tippy>
         )

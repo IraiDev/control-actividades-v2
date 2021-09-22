@@ -3,7 +3,7 @@ import { ActivityContext } from '../../../context/ActivityContext'
 import TBody from './TBody'
 import THead from './THead'
 
-function Table() {
+function Table({ toggleValue }) {
 
   const { states: ActState } = useContext(ActivityContext)
 
@@ -14,10 +14,11 @@ function Table() {
         {
           ActState.infoTimes.length > 0 ?
             ActState.infoTimes.map((item, index) => {
-              return <TBody key={index} project={item.proy} user={item.usuarios} />
+              return <TBody key={index} project={item.proy} user={item.usuarios} toggleValue={toggleValue} />
             })
             : <p className="text-center">No hay datos para mostrar</p>
         }
+        {/* <TBody project="TOTAL" user={ActState.totals} toggleValue={toggleValue} /> */}
       </div>
     </div>
   )

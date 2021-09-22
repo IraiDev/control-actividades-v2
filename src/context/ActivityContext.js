@@ -11,7 +11,6 @@ let arrayProject = []
 let arraySubProject = []
 let arrayUsersE = []
 let arrayUsersS = []
-let colCount = 0
 
 function ActivityProvider({ children }) {
   const { states: UiState, functions: UiFunc } = useContext(UiContext)
@@ -20,6 +19,8 @@ function ActivityProvider({ children }) {
   const [userNotify, setUserNotify] = useState([])
   const [activitiesRA, setActivitiesRA] = useState([])
   const [infoTimes, setInfoTimes] = useState([])
+  const [totals, setTotals] = useState([])
+  const [colCount, setColCount] = useState(0)
 
   const login = async (email) => {
     try {
@@ -200,9 +201,94 @@ function ActivityProvider({ children }) {
     const resp = await fetchToken(`times/get-times-info?${param}`)
     const body = await resp.json()
 
+    let tempProy = '', arrayNewTimes = [], arrayTotalTimes = [], data = {}
+
     if (body.ok) {
-      colCount = body.arregloNode[0].Usuarios.length + 1
-      setInfoTimes(body.msg[0])
+      setColCount(body.arregloNode[0].Usuarios.length + 1)
+
+      body.msg[0].forEach(item => {
+
+        item.usuarios.forEach(item2 => {
+
+          let validation1 = item2.tiempos.mc === '0,0' && item2.tiempos.d5c === '0,0' && item2.tiempos.d3c === '0,0' && item2.tiempos.d1c === '0,0'
+          let validation2 = item2.tiempos.mnc === '0,0' && item2.tiempos.d5nc === '0,0' && item2.tiempos.d3nc === '0,0' && item2.tiempos.d1nc === '0,0'
+
+          if (validation1 && validation2) {
+          } else {
+            if (item.proy !== tempProy) {
+              tempProy = item.proy
+              arrayNewTimes.push(item)
+              item.usuarios.forEach(user => {
+
+                let mcTotal = 0, d1cTotal = 0, d3cTotal = 0, d5cTotal = 0
+                let mncTotal = 0, d1ncTotal = 0, d3ncTotal = 0, d5ncTotal = 0
+
+                let mcDot = user.tiempos.mc.replace(',', '.')
+                let mc = parseFloat(mcDot)
+                let d1cDot = user.tiempos.d1c.replace(',', '.')
+                let d1c = parseFloat(d1cDot)
+                let d3cDot = user.tiempos.d3c.replace(',', '.')
+                let d3c = parseFloat(d3cDot)
+                let d5cDot = user.tiempos.d5c.replace(',', '.')
+                let d5c = parseFloat(d5cDot)
+
+                let mncDot = user.tiempos.mnc.replace(',', '.')
+                let mnc = parseFloat(mncDot)
+                let d1ncDot = user.tiempos.d1nc.replace(',', '.')
+                let d1nc = parseFloat(d1ncDot)
+                let d3ncDot = user.tiempos.d3nc.replace(',', '.')
+                let d3nc = parseFloat(d3ncDot)
+                let d5ncDot = user.tiempos.d5nc.replace(',', '.')
+                let d5nc = parseFloat(d5ncDot)
+
+                mcTotal = mcTotal + mc
+                d1cTotal = d1cTotal + d1c
+                d3cTotal = d3cTotal + d3c
+                d5cTotal = d5cTotal + d5c
+
+                mncTotal = mncTotal + mnc
+                d1ncTotal = d1ncTotal + d1nc
+                d3ncTotal = d3ncTotal + d3nc
+                d5ncTotal = d5ncTotal + d5nc
+
+                data = {
+                  usuario: user.usuario,
+                  tiempos: {
+                    d1c: d1cTotal,
+                    d1nc: d1ncTotal,
+                    d3c: d3cTotal,
+                    d3nc: d3ncTotal,
+                    d5c: d5cTotal,
+                    d5nc: d5ncTotal,
+                    mc: mcTotal,
+                    mnc: mncTotal
+                  }
+                }
+
+                let index = arrayTotalTimes.findIndex(i => i.usuario === user.usuario);
+
+                if (index >= 0) {
+                  arrayTotalTimes[index].tiempos.d1c += d1c
+                  arrayTotalTimes[index].tiempos.d3c += d3c
+                  arrayTotalTimes[index].tiempos.d5c += d5c
+                  arrayTotalTimes[index].tiempos.mc += mc
+                  arrayTotalTimes[index].tiempos.d1nc += d1nc
+                  arrayTotalTimes[index].tiempos.d3nc += d3nc
+                  arrayTotalTimes[index].tiempos.d5nc += d5nc
+                  arrayTotalTimes[index].tiempos.mnc += mnc
+                  arrayTotalTimes[index].usuario = user.usuario
+                }
+                else {
+                  arrayTotalTimes.push(data)
+                }
+              })
+            }
+          }
+        })
+      })
+      console.log(arrayTotalTimes)
+      setTotals(arrayTotalTimes)
+      setInfoTimes(arrayNewTimes)
     }
     else {
       normalAlert('warning', 'Error al obtener informe de tiempos', 'Entiendo...')
@@ -293,7 +379,8 @@ function ActivityProvider({ children }) {
       arrayPriority,
       arrayState,
       infoTimes,
-      colCount
+      colCount,
+      totals
     },
     functions: {
       login,

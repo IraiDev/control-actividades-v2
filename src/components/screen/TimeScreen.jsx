@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { ActivityContext } from '../../context/ActivityContext'
-import FloatCheck from '../ui/float/FloatCheck'
 import Table from '../ui/table/Table'
 import moment from 'moment'
 import { useForm } from '../../hooks/useForm'
 import { UiContext } from '../../context/UiContext'
+import ButtonUnText from '../ui/buttons/ButtonUnText'
 
 const date = new Date()
 const dateFormat = moment(date).format('yyyy-MM-DD')
@@ -14,6 +14,7 @@ function TimeScreen() {
   const { functions: ActFunc, states: ActState } = useContext(ActivityContext)
   const { functions: UiFunc } = useContext(UiContext)
   const [{ input }, onChangeInput] = useForm({ input: '' })
+  const [isChecked, setIsChecked] = useState(true)
 
   useEffect(() => {
 
@@ -29,31 +30,42 @@ function TimeScreen() {
     ActFunc.getInfoTimes(param)
   }
 
+  const handleOnChangeCheck = () => {
+    setIsChecked(!isChecked)
+  }
+
   return (
     <>
-      <div className="flex justify-center">
-        <div className="w-96 rounded-full bg-white shadow p-2 my-4 flex justify-between items-center">
+      <div className="flex justify-center items-center">
+        <div className="p-4 bg-white rounded-full shadow mr-4">
+          <label htmlFor="floatcheck123" className="flex items-center">
+            <input
+              className="mr-2"
+              id="floatcheck123"
+              type="checkbox"
+              checked={isChecked}
+              onChange={handleOnChangeCheck} />
+            <p className={`${!isChecked && 'line-through'}`}>Cobrables</p>
+          </label>
+        </div>
+        <div className="rounded-full bg-white shadow p-2 my-4 flex justify-between items-center">
           <input
-            className="bg-gray-100 p-2 rounded-full w-full"
+            className="bg-gray-100 p-2 rounded-full w-full mr-4"
             type="date"
-            placeholder="ingrese fecha"
             name="input"
             value={input}
             onChange={onChangeInput} />
           <div>
-            <button
-              className="rounded-full bg-blue-500 p-2 hover:bg-blue-600 text-white ml-2"
-              onClick={() => handleNewDate()}
-            >
-              Cargar
-            </button>
+            <ButtonUnText
+              icon="fas fa-check"
+              bgColor="bg-blue-500"
+              hoverBgColor="hover:bg-blue-400 shadow-lg"
+              color="text-white"
+              onclick={handleNewDate} />
           </div>
         </div>
       </div>
-      {/* {
-        ActState.infoTimes.length > 0 && <FloatCheck />
-      } */}
-      <Table />
+      <Table toggleValue={isChecked} />
     </>
   )
 }
