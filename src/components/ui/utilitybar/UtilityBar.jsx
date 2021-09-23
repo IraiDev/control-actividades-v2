@@ -19,6 +19,9 @@ import PColor from '../text/PColor';
 import "@szhsin/react-menu/dist/index.css";
 import "@material-tailwind/react/tailwind.css"
 import moment from 'moment';
+import { types } from '../../../types/types'
+
+const { plannerView, activitiesView, timesView } = types
 
 const colorArray = [
   { id: "bg-gray-500", colorButton: "bg-gray-500" },
@@ -85,6 +88,16 @@ function UtilityBar() {
     setShowModal(false)
   }
 
+  const updateTimesComponents = () => {
+    const date = new Date()
+    const dateFormat = moment(date).format('yyyy-MM-DD')
+    const param = `fecha=${dateFormat}`
+    UiFunc.setIsLoading(true)
+    ActFunc.getTimes()
+    ActFunc.getNotify()
+    ActFunc.getInfoTimes(param)
+  }
+
   const updatePlannerComponents = () => {
     UiFunc.setViewPlanner()
     UiFunc.setIsLoading(true)
@@ -128,7 +141,7 @@ function UtilityBar() {
   return (
     <>
       <div
-        className={`flex flex-col lg:flex-row bg-white shadow sticky top-14 z-20 pt-5 px-10`}>
+        className="flex flex-col lg:flex-row bg-white shadow sticky top-14 z-20 pt-5 px-10">
         <div className="flex justify-between order-last w-full pb-5 lg:order-first">
           <div>
             <ButtonText disable={UiState.disableBtnSideBar} icon="fas fa-filter fa-sm" text="Filtrar" onclick={handleSideBar} />
@@ -144,9 +157,9 @@ function UtilityBar() {
 
             <ButtonUnText
               icon="fas fa-sync-alt"
-              tippyText={UiState.navTab.activeTab ? "Actualizar Actividades" : "Actualizar Planner"}
+              tippyText={UiState.tabs === plannerView ? "Actualizar Planner" : UiState.tabs === activitiesView ? "Actualizar Actividades" : UiState.tabs === timesView && "Actualizar Informe de tiempos"}
               isTippy={true}
-              onclick={UiState.navTab.activeTab ? updateActivityComponents : updatePlannerComponents} />
+              onclick={UiState.tabs === plannerView ? updatePlannerComponents : UiState.tabs === activitiesView ? updateActivityComponents : UiState.tabs === timesView && updateTimesComponents} />
             <Menu
               direction="bottom"
               overflow="auto"

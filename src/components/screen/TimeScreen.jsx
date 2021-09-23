@@ -17,7 +17,6 @@ function TimeScreen() {
   const [isChecked, setIsChecked] = useState(true)
 
   useEffect(() => {
-
     const param = `fecha=${dateFormat}`
     ActFunc.getInfoTimes(param)
 
