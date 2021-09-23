@@ -359,8 +359,7 @@ function ActivityProvider({ children }) {
     const body = await resp.json()
 
     if (body.ok) {
-      setUserNotify([])
-
+      getNotify()
     }
     else {
       normalAlert('warning', 'Error al marcar las notificaciones', 'Entiendo...')

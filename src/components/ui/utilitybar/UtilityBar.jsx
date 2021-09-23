@@ -128,8 +128,15 @@ function UtilityBar() {
     ActFunc.getActivities(param)
   }
 
-  const handleMarkNotifications = () => {
+  const handleMarkAllNotifications = () => {
     ActFunc.markNotifications()
+  }
+
+  const handleMarkNotifications = (idNote) => {
+    const data = {
+      id_nota: idNote
+    }
+    ActFunc.markNotifications(data)
   }
 
   useEffect(() => {
@@ -189,13 +196,16 @@ function UtilityBar() {
                   ActState.userNotify.map((obj, index) => {
                     return (
                       <MenuItem
-                        onClick={() => console.log('una notificaiones mas su id: ')}
+
                         key={index}>
                         <p className="pb-3 text-sm border-b">
                           <strong>{obj.user_crea_nota.abrev_user}</strong> ha
                           creado una nota en la Actividad ID: <strong>{obj.id_det}</strong>,
                           con fecha <strong>{moment(obj.fecha_hora_crea).format('DD-MM-yyyy, HH:mm')}</strong>
-                          <i className="ml-2 text-gray-400 fas fa-eye"></i>
+                          <button
+                            onClick={() => handleMarkNotifications(obj.id_nota)}>
+                            <i className="ml-2 text-gray-400 fas fa-eye hover:text-red-500"></i>
+                          </button>
                         </p>
                       </MenuItem>
                     );
@@ -209,7 +219,7 @@ function UtilityBar() {
               <MenuDivider />
               <MenuItem
                 disabled={ActState.userNotify.length <= 0}
-                onClick={() => handleMarkNotifications()}
+                onClick={() => handleMarkAllNotifications()}
               >
                 <div className={`flex items-center mx-auto text-gray-400 ${ActState.userNotify.length > 0 && 'hover:text-red-500'}`}>
                   Marcar como vistas
