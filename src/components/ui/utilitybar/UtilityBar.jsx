@@ -185,7 +185,7 @@ function UtilityBar() {
               }
             >
               <MenuGroup takeOverflow>
-                {ActState.userNotify.length > 0 ? (
+                {ActState.userNotify.length > 0 ?
                   ActState.userNotify.map((obj, index) => {
                     return (
                       <MenuItem
@@ -200,11 +200,11 @@ function UtilityBar() {
                       </MenuItem>
                     );
                   })
-                ) : (
+                  :
                   <MenuItem>
                     <p>no hay notificaciones</p>
                   </MenuItem>
-                )}
+                }
               </MenuGroup>
               <MenuDivider />
               <MenuItem
