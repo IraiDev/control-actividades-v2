@@ -18,6 +18,7 @@ function ActivityProvider({ children }) {
   const [usersTimes, setUsersTimes] = useState([])
   const [userNotify, setUserNotify] = useState([])
   const [activitiesRA, setActivitiesRA] = useState([])
+  const [activityDetails, setActivityDetails] = useState(null)
   const [infoTimes, setInfoTimes] = useState([])
   // const [totals, setTotals] = useState([])
   const [colCount, setColCount] = useState(0)
@@ -195,6 +196,31 @@ function ActivityProvider({ children }) {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const getActivityDetail = async (idActivity) => {
+
+    const filters = `id_actividad=${idActivity}`
+
+    const data = {
+      encargado: [],
+      solicitante: [],
+      proyecto: [],
+      subProy: []
+    }
+
+    const resp = await fetchToken(`task/get-task-ra?${filters}`, data, 'POST')
+    const body = await resp.json()
+
+    console.log('detalle: ', body.tareas[0])
+
+    if (body.ok) {
+      setActivityDetails(body.tareas[0])
+    }
+    else {
+      normalAlert('info', 'Error al obtener detalle de actividad', 'Entiendo...')
+    }
+    UiFunc.setIsLoading(false)
   }
 
   const getInfoTimes = async (param) => {
@@ -381,6 +407,7 @@ function ActivityProvider({ children }) {
       arrayState,
       infoTimes,
       colCount,
+      activityDetails
       // totals
     },
     functions: {
@@ -389,6 +416,7 @@ function ActivityProvider({ children }) {
       getTimes,
       getNotify,
       getActivities,
+      getActivityDetail,
       updatePriority,
       updateUserColors,
       addNewNote,
@@ -397,7 +425,7 @@ function ActivityProvider({ children }) {
       addTaskToRA,
       getFilters,
       getInfoTimes,
-      markNotifications
+      markNotifications,
     }
   }
   return (

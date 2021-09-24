@@ -1,5 +1,6 @@
 
 import React, { useContext, useState } from 'react'
+import { UiContext } from '../../context/UiContext';
 import { ActivityContext } from '../../context/ActivityContext';
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 import { useForm } from '../../hooks/useForm';
@@ -40,6 +41,7 @@ function Card(props) {
   } = props;
 
   const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
+  const { functions: UiFunc } = useContext(UiContext)
   const [{ inputEdit, inputAdd }, onChangeValues, reset] = useForm(initialState)
   const [showModal, setShowModal] = useState(false)
   const [updateOrAdd, setUpdateOrAdd] = useState(false)
@@ -146,9 +148,16 @@ function Card(props) {
     initialState.inputEdit = description
   }
 
+  const handleOpenDetails = async () => {
+    ActFunc.getActivityDetail(id)
+    UiFunc.setAllOrDetails(false)
+  }
+
   return (
     <>
-      <div className={`rounded p-4 shadow-md text-sm ${bgColor} ${textColor} ${actPlay}`}>
+      <div
+        className={`rounded p-4 shadow-md text-sm ${bgColor} ${textColor} ${actPlay}`}
+        onDoubleClick={handleOpenDetails} >
         <div className="flex items-center justify-between pb-2 text-base">
           <Ptext tag="Actividad:" value={actividad} font="font-bold" />
           <div className="flex items-center">

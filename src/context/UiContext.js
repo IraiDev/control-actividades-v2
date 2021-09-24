@@ -29,6 +29,7 @@ function UiProvider({ children }) {
   const [subProject, setSubProject] = useState(null)
   const [navTab, setNavTab] = useState(initialNavTab)
   const [activeOrder, setActiveOrder] = useState(false)
+  const [allOrDetails, setAllOrDetails] = useState(true)
   //filtros en formato string y array
   const [filters, setFilters] = useState('')
   const [multiEncargados, setMultiEncargados] = useState([])
@@ -133,7 +134,8 @@ function UiProvider({ children }) {
       multiProyectos,
       multiSubProyectos,
       multiSolicitantes,
-      tabs
+      tabs,
+      allOrDetails
     },
     functions: {
       activityView,
@@ -154,7 +156,8 @@ function UiProvider({ children }) {
       setMultiProyectos,
       setMultiSubProyectos,
       setMultiSolicitantes,
-      timesView
+      timesView,
+      setAllOrDetails
     }
   }
   return (
