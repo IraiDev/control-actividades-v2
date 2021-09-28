@@ -237,8 +237,16 @@ function ActivityProvider({ children }) {
 
         item.usuarios.forEach(item2 => {
 
-          let validation1 = item2.tiempos.mc === '0,0' && item2.tiempos.d5c === '0,0' && item2.tiempos.d3c === '0,0' && item2.tiempos.d1c === '0,0'
-          let validation2 = item2.tiempos.mnc === '0,0' && item2.tiempos.d5nc === '0,0' && item2.tiempos.d3nc === '0,0' && item2.tiempos.d1nc === '0,0'
+          let validation1
+          // = item2.tiempos.mc === '0,0' && item2.tiempos.d5c === '0,0' && item2.tiempos.d3c === '0,0' && item2.tiempos.d1c === '0,0'
+          let validation2
+            = item2.tiempos.mnc === '0,0' && item2.tiempos.d5nc === '0,0' && item2.tiempos.d3nc === '0,0' && item2.tiempos.d1nc === '0,0'
+
+          if (item2 === 'TOTAL') {
+            validation1 = item2.tiempos.mc === '0,0' && item2.tiempos.d5c === '0,0' && item2.tiempos.d3c === '0,0' && item2.tiempos.d1c === '0,0'
+            validation2 = item2.tiempos.mnc === '0,0' && item2.tiempos.d5nc === '0,0' && item2.tiempos.d3nc === '0,0' && item2.tiempos.d1nc === '0,0'
+          }
+
 
           if (validation1 && validation2) {
           } else {

@@ -153,19 +153,19 @@ function ActivityDetailScreen() {
                 <div className="col-span-1 border-r grid grid-cols-1 gap-2 pr-5 place-content-between">
                   <div>
                     <label className="text-xs">Proyecto:</label>
-                    <Select placeholder="Seleccione una opcion" />
+                    <Select placeholder="Seleccionar" />
                   </div>
                   <div>
                     <label className="text-xs">Sub Proyecto:</label>
-                    <Select placeholder="Seleccione una opcion" />
+                    <Select placeholder="Seleccionar" />
                   </div>
                   <div>
                     <label className="text-xs">Solicita:</label>
-                    <Select placeholder="Seleccione una opcion" />
+                    <Select placeholder="Seleccionar" />
                   </div>
                   <div>
                     <label className="text-xs">Encargado:</label>
-                    <Select placeholder="Seleccione una opcion" />
+                    <Select placeholder="Seleccionar" />
                   </div>
                 </div>
                 <div className="col-span-3">
@@ -202,7 +202,19 @@ function ActivityDetailScreen() {
                 </div>
               </div>
             </div>
-            <div className="mt-10 flex justify-end">
+            <div className="mt-10 flex justify-between">
+              <Button
+                color="blue"
+                buttonType="outline"
+                size="regular"
+                rounded={true}
+                block={false}
+                iconOnly={false}
+                ripple="light"
+                onClick={() => UiFunc.setAllOrDetails(true)}
+              >
+                Volver
+              </Button>
               <Button
                 color="green"
                 buttonType="filled"
@@ -213,19 +225,6 @@ function ActivityDetailScreen() {
                 ripple="light"
               >
                 Aplicar
-              </Button>
-              <span className="mr-4"></span>
-              <Button
-                color="blue"
-                buttonType="filled"
-                size="regular"
-                rounded={true}
-                block={false}
-                iconOnly={false}
-                ripple="light"
-                onClick={() => UiFunc.setAllOrDetails(true)}
-              >
-                Volver
               </Button>
             </div>
           </div>

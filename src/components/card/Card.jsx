@@ -149,8 +149,9 @@ function Card(props) {
   }
 
   const handleOpenDetails = async () => {
-    ActFunc.getActivityDetail(id)
-    UiFunc.setAllOrDetails(false)
+    // UiFunc.setIsLoading(true)
+    // ActFunc.getActivityDetail(id)
+    // UiFunc.setAllOrDetails(false)
   }
 
   return (
