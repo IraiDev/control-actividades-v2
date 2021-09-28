@@ -13,10 +13,11 @@ function TimeScreen() {
 
   const { functions: ActFunc, states: ActState } = useContext(ActivityContext)
   const { functions: UiFunc } = useContext(UiContext)
-  const [{ input }, onChangeInput] = useForm({ input: '' })
+  const [{ input }, onChangeInput, reset] = useForm({ input: dateFormat })
   const [isChecked, setIsChecked] = useState(true)
 
   useEffect(() => {
+    reset()
     const param = `fecha=${dateFormat}`
     ActFunc.getInfoTimes(param)
 

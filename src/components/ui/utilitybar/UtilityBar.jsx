@@ -148,14 +148,14 @@ function UtilityBar() {
   return (
     <>
       <div
-        className="flex flex-col lg:flex-row bg-white shadow sticky top-14 z-20 pt-5 px-10">
+        className="flex flex-col lg:flex-row items-center bg-white shadow sticky top-14 z-20 pt-5 px-10">
         <div className="flex justify-between order-last w-full pb-5 lg:order-first">
           <div>
             <ButtonText disable={UiState.disableBtnSideBar} icon="fas fa-filter fa-sm" text="Filtrar" onclick={handleSideBar} />
           </div>
           <div className="flex">
             <ButtonUnText
-              disable={UiState.navTab.filterPlayActivities}
+              disable={UiState.navTab.filterPlayActivities && !UiState.navTab.disablePlannerTab}
               icon="fas fa-user-clock"
               tippyText={isWorking ? "Todas las actividades" : "Mostrar actividades en Play"}
               color={isWorking && 'text-blue-500'}
@@ -163,6 +163,7 @@ function UtilityBar() {
               onclick={handleUserWorking} />
 
             <ButtonUnText
+              disable={UiState.navTab.filterPlayActivities}
               icon="fas fa-sync-alt"
               tippyText={UiState.tabs === plannerView ? "Actualizar Planner" : UiState.tabs === activitiesView ? "Actualizar Actividades" : UiState.tabs === timesView && "Actualizar Informe de tiempos"}
               isTippy={true}
@@ -172,7 +173,7 @@ function UtilityBar() {
               overflow="auto"
               position="anchor"
               menuButton={
-                <MenuButton className="relative focus:outline-none active:outline-none">
+                <MenuButton className="relative focus:outline-none active:outline-none h-8 w-8 text-gray-700 rounded-full hover:bg-gray-300 ">
                   {
                     ActState.userNotify.length > 0 &&
                     <label
@@ -186,7 +187,7 @@ function UtilityBar() {
                     placement={"bottom"}
                     content={<span>Notificaciones</span>}
                   >
-                    <i className="p-2 text-gray-700 rounded-full hover:bg-gray-200 fas fa-bell"></i>
+                    <i className="fas fa-bell"></i>
                   </Tippy>
                 </MenuButton>
               }

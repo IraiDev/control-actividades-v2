@@ -21,7 +21,6 @@ function ActivityProvider({ children }) {
   const [activityDetails, setActivityDetails] = useState(null)
   const [infoTimes, setInfoTimes] = useState([])
   // const [totals, setTotals] = useState([])
-  const [colCount, setColCount] = useState(0)
 
   const login = async (email) => {
     try {
@@ -212,8 +211,6 @@ function ActivityProvider({ children }) {
     const resp = await fetchToken(`task/get-task-ra?${filters}`, data, 'POST')
     const body = await resp.json()
 
-    console.log('detalle: ', body.tareas[0])
-
     if (body.ok) {
       setActivityDetails(body.tareas[0])
     }
@@ -227,15 +224,11 @@ function ActivityProvider({ children }) {
     const resp = await fetchToken(`times/get-times-info?${param}`)
     const body = await resp.json()
 
-    // console.log('arreglo: ', body)
 
     let tempProy = '', arrayNewTimes = []
     // let arrayTotalTimes = [], data = {}
 
     if (body.ok) {
-      // setColCount(body.arregloNode[0].Usuarios.length + 1)
-
-
       body.msg[0].forEach(item => {
 
         item.usuarios.forEach(item2 => {
@@ -328,11 +321,11 @@ function ActivityProvider({ children }) {
     UiFunc.setIsLoading(false)
   }
 
-  const updatePriority = async (data) => {
+  const updatePriority = async (data, from = false, idActivity) => {
     UiFunc.setIsLoading(true)
     const resp = await fetchToken('task/update-priority', data, 'POST')
     const body = await resp.json()
-    body.ok ? getActivities() :
+    body.ok ? from ? getActivityDetail(idActivity) : getActivities() :
       normalAlert('warning', 'Error al actualizar la prioridad de la actividad', 'Entiendo...')
   }
 
@@ -345,27 +338,27 @@ function ActivityProvider({ children }) {
       normalAlert('warning', 'Error al actualizar color de prioridad ToDO', 'Entiendo...')
   }
 
-  const addNewNote = async (data) => {
+  const addNewNote = async (data, from = false, idActivity) => {
     UiFunc.setIsLoading(true)
     const resp = await fetchToken('task/create-note', data, 'POST')
     const body = await resp.json()
-    body.ok ? getActivities() :
+    body.ok ? from ? getActivityDetail(idActivity) : getActivities() :
       normalAlert('warning', 'Error al crear la nota', 'Entiendo...')
   }
 
-  const updateNote = async (data) => {
+  const updateNote = async (data, from = false, idActivity) => {
     UiFunc.setIsLoading(true)
     const resp = await fetchToken('task/update-note', data, 'PUT')
     const body = await resp.json()
-    body.ok ? getActivities() :
+    body.ok ? from ? getActivityDetail(idActivity) : getActivities() :
       normalAlert('warning', 'Error al actualizar la nota', 'Entiendo...')
   }
 
-  const deleteNote = async (data) => {
+  const deleteNote = async (data, from = false, idActivity) => {
     UiFunc.setIsLoading(true)
     const resp = await fetchToken('task/delete-note', data, 'DELETE')
     const body = await resp.json()
-    body.ok ? getActivities() :
+    body.ok ? from ? getActivityDetail(idActivity) : getActivities() :
       normalAlert('warning', 'Error al eliminar la nota', 'Entiendo...')
   }
 
@@ -410,7 +403,6 @@ function ActivityProvider({ children }) {
       arrayPriority,
       arrayState,
       infoTimes,
-      colCount,
       activityDetails
       // totals
     },

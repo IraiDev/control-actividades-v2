@@ -61,13 +61,8 @@ function UiProvider({ children }) {
     return newValue
   }
 
-  const activityView = () => {
-    setTabs(actView)
-    setDisableBtnSideBar(false)
-    setViewActivities()
-    setActiveOrder(true)
-    setIsLoading(true)
-    setNavTab({
+  const activityView = async () => {
+    await setNavTab({
       planner: '',
       activities: 'text-blue-600 font-bold',
       times: '',
@@ -78,6 +73,11 @@ function UiProvider({ children }) {
       activeTab: true,
       filterPlayActivities: false
     })
+    await setTabs(actView)
+    await setDisableBtnSideBar(false)
+    await setViewActivities()
+    await setActiveOrder(true)
+    await setAllOrDetails(true)
   }
 
   const plannerView = () => {
@@ -86,6 +86,7 @@ function UiProvider({ children }) {
     setDisableBtnSideBar(true)
     setViewPLannerTask()
     setIsLoading(true)
+    setAllOrDetails(true)
     setNavTab({
       activities: '',
       planner: 'text-blue-600 font-bold',
@@ -115,6 +116,22 @@ function UiProvider({ children }) {
       disableTime: true,
       activeTab: false,
       filterPlayActivities: true
+    })
+  }
+
+  const detailsView = (btnFilter, btnPlay) => {
+    toggleSideBar && setToggleSideBar()
+    setDisableBtnSideBar(btnFilter)
+    setNavTab({
+      planner: '',
+      activities: 'text-blue-600 font-bold',
+      times: '',
+      disableActivityTab: true,
+      disablePlannerTab: false,
+      disableTimesTab: false,
+      disableTime: false,
+      activeTab: true,
+      filterPlayActivities: btnPlay
     })
   }
 
@@ -157,7 +174,8 @@ function UiProvider({ children }) {
       setMultiSubProyectos,
       setMultiSolicitantes,
       timesView,
-      setAllOrDetails
+      setAllOrDetails,
+      detailsView
     }
   }
   return (

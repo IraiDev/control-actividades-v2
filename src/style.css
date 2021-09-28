@@ -20,19 +20,6 @@ body {
   scrollbar-color: rgba(90, 81, 81, 0.5) transparent;
 }
 
-.scroll-row-side-bar {
-  max-height: 5rem;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scroll-behavior: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(124, 124, 124, 0) transparent;
-}
-
-.scroll-row-side-bar:hover{
-  scrollbar-color: rgba(124, 124, 124, 0.3) transparent;
-}
-
 .scroll-row::-webkit-scrollbar {
   width: 4px;
 }
@@ -47,6 +34,45 @@ body {
   background: rgb(223, 223, 223);
   border-radius: 5px;
   width: 20px;
+}
+
+.scroll-row-detail {
+  max-height: 13rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(90, 81, 81, 0.5) transparent;
+}
+
+.scroll-row-detail::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scroll-row-detail::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 5px;
+  width: 20px;
+}
+
+.scroll-row-detail:hover::-webkit-scrollbar-thumb {
+  background: rgb(223, 223, 223);
+  border-radius: 5px;
+  width: 20px;
+}
+
+
+.scroll-row-side-bar {
+  max-height: 5rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(124, 124, 124, 0) transparent;
+}
+
+.scroll-row-side-bar:hover{
+  scrollbar-color: rgba(124, 124, 124, 0.3) transparent;
 }
 
 input[type="number"]::-webkit-inner-spin-button,

@@ -2,20 +2,35 @@ import React, { useContext } from 'react'
 import { ActivityContext } from '../../../context/ActivityContext'
 import ButtonUnText from '../buttons/ButtonUnText'
 
-function PDefaultNotes({ idAct, noteText, isSeparator = true, onclick, updatePriority = false }) {
+function PDefaultNotes({ idAct, noteText, isSeparator = true, onclick, updatePriority = false, from = false }) {
   const { functions: GraphFunc } = useContext(ActivityContext)
 
   const handleAddNote = () => {
-    if (updatePriority) {
-      const data = { prioridad_numero: 100, id_actividad: idAct }
-      GraphFunc.updatePriority(data)
-      const data2 = { description: noteText, id_actividad: idAct }
-      GraphFunc.addNewNote(data2)
-    } else {
-      const data = { description: noteText, id_actividad: idAct }
-      GraphFunc.addNewNote(data)
+
+    if (from) {
+      if (updatePriority) {
+        const data = { prioridad_numero: 100, id_actividad: idAct }
+        GraphFunc.updatePriority(data, true, idAct)
+        const data2 = { description: noteText, id_actividad: idAct }
+        GraphFunc.addNewNote(data2, true, idAct)
+      } else {
+        const data = { description: noteText, id_actividad: idAct }
+        GraphFunc.addNewNote(data, true, idAct)
+      }
+      onclick()
     }
-    onclick()
+    else {
+      if (updatePriority) {
+        const data = { prioridad_numero: 100, id_actividad: idAct }
+        GraphFunc.updatePriority(data)
+        const data2 = { description: noteText, id_actividad: idAct }
+        GraphFunc.addNewNote(data2)
+      } else {
+        const data = { description: noteText, id_actividad: idAct }
+        GraphFunc.addNewNote(data)
+      }
+      onclick()
+    }
   }
   return (
     <>

@@ -100,7 +100,7 @@ function Todo() {
             name="textArea"
             onChange={onChangeValues}
             color="blue"
-            size="regular"
+            size="sm"
             outline={true}
             placeholder="Descripcion..."
           />

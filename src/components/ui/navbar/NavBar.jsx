@@ -8,10 +8,12 @@ function NavBar() {
   const { functions: UiFunc, states: UiState } = useContext(UiContext)
   const { functions: ActFunc, states: ActState } = useContext(ActivityContext)
 
-  const handleActivityView = () => {
-    UiFunc.activityView()
-    ActFunc.getNotify()
-    ActFunc.getTimes()
+  const handleActivityView = async () => {
+    await UiFunc.setIsLoading(true)
+    await ActFunc.getActivities()
+    await UiFunc.activityView()
+    await ActFunc.getNotify()
+    await ActFunc.getTimes()
   }
 
   const handlePlannerView = () => {

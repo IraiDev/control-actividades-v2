@@ -10,7 +10,7 @@ function ActivitiesScreen() {
   const { states: UiState, functions: UiFunc } = useContext(UiContext)
 
   useEffect(() => {
-    ActFunc.getActivities()
+
   }, [])
 
   return (

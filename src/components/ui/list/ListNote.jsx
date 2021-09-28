@@ -16,7 +16,8 @@ function ListNote(props) {
     user,
     isModal = false,
     onclick,
-    activeColor
+    activeColor,
+    idActivity = null
   } = props
 
   const { functions: ActFunc } = useContext(ActivityContext)
@@ -46,16 +47,31 @@ function ListNote(props) {
   }
 
   const handleDeleteNote = () => {
-    const data = { id_nota: idNote }
-    const action = () => ActFunc.deleteNote(data)
-    let text = desc.substring(0, 15)
-    alertQuest(
-      'info',
-      `<p>Esto eliminara la nota: <b>${text}...</b></p>`,
-      'No, cancelar',
-      'Si, eliminar',
-      action
-    )
+
+    if (idActivity === null) {
+      const data = { id_nota: idNote }
+      const action = () => ActFunc.deleteNote(data)
+      let text = desc.substring(0, 15)
+      alertQuest(
+        'info',
+        `<p>Esto eliminara la nota: <b>${text}...</b></p>`,
+        'No, cancelar',
+        'Si, eliminar',
+        action
+      )
+    }
+    else {
+      const data = { id_nota: idNote }
+      const action = () => ActFunc.deleteNote(data, true, idActivity)
+      let text = desc.substring(0, 15)
+      alertQuest(
+        'info',
+        `<p>Esto eliminara la nota: <b>${text}...</b></p>`,
+        'No, cancelar',
+        'Si, eliminar',
+        action
+      )
+    }
   }
 
   return (
