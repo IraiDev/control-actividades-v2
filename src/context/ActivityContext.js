@@ -233,23 +233,15 @@ function ActivityProvider({ children }) {
     // let arrayTotalTimes = [], data = {}
 
     if (body.ok) {
-      setColCount(body.arregloNode[0].Usuarios.length + 1)
+      // setColCount(body.arregloNode[0].Usuarios.length + 1)
 
 
       body.msg[0].forEach(item => {
 
         item.usuarios.forEach(item2 => {
 
-          let validation1
-          // = item2.tiempos.mc === '0,0' && item2.tiempos.d5c === '0,0' && item2.tiempos.d3c === '0,0' && item2.tiempos.d1c === '0,0'
-          let validation2
-            = item2.tiempos.mnc === '0,0' && item2.tiempos.d5nc === '0,0' && item2.tiempos.d3nc === '0,0' && item2.tiempos.d1nc === '0,0'
-
-          if (item2.usuario === 'TOTAL') {
-            console.log('usuario total')
-            validation1 = item2.tiempos.mc === '0,0' && item2.tiempos.d5c === '0,0' && item2.tiempos.d3c === '0,0' && item2.tiempos.d1c === '0,0'
-            validation2 = item2.tiempos.mnc === '0,0' && item2.tiempos.d5nc === '0,0' && item2.tiempos.d3nc === '0,0' && item2.tiempos.d1nc === '0,0'
-          }
+          let validation1 = item2.tiempos.mc === '0,0' && item2.tiempos.d5c === '0,0' && item2.tiempos.d3c === '0,0' && item2.tiempos.d1c === '0,0'
+          let validation2 = item2.tiempos.mnc === '0,0' && item2.tiempos.d5nc === '0,0' && item2.tiempos.d3nc === '0,0' && item2.tiempos.d1nc === '0,0'
 
 
           if (validation1 && validation2) {
