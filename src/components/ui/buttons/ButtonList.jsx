@@ -84,7 +84,7 @@ function ButtonList(props) {
                 setShowModal(true);
               }}
             >
-              <i className="fas fa-pen hover:text-green-400"></i>
+              <i className="transition duration-500 fas fa-pen hover:text-green-400"></i>
             </button>
             <button
               className="active:outline-none focus:outline-none"
@@ -92,7 +92,7 @@ function ButtonList(props) {
                 handleDeleteList();
               }}
             >
-              <i className="ml-3 fas fa-trash hover:text-red-400"></i>
+              <i className="transition duration-500 ml-3 fas fa-trash hover:text-red-400"></i>
             </button>
           </div>
         }

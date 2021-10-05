@@ -173,7 +173,7 @@ function UtilityBar() {
               overflow="auto"
               position="anchor"
               menuButton={
-                <MenuButton className="relative focus:outline-none active:outline-none h-8 w-8 text-gray-700 rounded-full hover:bg-gray-300 ">
+                <MenuButton className="transition duration-500 relative focus:outline-none active:outline-none h-8 w-8 text-gray-700 rounded-full hover:bg-gray-300 ">
                   {
                     ActState.userNotify.length > 0 &&
                     <label

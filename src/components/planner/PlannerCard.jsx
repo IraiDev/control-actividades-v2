@@ -29,7 +29,7 @@ function PlannerCard({ idTask: id_todo, idPlan, title, desc: description, assign
   }, [])
 
   return (
-    <div className="grid w-full grid-cols-12 gap-2 p-4 mb-2 bg-white border border-gray-300 rounded-md hover:bg-gray-100">
+    <div className="transition duration-500 grid w-full grid-cols-12 gap-2 p-4 mb-2 bg-white border border-gray-300 rounded-md hover:bg-gray-100">
       <div className="flex flex-col justify-between col-span-3">
         <div className="">
           <h5 className="font-semibold">{title}</h5>

@@ -36,19 +36,19 @@ function NavBar() {
       </div>
       <div className="flex items-center">
         <button disabled={UiState.navTab.disableActivityTab}
-          className={`hover:text-blue-700 focus:outline-none hover:bg-gray-100 rounded-full px-4 py-2 ${UiState.navTab.activities}`}
+          className={`transition duration-500 hover:text-blue-700 focus:outline-none hover:bg-gray-200 rounded-full px-4 py-2 ${UiState.navTab.activities}`}
           onClick={() => { handleActivityView() }}
         >
           Actividades
         </button>
         <button disabled={UiState.navTab.disablePlannerTab}
-          className={`hover:text-blue-700 focus:outline-none hover:bg-gray-100 rounded-full px-4 py-2 ${UiState.navTab.planner}`}
+          className={`transition duration-500 hover:text-blue-700 focus:outline-none hover:bg-gray-200 rounded-full px-4 py-2 ${UiState.navTab.planner}`}
           onClick={() => { handlePlannerView() }}
         >
           Planner
         </button>
         <button disabled={UiState.navTab.disableTimesTab}
-          className={`hover:text-blue-700 focus:outline-none hover:bg-gray-100 rounded-full px-4 py-2 ${UiState.navTab.times}`}
+          className={`transition duration-500 hover:text-blue-700 focus:outline-none hover:bg-gray-200 rounded-full px-4 py-2 ${UiState.navTab.times}`}
           onClick={() => { handleTimesView() }}
         >
           Informe de Tiempos

@@ -20,7 +20,7 @@ function UserTimer({ user, time, isPause }) {
 
   return (
     <button
-      className={`flex justify-between p-1 ml-2 shadow-md text-white w-32 h-10 rounded-full ${clockColor}`}
+      className={`transition duration-500 flex justify-between p-1 ml-2 shadow-md text-white w-32 h-10 rounded-full ${clockColor}`}
     >
       <h5 className="w-8 p-1 text-black bg-white rounded-full">{user}</h5>
       <p className="pt-1 pr-1 font-semibold">{userTime}</p>
