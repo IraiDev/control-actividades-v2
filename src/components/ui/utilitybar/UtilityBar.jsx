@@ -139,6 +139,17 @@ function UtilityBar() {
     ActFunc.markNotifications(data)
   }
 
+  const handleGoActivity = (idAct) => {
+    const param = `id_actividad=${idAct}`
+    if (UiState.tabs !== activitiesView) {
+      UiFunc.activityView()
+      ActFunc.getActivities(param)
+    }
+    else {
+      ActFunc.getActivities(param)
+    }
+  }
+
   useEffect(() => {
     if (UiState.isResetFilters) {
       toggleIsWorking(false)
@@ -197,15 +208,16 @@ function UtilityBar() {
                   ActState.userNotify.map((obj, index) => {
                     return (
                       <MenuItem
-
+                        onClick={() => handleGoActivity(obj.id_det)}
                         key={index}>
-                        <p className="pb-3 text-sm border-b">
-                          <strong>{obj.user_crea_nota.abrev_user}</strong> ha
-                          creado una nota en la Actividad ID: <strong>{obj.id_det}</strong>,
-                          con fecha <strong>{moment(obj.fecha_hora_crea).format('DD-MM-yyyy, HH:mm')}</strong>
+                        <p className="pb-3 text-sm border-b text-transparent hover:text-gray-400">
+                          <strong className="text-black">{obj.user_crea_nota.abrev_user}</strong><i className="text-black">, ha
+                            creado una nota en la Actividad:</i> <strong className="text-black">{obj.id_det}</strong><i className="text-black">,
+                              con fecha</i> <strong className="text-black">{moment(obj.fecha_hora_crea).format('DD-MM-yyyy')}</strong>
                           <button
+                            className="outline-none focus:outline-none"
                             onClick={() => handleMarkNotifications(obj.id_nota)}>
-                            <i className="ml-2 text-gray-400 fas fa-eye hover:text-red-500"></i>
+                            <i className="ml-2 fas fa-eye-slash hover:text-red-500"></i>
                           </button>
                         </p>
                       </MenuItem>
