@@ -109,11 +109,6 @@ function ActivityProvider({ children }) {
           id: item.id_proy
         }
       })
-      // arrayProject.unshift({
-      //   label: 'Todas',
-      //   value: '',
-      //   name: 'proyecto',
-      // })
 
       arraySubProject = body.subproyectos.map(item => {
         return {
@@ -123,12 +118,6 @@ function ActivityProvider({ children }) {
           id: item.id_proyecto
         }
       })
-      // arraySubProject.unshift({
-      //   label: 'Todas',
-      //   value: '',
-      //   name: 'subProy',
-      //   id: null
-      // })
 
       arrayUsersE = body.usuarios.map(item => {
         return {
@@ -137,11 +126,6 @@ function ActivityProvider({ children }) {
           name: 'encargado',
         }
       })
-      // arrayUsersE.unshift({
-      //   label: 'Todas',
-      //   value: '',
-      //   name: 'encargado',
-      // })
 
       arrayUsersS = body.usuarios.map(item => {
         return {
@@ -150,11 +134,6 @@ function ActivityProvider({ children }) {
           name: 'solicitante',
         }
       })
-      // arrayUsersS.unshift({
-      //   label: 'Todas',
-      //   value: '',
-      //   name: 'solicitante',
-      // })
     } else {
       normalAlert('warning', 'Error al obtener los filtros', 'Entiendo...')
     }

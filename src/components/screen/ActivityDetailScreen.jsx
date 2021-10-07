@@ -1,5 +1,5 @@
 import moment from 'moment'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { UiContext } from '../../context/UiContext'
 import { ActivityContext } from '../../context/ActivityContext'
 import ButtonUnText from '../ui/buttons/ButtonUnText'
@@ -17,10 +17,21 @@ import Textarea from '@material-tailwind/react/Textarea'
 import ModalFooter from '@material-tailwind/react/ModalFooter'
 import { alertTimer } from '../../helpers/alerts'
 import { useForm } from '../../hooks/useForm'
+import Tippy from '@tippyjs/react'
 
 let today = new Date()
 today = moment(today).format('yyyy-MM-DD')
-let initialState = { inputEdit: '', inputAdd: '' }
+const initialState = {
+  inputEdit: '',
+  inputAdd: ''
+}
+
+const initialStateRA = {
+  inputDesc: '',
+  inputTicket: '',
+  inputPriority: '',
+  inputTime: ''
+}
 
 function ActivityDetailScreen() {
 
@@ -30,6 +41,15 @@ function ActivityDetailScreen() {
   const [{ idNote }, setNoteActive] = useState({ idNote: null })
   const [updateOrAdd, setUpdateOrAdd] = useState(false)
   const [showModal, setShowModal] = useState(false)
+  const [project, setProject] = useState(null)
+  const [subProject, setSubProject] = useState(null)
+  const [userR, setUserR] = useState(null)
+  const [userS, setUserS] = useState(null)
+  const [userE, setUserE] = useState(null)
+  const [newSubProjectArray, setNewSubProjectArray] = useState(null)
+  const [values, setValues] = useState(initialStateRA)
+  const [isActPlay, setIsActPlay] = useState(false)
+  const { inputTicket, inputPriority, inputTime, inputDesc } = values
 
   const handleBack = async () => {
     await UiFunc.setIsLoading(true)
@@ -84,17 +104,54 @@ function ActivityDetailScreen() {
   }
 
   const showModalFalse = () => {
-    initialState.inputEdit = ''
     setNoteActive({ idNote: null, description: '' })
     setShowModal(false)
     reset()
   }
 
-  const handleGetidNote = (idNote, description) => {
+  const handleGetIdNote = (idNote, description) => {
     reset()
     setNoteActive({ idNote, description })
     initialState.inputEdit = description
   }
+
+  useEffect(() => {
+    if (project !== null) {
+      const tempArray = ActState.arraySubProject.filter(item => project.id === item.id)
+      const tempSubProj = tempArray.filter(item => ActState.activityDetails.id_sub_proyecto === item.id)
+      tempSubProj !== [] && setSubProject(tempSubProj)
+      setNewSubProjectArray(tempArray)
+    }
+    else {
+      setNewSubProjectArray(ActState.arraySubProject)
+    }
+  }, [project])
+
+  useEffect(() => {
+    if (ActState.activityDetails !== null) {
+      setValues({
+        ...values,
+        inputTicket: ActState.activityDetails.num_ticket_edit,
+        inputPriority: ActState.activityDetails.num_prioridad,
+      })
+      const tempProj = ActState.arrayProject.filter(item => ActState.activityDetails.id_proy === item.id)
+      setProject(tempProj[0])
+
+      const tempUserS = ActState.arrayUsersS.filter(item => ActState.activityDetails.user_solicita === item.label)
+      setUserS(tempUserS[0])
+
+      const tempUserE = ActState.arrayUsersE.filter(item => ActState.activityDetails.encargado_actividad === item.label)
+      setUserE(tempUserE[0])
+    }
+  }, [ActState.activityDetails])
+
+  useEffect(() => {
+    if (ActState.activityDetails !== null) {
+      const validation1 = ActState.activityDetails.pausas.length > 0
+      const validation2 = ActState.activityDetails.estado === 2
+      validation1 && validation2 && setIsActPlay(true)
+    }
+  }, [ActState.activityDetails])
 
   return (
     <>
@@ -102,7 +159,7 @@ function ActivityDetailScreen() {
         ActState.activityDetails !== null &&
         <>
           <div className="container mx-auto">
-            <div className="bg-white p-10 rounded-lg shadow-lg mt-20">
+            <div className="bg-white p-10 rounded-lg shadow-lg my-10">
               <div className="flex items-center justify-between mb-10">
                 <div className="text-2xl font-bold text-gray-700 capitalize">
                   <ButtonUnText
@@ -228,66 +285,149 @@ function ActivityDetailScreen() {
                     tippyText="no disponible"
                     isOnclickeable={false} />
                 </div>
-                <div className="max-h-48 scroll-row">
+                <div className="h-desc scroll-row-detail">
                   <p className="p-2 leading-tight text-justify">{ActState.activityDetails.func_objeto}</p>
                 </div>
               </div>
               <div className="grid grid-cols-1 mt-6">
-                <Ptext tag="Opciones Registro de Avance: (sin funcionalidades por ahora)" />
+                <div className="flex justify-between items-center mb-6">
+                  <Ptext tag="Opciones Registro de Avance: (sin funcionalidades por ahora)" />
+                  <div className="flex items-center justify-between bg-gray-100 px-3 rounded-full border">
+                    <ButtonUnText
+                      icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
+                      color=""
+                      hoverBgColor={isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'}
+                      isOnclickeable={false}
+                      isTippy={true}
+                      tippyText={isActPlay ? 'Detener tiempo' : 'Reanudar tiempo'} />
+                    {
+                      isActPlay &&
+                      <Tippy
+                        offset={[0, 12]}
+                        delay={[100, 0]}
+                        placement={"bottom"}
+                        content={<span>Actividad en play</span>}
+                      >
+                        <i className="ml-2 mr-1 fas fa-user-clock fa-sm"></i>
+                      </Tippy>
+                    }
+                  </div>
+                </div>
                 <div className="mt-4 grid grid-cols-4 gap-10 px-5">
-                  <div className="col-span-1 border-r grid grid-cols-1 gap-2 pr-5 place-content-between">
+                  <div className="col-span-2 lg:col-span-1 border-r grid grid-cols-1 gap-2 pr-5 place-content-between">
                     <div>
                       <label className="text-xs">Proyecto:</label>
-                      <Select placeholder="Seleccionar" />
+                      <Select
+                        placeholder="Seleccionar"
+                        options={ActState.arrayProject}
+                        onChange={(option) => { setProject(option) }}
+                        value={project} />
                     </div>
                     <div>
                       <label className="text-xs">Sub Proyecto:</label>
-                      <Select placeholder="Seleccionar" />
+                      <Select
+                        placeholder="Seleccionar"
+                        options={newSubProjectArray}
+                        onChange={(option) => { setSubProject(option) }}
+                        value={subProject} />
                     </div>
                     <div>
                       <label className="text-xs">Solicita:</label>
-                      <Select placeholder="Seleccionar" />
+                      <Select
+                        placeholder="Seleccionar"
+                        options={ActState.arrayUsersS}
+                        onChange={(option) => { setUserS(option) }}
+                        value={userS} />
                     </div>
                     <div>
                       <label className="text-xs">Encargado:</label>
-                      <Select placeholder="Seleccionar" />
+                      <Select
+                        placeholder="Seleccionar"
+                        options={ActState.arrayUsersE}
+                        onChange={(option) => { setUserE(option) }}
+                        value={userE} />
+                    </div>
+                    <div>
+                      <label className="text-xs">Revisor:</label>
+                      <Select
+                        placeholder="Seleccionar"
+                        options={ActState.arrayUsersE}
+                        onChange={(option) => { setUserR(option) }}
+                        value={userR} />
                     </div>
                   </div>
-                  <div className="col-span-3">
-                    <div className="flex mb-5 gap-5 justify-center">
+                  <div className="col-span-2 lg:col-span-3">
+                    <div className="flex flex-wrap lg:flex-nowrap mb-5 gap-5 justify-center">
                       <Input
                         type="text"
+                        name="inputPriority"
+                        value={inputPriority}
+                        onChange={(e) => setValues({
+                          ...values,
+                          inputPriority: parseInt(e.target.value)
+                        })}
                         color="lightBlue"
                         size="regular"
                         outline={true}
                         placeholder="Nᵒ prioridad"
-                      />
+                        onKeyPress={(event) => {
+                          if (!/[0-9]/.test(event.key)) {
+                            event.preventDefault();
+                          }
+                        }} />
                       <Input
                         type="text"
+                        name="inputTicket"
+                        value={inputTicket}
+                        onChange={(e) => setValues({
+                          ...values,
+                          inputTicket: parseInt(e.target.value)
+                        })}
                         color="lightBlue"
                         size="regular"
                         outline={true}
                         placeholder="Ticket"
-                      />
+                        onKeyPress={(event) => {
+                          if (!/[0-9]/.test(event.key)) {
+                            event.preventDefault();
+                          }
+                        }} />
                       <Input
                         type="text"
+                        name="inputTime"
+                        value={inputTime}
+                        onChange={(e) => setValues({
+                          ...values,
+                          inputTime: parseInt(e.target.value)
+                        })}
                         color="lightBlue"
                         size="regular"
                         outline={true}
                         placeholder="Tiempo estimado"
+                        onKeyPress={(event) => {
+                          if (!/[0-9]/.test(event.key)) {
+                            event.preventDefault();
+                          }
+                        }}
                       />
                     </div>
                     <hr />
-                    {/* <div className="grid grid-cols-4 mt-5">
-              <PTimes user="RD" />
-              <PTimes user="SA" />
-              <PTimes user="IA" />
-              <PTimes user="FM" />
-            </div> */}
                   </div>
                 </div>
               </div>
-              <div className="mt-10 flex justify-end">
+              <div className="mt-16 flex justify-between">
+                <Button
+                  color="red"
+                  buttonType="filled"
+                  size="regular"
+                  rounded={true}
+                  block={false}
+                  iconOnly={false}
+                  ripple="light"
+                  onClick={handleBack}
+                >
+                  cancelar
+                </Button>
                 <Button
                   color="green"
                   buttonType="filled"
@@ -297,7 +437,7 @@ function ActivityDetailScreen() {
                   iconOnly={false}
                   ripple="light"
                 >
-                  Aplicar
+                  Guardar cambios
                 </Button>
               </div>
             </div>
@@ -350,7 +490,7 @@ function ActivityDetailScreen() {
                                 user={obj.user_crea}
                                 idActivity={ActState.activityDetails.id_det}
                                 dateColor="text-white"
-                                onclick={handleGetidNote}
+                                onclick={handleGetIdNote}
                                 activeColor={idNote === obj.id_nota ? 'text-green-600' : 'text-gray-500'}
                               />
                             )

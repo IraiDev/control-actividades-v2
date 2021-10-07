@@ -16,6 +16,7 @@ import "@material-tailwind/react/tailwind.css"
 import PDefaultNotes from '../ui/text/PDefaultNotes';
 import { alertTimer } from '../../helpers/alerts';
 import moment from 'moment';
+import ButtonUnText from '../ui/buttons/ButtonUnText';
 
 let initialState = { inputEdit: '', inputAdd: '' }
 let today = new Date()
@@ -82,10 +83,14 @@ function Card(props) {
       break;
   }
 
-  if (pausas.length >= 1 && estado === 2) {
+  if (pausas.length > 0 && estado === 2) {
     if (pausas[pausas.length - 1].boton === 2) {
       isActPlay = true
       actPlay = 'border-4 border-black border-opacity-25'
+    }
+    else {
+      isActPlay = false
+      actPlay = ''
     }
   }
 
@@ -162,9 +167,16 @@ function Card(props) {
         onDoubleClick={handleOpenDetails} >
         <div className="flex items-center justify-between pb-2 text-base">
           <Ptext tag="Actividad:" value={actividad} font="font-bold" />
-          <div className="flex items-center">
-            {isActPlay && (<i className="fas fa-user-clock"></i>)}
-            <p className="ml-4 font-bold text-md">{numberCard}</p>
+          <div className={`flex items-center justify-between bg-black px-3 rounded-full shadow-md border border-black border-opacity-5 ${prioridad === 1000 ? 'bg-opacity-10' : 'bg-opacity-25'}`}>
+            <ButtonUnText
+              icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
+              color=""
+              hoverBgColor={isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'}
+              isOnclickeable={false}
+              isTippy={true}
+              tippyText={isActPlay ? 'Detener tiempo' : 'Reanudar tiempo'} />
+            {isActPlay && <i className="ml-2 fas fa-user-clock fa-sm"></i>}
+            <p className="ml-4 mr-2 font-bold text-md">{numberCard}</p>
           </div>
         </div>
         <div className={`grid grid-cols-12 mb-2 h-48 border-b pb-3 gap-2 ${lineColor}`}>
@@ -207,6 +219,19 @@ function Card(props) {
               isTippy={true}
               textTippy="ID Actividad" />
             <Ptext tag="Ticket:" value={ticket} />
+            <div className="flex">
+              <Ptext
+                tag="F. Crea:"
+                value={moment(fechaCrea).format('DD-MM-yyyy')}
+                isTippy={true}
+                textTippy="Fecha de creacion"
+              />
+              <Ptext
+                tag={`(${days})`}
+                isTippy={true}
+                textTippy="Dias transcurridos"
+              />
+            </div>
           </div>
           <div className="col-span-4 2xl:col-span-5">
             <Ptext tag="Descripcion:" />
@@ -239,7 +264,7 @@ function Card(props) {
             </div>
           </div>
         </div>
-        <div className="flex justify-between mt-2">
+        <div className="flex justify-between items-center mt-2 min-w-full">
           <div className="flex">
             <Ptext
               tag="Prioridad:"
@@ -255,26 +280,12 @@ function Card(props) {
               isTippy={true}
               textTippy="Prioridad RA" />
           </div>
-          <div className="flex">
-            <Ptext
-              tag="F. Crea:"
-              value={moment(fechaCrea).format('DD-MM-yyyy')}
-              isTippy={true}
-              textTippy="Fecha de creacion"
-            />
-            <Ptext
-              tag={`(${days})`}
-              isTippy={true}
-              textTippy="Dias transcurridos"
-            />
-          </div>
           <div>
-
             <Menu
               direction="left"
               menuButton={
-                <MenuButton className="focus:outline-none active:outline-none">
-                  <i className="mx-2 fas fa-ellipsis-v"></i>
+                <MenuButton className="focus:outline-none active:outline-none h-7 w-7 rounded-full transition duration-500 hover:bg-black hover:bg-opacity-25 mt-1">
+                  <i className="fas fa-ellipsis-v"></i>
                 </MenuButton>
               }
             >
