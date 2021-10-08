@@ -13,7 +13,8 @@ function ButtonUnText(props) {
     hoverBgColor = 'hover:bg-gray-300',
     styles = 'h-8 w-8',
     onclick,
-    isOnclickeable = true
+    isOnclickeable = true,
+    offset = 2
   } = props
 
   const handleClick = () => {
@@ -26,7 +27,7 @@ function ButtonUnText(props) {
         !disable && (
           <Tippy
             disabled={!isTippy}
-            offset={[0, 2]}
+            offset={[0, offset]}
             delay={[200, 0]}
             placement={"bottom"}
             content={<span>{tippyText}</span>}

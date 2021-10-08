@@ -41,6 +41,7 @@ function ActivityDetailScreen() {
   const [{ idNote }, setNoteActive] = useState({ idNote: null })
   const [updateOrAdd, setUpdateOrAdd] = useState(false)
   const [showModal, setShowModal] = useState(false)
+  const [showModalDesc, setShowModalDesc] = useState(false)
   const [project, setProject] = useState(null)
   const [subProject, setSubProject] = useState(null)
   const [userR, setUserR] = useState(null)
@@ -109,6 +110,14 @@ function ActivityDetailScreen() {
     reset()
   }
 
+  const showModalDescFalse = () => {
+    setShowModalDesc(false)
+    setValues({
+      ...values,
+      inputDesc: ''
+    })
+  }
+
   const handleGetIdNote = (idNote, description) => {
     reset()
     setNoteActive({ idNote, description })
@@ -152,6 +161,10 @@ function ActivityDetailScreen() {
       validation1 && validation2 && setIsActPlay(true)
     }
   }, [ActState.activityDetails])
+
+  useEffect(() => {
+    console.log('values: ', values)
+  }, [values])
 
   return (
     <>
@@ -281,9 +294,7 @@ function ActivityDetailScreen() {
                   <Ptext tag="Descripcion:" />
                   <ButtonUnText
                     icon="fas fa-pen"
-                    isTippy={true}
-                    tippyText="no disponible"
-                    isOnclickeable={false} />
+                    onclick={() => setShowModalDesc(true)} />
                 </div>
                 <div className="h-desc scroll-row-detail">
                   <p className="p-2 leading-tight text-justify">{ActState.activityDetails.func_objeto}</p>
@@ -292,14 +303,7 @@ function ActivityDetailScreen() {
               <div className="grid grid-cols-1 mt-6">
                 <div className="flex justify-between items-center mb-6">
                   <Ptext tag="Opciones Registro de Avance: (sin funcionalidades por ahora)" />
-                  <div className="flex items-center justify-between bg-gray-100 px-3 rounded-full border">
-                    <ButtonUnText
-                      icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
-                      color=""
-                      hoverBgColor={isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'}
-                      isOnclickeable={false}
-                      isTippy={true}
-                      tippyText={isActPlay ? 'Detener tiempo' : 'Reanudar tiempo'} />
+                  <div className="flex items-center justify-between px-3">
                     {
                       isActPlay &&
                       <Tippy
@@ -308,9 +312,25 @@ function ActivityDetailScreen() {
                         placement={"bottom"}
                         content={<span>Actividad en play</span>}
                       >
-                        <i className="ml-2 mr-1 fas fa-user-clock fa-sm"></i>
+                        <i className="ml-2 mr-1 mt-1 fas fa-user-clock fa-sm"></i>
                       </Tippy>
                     }
+                    <ButtonUnText
+                      icon="fas fa-clone fa-sm"
+                      color=""
+                      hoverBgColor="hover:bg-gray-300 hover:text-blue-500"
+                      isOnclickeable={false}
+                      isTippy={true}
+                      offset={12}
+                      tippyText="Clonar actividad" />
+                    <ButtonUnText
+                      icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
+                      color=""
+                      hoverBgColor={`hover:bg-gray-300 ${isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'}`}
+                      isOnclickeable={false}
+                      isTippy={true}
+                      offset={12}
+                      tippyText={isActPlay ? 'Detener tiempo' : 'Reanudar tiempo'} />
                   </div>
                 </div>
                 <div className="mt-4 grid grid-cols-4 gap-10 px-5">
@@ -418,7 +438,7 @@ function ActivityDetailScreen() {
               <div className="mt-16 flex justify-between">
                 <Button
                   color="red"
-                  buttonType="filled"
+                  buttonType="link"
                   size="regular"
                   rounded={true}
                   block={false}
@@ -426,19 +446,34 @@ function ActivityDetailScreen() {
                   ripple="light"
                   onClick={handleBack}
                 >
-                  cancelar
+                  eliminar actvidad
                 </Button>
-                <Button
-                  color="green"
-                  buttonType="filled"
-                  size="regular"
-                  rounded={true}
-                  block={false}
-                  iconOnly={false}
-                  ripple="light"
-                >
-                  Guardar cambios
-                </Button>
+                <div className="flex items-center">
+                  <Button
+                    color="red"
+                    buttonType="filled"
+                    size="regular"
+                    rounded={true}
+                    block={false}
+                    iconOnly={false}
+                    ripple="light"
+                    onClick={handleBack}
+                  >
+                    cancelar
+                  </Button>
+                  <span className="mr-2"></span>
+                  <Button
+                    color="green"
+                    buttonType="filled"
+                    size="regular"
+                    rounded={true}
+                    block={false}
+                    iconOnly={false}
+                    ripple="light"
+                  >
+                    Guardar cambios
+                  </Button>
+                </div>
               </div>
             </div>
 
@@ -523,6 +558,41 @@ function ActivityDetailScreen() {
                 ripple="light"
               >
                 {idNote !== null ? (updateOrAdd ? 'Agregar' : 'Editar') : 'Agregar'}
+              </Button>
+            </ModalFooter>
+          </Modal>
+
+          <Modal size="regular" active={showModalDesc} toggler={() => showModalDescFalse()}>
+            <ModalHeader toggler={() => showModalDescFalse()}>
+              Editar descripcion
+            </ModalHeader>
+            <ModalBody>
+              <div className="w-430">
+                <Textarea
+                  name="inputDesc"
+                  value={inputDesc}
+                  onChange={(e) => setValues({
+                    ...values,
+                    inputDesc: e.target.value
+                  })}
+                  color="blue"
+                  size="sm"
+                  outline={true}
+                  placeholder="Descripcion"
+                />
+              </div>
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                color="blue"
+                buttonType="link"
+                size="regular"
+                rounded={true}
+                block={false}
+                iconOnly={false}
+                ripple="dark"
+              >
+                Editar
               </Button>
             </ModalFooter>
           </Modal>
