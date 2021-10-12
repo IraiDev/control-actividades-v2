@@ -77,14 +77,14 @@ function ListNote(props) {
   return (
     <>
       {
-        !isModal ? (
+        !isModal ?
           <li className="pb-3 leading-tight">
-            <p className={`bg-gray-800 bg-opacity-25 px-2 rounded-full inline font-normal text-xs ${dateColor}`}>
+            <p className={`bg-gray-800 bg-opacity-25 px-2 rounded-full inline font-bold text-xs ${dateColor}`}>
               <label className="mr-2">{name}</label>({moment(date).format("DD-MM-yyyy, HH:mm")})
             </p>
             <p className="inline ml-1 font-semibold">: {desc}</p>
           </li>
-        ) : (
+          :
           <li className="flex justify-between w-full pb-2 border-b">
             <button
               className={`${buttonStyle} ${activeColor}`}
@@ -94,7 +94,7 @@ function ListNote(props) {
               <p className={`flex font-bold`}>
                 <label className="mr-2">{name}</label>({moment(date).format("DD-MM-yyyy, HH:mm")})
               </p>
-              <p className="flex ml-1 text-left">{desc}</p>
+              <p className="flex ml-1 text-left font-semibold">{desc}</p>
             </button>
             <br />
             <ButtonUnText
@@ -103,7 +103,7 @@ function ListNote(props) {
               onclick={handleDeleteNote}
             />
           </li>
-        )
+
       }
     </>
   )
