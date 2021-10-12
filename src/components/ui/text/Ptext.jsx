@@ -1,10 +1,10 @@
 import React from 'react'
 import Tippy from '@tippyjs/react'
 
-function Ptext({ isTippy = false, textTippy = '', tag, value, font = '', priority = '', isPriority = false }) {
+function Ptext({ isTippy = false, textTippy = '', tag, value, font = '', priority = '', isPriority = false, style = '' }) {
   return (
     <>
-      <p>
+      <p className={style}>
         <Tippy
           disabled={!isTippy}
           offset={[0, 6]}
@@ -16,8 +16,8 @@ function Ptext({ isTippy = false, textTippy = '', tag, value, font = '', priorit
         </Tippy>
         <span className={font}>{value}</span>
         {
-          isPriority ?
-            (<span className={font}> ({priority})</span>) : ''
+          isPriority &&
+          (<span className={font}> ({priority})</span>)
         }
       </p>
     </>

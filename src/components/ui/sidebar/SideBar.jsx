@@ -155,7 +155,7 @@ function SideBar() {
         />
         <SelectFilter
           isMulti={true}
-          iscontrollerBy={true}
+          isControllerBy={true}
           label="Sub proyecto"
           orderPriority="orden_sub_proyecto"
           orderAsc={handleOrderAsc}

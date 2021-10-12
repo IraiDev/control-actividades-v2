@@ -119,6 +119,8 @@ function ActivityProvider({ children }) {
         }
       })
 
+      console.log({ arraySubProject })
+
       arrayUsersE = body.usuarios.map(item => {
         return {
           label: item.abrev_user,

@@ -180,7 +180,7 @@ function Card(props) {
             <p className="ml-4 mr-2 font-bold text-md">{numberCard}</p>
           </div>
         </div>
-        <div className={`grid grid-cols-12 mb-2 h-48 border-b pb-3 gap-2 ${lineColor}`}>
+        <div className={`grid grid-cols-12 mb-2 h-52 border-b pb-3 gap-2 ${lineColor}`}>
           <div className="col-span-3 md:col-span-2 lg:col-span-3 2xl:col-span-2">
             <Ptext
               tag="Encar:"
@@ -220,19 +220,18 @@ function Card(props) {
               isTippy={true}
               textTippy="ID Actividad" />
             <Ptext tag="Ticket:" value={ticket} />
-            <div className="flex">
-              <Ptext
-                tag="F. Crea:"
-                value={moment(fechaCrea).format('DD-MM-yyyy')}
-                isTippy={true}
-                textTippy="Fecha de creacion"
-              />
-              <Ptext
-                tag={`(${days})`}
-                isTippy={true}
-                textTippy="Dias transcurridos"
-              />
-            </div>
+            <Ptext
+              tag="F. Crea:"
+              value={moment(fechaCrea).format('DD-MM-YY')}
+              isTippy={true}
+              textTippy="Fecha de creacion"
+            />
+            <Ptext
+              tag="D. transc:"
+              value={days}
+              isTippy={true}
+              textTippy="Dias transcurridos"
+            />
           </div>
           <div className="col-span-4 2xl:col-span-5">
             <Ptext tag="Descripcion:" />
