@@ -21,7 +21,7 @@ import "@material-tailwind/react/tailwind.css"
 import moment from 'moment';
 import { types } from '../../../types/types'
 
-const { plannerView, activitiesView, timesView } = types
+const { plannerView, activitiesView, timesView, detailsView } = types
 
 const colorArray = [
   { id: "bg-gray-500", colorButton: "bg-gray-500" },
@@ -166,7 +166,7 @@ function UtilityBar() {
           </div>
           <div className="flex">
             <ButtonUnText
-              disable={UiState.navTab.filterPlayActivities && !UiState.navTab.disablePlannerTab}
+              disable={UiState.navTab.disabled === plannerView || UiState.navTab.disabled === timesView || UiState.navTab.disabled === detailsView}
               icon="fas fa-user-clock"
               tippyText={isWorking ? "Todas las actividades" : "Mostrar actividades en Play"}
               color={isWorking && 'text-blue-500'}
@@ -174,7 +174,7 @@ function UtilityBar() {
               onclick={handleUserWorking} />
 
             <ButtonUnText
-              disable={UiState.navTab.filterPlayActivities}
+              disable={UiState.navTab.disabled === detailsView}
               icon="fas fa-sync-alt"
               tippyText={UiState.tabs === plannerView ? "Actualizar Planner" : UiState.tabs === activitiesView ? "Actualizar Actividades" : UiState.tabs === timesView && "Actualizar Informe de tiempos"}
               isTippy={true}

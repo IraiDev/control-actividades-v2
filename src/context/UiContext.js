@@ -4,22 +4,26 @@ import useTab from '../hooks/useTab'
 import useToggle from '../hooks/useToggle'
 import { types } from '../types/types'
 
-const { plannerView: plannerScreen, activitiesView: actView, timesView: timeView } = types
+const { plannerView: plannerScreen, activitiesView: actView, timesView: timeView, detailsView: detailView } = types
 
 export const UiContext = createContext()
 
 const initialNavTab = {
   activities: '',
   planner: 'text-blue-600 font-bold',
+  times: '',
+  disabled: plannerScreen,
   disableActivityTab: false,
   disablePlannerTab: true,
+  disableTimesTab: false,
+  disableTime: false,
   activeTab: false,
   filterPlayActivities: true
 }
 
 function UiProvider({ children }) {
 
-  const [tabs, setTabs] = useState('/planner')
+  const [tabs, setTabs] = useState(plannerScreen)
   const [isViewChanged, setViewActivities, setViewPLannerTask] = useTab()
   const [isTodoOrPlanner, setViewTodo, setViewPlanner] = useTab()
   const [toggleSideBar, setToggleSideBar] = useToggle(false);
@@ -66,6 +70,7 @@ function UiProvider({ children }) {
       planner: '',
       activities: 'text-blue-600 font-bold',
       times: '',
+      disabled: actView,
       disableActivityTab: true,
       disablePlannerTab: false,
       disableTimesTab: false,
@@ -91,6 +96,7 @@ function UiProvider({ children }) {
       activities: '',
       planner: 'text-blue-600 font-bold',
       times: '',
+      disabled: plannerScreen,
       disableActivityTab: false,
       disablePlannerTab: true,
       disableTimesTab: false,
@@ -110,6 +116,7 @@ function UiProvider({ children }) {
       activities: '',
       planner: '',
       times: 'text-blue-600 font-bold',
+      disabled: timeView,
       disableActivityTab: false,
       disablePlannerTab: false,
       disableTimesTab: true,
@@ -126,6 +133,7 @@ function UiProvider({ children }) {
       planner: '',
       activities: 'text-blue-600 font-bold',
       times: '',
+      disabled: detailView,
       disableActivityTab: true,
       disablePlannerTab: false,
       disableTimesTab: false,

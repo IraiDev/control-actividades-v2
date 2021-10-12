@@ -1,7 +1,6 @@
 export const types = {
-
   plannerView: '/planner',
   activitiesView: '/activities',
-  timesView: '/times'
-
+  timesView: '/times',
+  detailsView: '/details'
 }
