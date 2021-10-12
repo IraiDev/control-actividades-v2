@@ -357,7 +357,7 @@ function Card(props) {
 
       {/* modal update todo */}
 
-      <Modal size="regular" active={showModal} toggler={() => showModalFalse()}>
+      <Modal size="lg" active={showModal} toggler={() => showModalFalse()}>
         <ModalHeader toggler={() => showModalFalse()}>
           {
             noteActive.idNote !== null ? 'Editar Nota' : 'Agregar nueva nota'
