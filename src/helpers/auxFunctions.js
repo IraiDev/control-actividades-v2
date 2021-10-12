@@ -12,3 +12,10 @@ export const clearParams = (url, param) => {
     return url;
   }
 }
+
+export const seekParam = (text, param) => {
+  const p = /- PAUSA/g
+  const t = text.replace(p, `\n${param}`)
+
+  return t
+}

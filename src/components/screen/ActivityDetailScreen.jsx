@@ -18,6 +18,8 @@ import ModalFooter from '@material-tailwind/react/ModalFooter'
 import { alertTimer } from '../../helpers/alerts'
 import { useForm } from '../../hooks/useForm'
 import Tippy from '@tippyjs/react'
+import { seekParam } from '../../helpers/auxFunctions'
+import TableTimes from '../ui/times/TableTimes'
 
 let today = new Date()
 today = moment(today).format('yyyy-MM-DD')
@@ -105,6 +107,7 @@ function ActivityDetailScreen() {
   }
 
   const showModalFalse = () => {
+    initialState.inputEdit = ''
     setNoteActive({ idNote: null, description: '' })
     setShowModal(false)
     reset()
@@ -114,7 +117,7 @@ function ActivityDetailScreen() {
     setShowModalDesc(false)
     setValues({
       ...values,
-      inputDesc: ''
+      inputDesc: ActState.activityDetails.func_objeto
     })
   }
 
@@ -142,6 +145,7 @@ function ActivityDetailScreen() {
         ...values,
         inputTicket: ActState.activityDetails.num_ticket_edit,
         inputPriority: ActState.activityDetails.num_prioridad,
+        inputDesc: ActState.activityDetails.func_objeto
       })
       const tempProj = ActState.arrayProject.filter(item => ActState.activityDetails.id_proy === item.id)
       setProject(tempProj[0])
@@ -163,7 +167,7 @@ function ActivityDetailScreen() {
   }, [ActState.activityDetails])
 
   useEffect(() => {
-    console.log('values: ', values)
+    // console.log('values: ', values)
   }, [values])
 
   return (
@@ -173,8 +177,8 @@ function ActivityDetailScreen() {
         <>
           <div className="container mx-auto">
             <div className="bg-white p-10 rounded-lg shadow-lg my-10">
-              <div className="flex items-center justify-between mb-10">
-                <div className="text-2xl font-bold text-gray-700 capitalize">
+              <div className="grid grid-cols-1 lg:grid-cols-3 mb-10">
+                <div className="text-2xl font-bold text-gray-700 capitalize col-span-2">
                   <ButtonUnText
                     icon="fas fa-chevron-left"
                     styles="mr-7"
@@ -183,7 +187,7 @@ function ActivityDetailScreen() {
                     onclick={handleBack} />
                   Detalle actividad: {ActState.activityDetails.id_det}, {ActState.activityDetails.actividad}
                 </div>
-                <div className="rounded-full p-1 bg-gray-100">
+                <div className="rounded-full p-1 bg-gray-100 place-self-end col-span-1 mt-4 lg:mt-0">
                   <ButtonColor
                     color="bg-gray-300"
                     isUpdate={true}
@@ -229,7 +233,7 @@ function ActivityDetailScreen() {
                     hwBtn="5" />
                 </div>
               </div>
-              <div className="grid grid-cols-3">
+              <div className="grid grid-cols-3 gap-1">
                 <div className="col-span-1">
                   <Ptext tag="Encargado:" value={ActState.activityDetails.encargado_actividad}
                   />
@@ -297,7 +301,7 @@ function ActivityDetailScreen() {
                     onclick={() => setShowModalDesc(true)} />
                 </div>
                 <div className="h-desc scroll-row-detail">
-                  <p className="p-2 leading-tight text-justify">{ActState.activityDetails.func_objeto}</p>
+                  <p className="p-2 leading-tight text-justify salto">{seekParam(ActState.activityDetails.func_objeto, '- PAUSA')}</p>
                 </div>
               </div>
               <div className="grid grid-cols-1 mt-6">
@@ -334,7 +338,7 @@ function ActivityDetailScreen() {
                   </div>
                 </div>
                 <div className="mt-4 grid grid-cols-4 gap-10 px-5">
-                  <div className="col-span-2 lg:col-span-1 border-r grid grid-cols-1 gap-2 pr-5 place-content-between">
+                  <div className="col-span-4 lg:col-span-1 lg:border-r border-b lg:border-b-0 pb-10 lg:pb-0 lg grid grid-cols-1 gap-2 lg:pr-5 place-content-between">
                     <div>
                       <label className="text-xs">Proyecto:</label>
                       <Select
@@ -376,8 +380,8 @@ function ActivityDetailScreen() {
                         value={userR} />
                     </div>
                   </div>
-                  <div className="col-span-2 lg:col-span-3">
-                    <div className="flex flex-wrap lg:flex-nowrap mb-5 gap-5 justify-center">
+                  <div className="col-span-4 lg:col-span-3">
+                    <div className="flex flex-wrap lg:flex-nowrap mb-10 gap-5 justify-center">
                       <Input
                         type="text"
                         name="inputPriority"
@@ -432,6 +436,9 @@ function ActivityDetailScreen() {
                       />
                     </div>
                     <hr />
+                    <div className="mt-10">
+                      <TableTimes />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -446,7 +453,7 @@ function ActivityDetailScreen() {
                   ripple="light"
                   onClick={handleBack}
                 >
-                  eliminar actvidad
+                  eliminar actividad
                 </Button>
                 <div className="flex items-center">
                   <Button
@@ -480,7 +487,7 @@ function ActivityDetailScreen() {
             {/* container fin */}
           </div>
 
-          <Modal size="regular" active={showModal} toggler={() => showModalFalse()}>
+          <Modal size="lg" active={showModal} toggler={() => showModalFalse()}>
             <ModalHeader toggler={() => showModalFalse()}>
               {
                 idNote !== null ? 'Editar Nota' : 'Agregar nueva nota'
@@ -489,7 +496,7 @@ function ActivityDetailScreen() {
             <ModalBody>
               {
                 updateOrAdd ?
-                  (<div className="w-430">
+                  <div className="w-600">
                     <label className="text-xs">Mensajes predeterminados:</label>
                     <div className="py-3 pl-3 pr-1 mx-auto mt-1 mb-5 bg-gray-100 rounded-md">
                       <PDefaultNotes from={true} idAct={ActState.activityDetails.id_det} noteText="Inicializar actividad urgente" onclick={showModalFalse} updatePriority={true} />
@@ -504,12 +511,12 @@ function ActivityDetailScreen() {
                       name="inputAdd"
                       onChange={onChangeValues}
                       color="blue"
-                      size="regular"
+                      size="sm"
                       outline={true}
                       placeholder="Nota"
                     />
-                  </div>) :
-                  (<div className="w-600">
+                  </div> :
+                  <div className="w-600">
                     <label className="mb-2 text-xs">Notas:</label>
                     <ul className="min-h-80 scroll-row">
                       {
@@ -541,11 +548,11 @@ function ActivityDetailScreen() {
                       name="inputEdit"
                       onChange={onChangeValues}
                       color="blue"
-                      size="regular"
+                      size="sm"
                       outline={true}
                       placeholder="Nota"
                     />
-                  </div>)
+                  </div>
               }
             </ModalBody>
             <ModalFooter>
@@ -562,12 +569,12 @@ function ActivityDetailScreen() {
             </ModalFooter>
           </Modal>
 
-          <Modal size="regular" active={showModalDesc} toggler={() => showModalDescFalse()}>
+          <Modal size="lg" active={showModalDesc} toggler={() => showModalDescFalse()}>
             <ModalHeader toggler={() => showModalDescFalse()}>
               Editar descripcion
             </ModalHeader>
             <ModalBody>
-              <div className="w-430">
+              <div className="w-600">
                 <Textarea
                   name="inputDesc"
                   value={inputDesc}
@@ -586,7 +593,7 @@ function ActivityDetailScreen() {
               <Button
                 color="blue"
                 buttonType="link"
-                size="regular"
+                size="sm"
                 rounded={true}
                 block={false}
                 iconOnly={false}

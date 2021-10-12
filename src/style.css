@@ -2,6 +2,10 @@ body {
   background-color: rgb(243, 244, 246);
 }
 
+.salto{
+  white-space: pre-wrap;
+}
+
 .bg-img-login {
   background-image: url("./assets/img/login.jpg");
   background-repeat: no-repeat;
@@ -97,11 +101,11 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .w-430{
-  width: 430px;
+  width:430px;
 }
 
 .w-600{
-  min-width: 430px;
+  min-width: 800px;
 }
 
 .z-loading{
@@ -126,5 +130,11 @@ input[type="number"]::-webkit-outer-spin-button {
   }
   .h-table{
     min-height: 67vh;
+  }
+}
+
+@media only screen and (max-width: 870px) {
+  .w-600{
+    min-width: 400px;
   }
 }

@@ -167,13 +167,14 @@ function Card(props) {
         onDoubleClick={handleOpenDetails} >
         <div className="flex items-center justify-between pb-2 text-base">
           <Ptext tag="Actividad:" value={actividad} font="font-bold" />
-          <div className={`flex items-center justify-between bg-black px-3 rounded-full shadow-md border border-black border-opacity-5 ${prioridad === 1000 ? 'bg-opacity-10' : 'bg-opacity-25'}`}>
+          <div className={`flex items-center justify-between px-3 ${prioridad === 1000 ? 'bg-opacity-10' : 'bg-opacity-25'}`}>
             <ButtonUnText
               icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
               color=""
-              hoverBgColor={isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'}
+              hoverBgColor={`${isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'} hover:bg-black hover:bg-opacity-20`}
               isOnclickeable={false}
               isTippy={true}
+              offset={10}
               tippyText={isActPlay ? 'Detener tiempo' : 'Reanudar tiempo'} />
             {isActPlay && <i className="ml-2 fas fa-user-clock fa-sm"></i>}
             <p className="ml-4 mr-2 font-bold text-md">{numberCard}</p>
@@ -236,7 +237,7 @@ function Card(props) {
           <div className="col-span-4 2xl:col-span-5">
             <Ptext tag="Descripcion:" />
             <div className="h-48 scroll-row">
-              <p className="px-2 font-semibold leading-tight">{desc}</p>
+              <p className="px-2 font-semibold leading-tight salto">{desc}</p>
             </div>
           </div>
           <div className="col-span-5">
@@ -365,7 +366,7 @@ function Card(props) {
         <ModalBody>
           {
             updateOrAdd ?
-              (<div className="w-430">
+              (<div className="w-600">
                 <label className="text-xs">Mensajes predeterminados:</label>
                 <div className="py-3 pl-3 pr-1 mx-auto mt-1 mb-5 bg-gray-100 rounded-md">
                   <PDefaultNotes idAct={id} noteText="Inicializar actividad urgente" onclick={showModalFalse} updatePriority={true} />
