@@ -57,8 +57,9 @@ function ActivityDetailScreen() {
   const handleBack = async () => {
     await UiFunc.setIsLoading(true)
     await ActFunc.getActivities()
-    await UiFunc.setAllOrDetails(true)
-    await UiFunc.detailsView(false, false)
+    await UiFunc.activityView()
+    await ActFunc.getNotify()
+    await ActFunc.getTimes()
   }
 
   const handleUpdatePriority = (id, priority) => {
@@ -263,7 +264,7 @@ function ActivityDetailScreen() {
                   </div>
                   <Ptext tag="Prioridad RA:" value={ActState.activityDetails.num_prioridad} />
                 </div>
-                <div className="col-span-2 bg-gray-100 py-2 px-4 rounded-md border">
+                <div className="col-span-2 bg-gray-100 py-2 px-4 rounded-md">
                   <div className="flex justify-between">
                     <Ptext tag="Informes Diarios (notas):" />
                     <div>
@@ -272,7 +273,7 @@ function ActivityDetailScreen() {
                     </div>
                   </div>
                   <div className="scroll-row-detail h-card-details">
-                    <ul className="mt-1">
+                    <ul className="mt-1 text-sm">
                       {ActState.activityDetails.notas.length > 0 ?
                         ActState.activityDetails.notas.map(obj => {
                           return (
@@ -293,7 +294,7 @@ function ActivityDetailScreen() {
                   </div>
                 </div>
               </div>
-              <div className="grid grid-cols-1 mt-6 bg-gray-100 rounded-md py-2 px-4 border">
+              <div className="grid grid-cols-1 mt-6 bg-gray-100 rounded-md py-2 px-4">
                 <div className="flex justify-between">
                   <Ptext tag="Descripcion:" />
                   <ButtonUnText
@@ -301,7 +302,9 @@ function ActivityDetailScreen() {
                     onclick={() => setShowModalDesc(true)} />
                 </div>
                 <div className="h-desc scroll-row-detail">
-                  <p className="p-2 leading-tight text-justify salto">{seekParam(ActState.activityDetails.func_objeto, '- PAUSA')}</p>
+                  <p className="p-2 leading-tight text-justify salto text-sm">
+                    {seekParam(ActState.activityDetails.func_objeto, '- PAUSA')}
+                  </p>
                 </div>
               </div>
               <div className="grid grid-cols-1 mt-6">

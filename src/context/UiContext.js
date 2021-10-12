@@ -70,13 +70,7 @@ function UiProvider({ children }) {
       planner: '',
       activities: 'text-blue-600 font-bold',
       times: '',
-      disabled: actView,
-      disableActivityTab: true,
-      disablePlannerTab: false,
-      disableTimesTab: false,
-      disableTime: false,
-      activeTab: true,
-      filterPlayActivities: false
+      disabled: actView
     })
     await setTabs(actView)
     await setDisableBtnSideBar(false)
@@ -96,13 +90,7 @@ function UiProvider({ children }) {
       activities: '',
       planner: 'text-blue-600 font-bold',
       times: '',
-      disabled: plannerScreen,
-      disableActivityTab: false,
-      disablePlannerTab: true,
-      disableTimesTab: false,
-      disableTime: false,
-      activeTab: false,
-      filterPlayActivities: true
+      disabled: plannerScreen
     })
   }
 
@@ -116,13 +104,7 @@ function UiProvider({ children }) {
       activities: '',
       planner: '',
       times: 'text-blue-600 font-bold',
-      disabled: timeView,
-      disableActivityTab: false,
-      disablePlannerTab: false,
-      disableTimesTab: true,
-      disableTime: true,
-      activeTab: false,
-      filterPlayActivities: true
+      disabled: timeView
     })
   }
 
@@ -134,11 +116,6 @@ function UiProvider({ children }) {
       activities: 'text-blue-600 font-bold',
       times: '',
       disabled: detailView,
-      disableActivityTab: true,
-      disablePlannerTab: false,
-      disableTimesTab: false,
-      disableTime: false,
-      activeTab: true,
       filterPlayActivities: btnPlay
     })
   }
@@ -183,7 +160,8 @@ function UiProvider({ children }) {
       setMultiSolicitantes,
       timesView,
       setAllOrDetails,
-      detailsView
+      detailsView,
+      setNavTab
     }
   }
   return (
