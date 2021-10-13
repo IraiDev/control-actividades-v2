@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { GraphContext } from '../../context/GraphContext'
 import { useForm } from '../../hooks/useForm'
-import { alertTimer } from '../../helpers/alerts'
+import { alertTimer, normalAlert } from '../../helpers/alerts'
 import TodoCard from './TodoCard'
 import Modal from "@material-tailwind/react/Modal"
 import ModalHeader from "@material-tailwind/react/ModalHeader"
@@ -13,6 +13,7 @@ import Textarea from "@material-tailwind/react/Textarea"
 import "@material-tailwind/react/tailwind.css"
 import ButtonText from '../ui/buttons/ButtonText'
 import PResp from '../ui/text/PResp'
+import { checkForms } from '../../helpers/auxFunctions'
 
 const buttonStyle = 'text-blue-500 border-2 border-blue-500 font-semibold bg-white'
 const buttonStyleHover = 'hover:bg-blue-500 hover:text-white transition duration-300'

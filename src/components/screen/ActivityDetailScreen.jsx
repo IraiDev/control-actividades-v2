@@ -15,10 +15,10 @@ import ModalBody from '@material-tailwind/react/ModalBody'
 import PDefaultNotes from '../ui/text/PDefaultNotes'
 import Textarea from '@material-tailwind/react/Textarea'
 import ModalFooter from '@material-tailwind/react/ModalFooter'
-import { alertTimer } from '../../helpers/alerts'
+import { alertTimer, normalAlert } from '../../helpers/alerts'
 import { useForm } from '../../hooks/useForm'
 import Tippy from '@tippyjs/react'
-import { seekParam } from '../../helpers/auxFunctions'
+import { checkForms, seekParam } from '../../helpers/auxFunctions'
 import TableTimes from '../ui/times/TableTimes'
 
 let today = new Date()
@@ -68,6 +68,13 @@ function ActivityDetailScreen() {
   }
 
   const handleAddNewNote = () => {
+
+    const vDesc = checkForms(inputAdd)
+    if (vDesc.state) {
+      normalAlert('warning', `Caracter <b class="text-gray-600 text-xl">${vDesc.char}</b> no pemitido, campo: <b>Nota</b> <br><br> <i class="text-blue-500">Caracteres no permitidos:</i> <b>${vDesc.list}</b>`, 'Entiendo')
+      return
+    }
+
     const data = { id_actividad: ActState.activityDetails.id_det, description: inputAdd }
     const action = () => {
       ActFunc.addNewNote(data, true, ActState.activityDetails.id_det)
@@ -78,6 +85,13 @@ function ActivityDetailScreen() {
   }
 
   const handleUpdateNote = () => {
+
+    const vDesc = checkForms(inputEdit)
+    if (vDesc.state) {
+      normalAlert('warning', `Caracter <b class="text-gray-600 text-xl">${vDesc.char}</b> no pemitido, campo: <b>Nota</b> <br><br> <i class="text-blue-500">Caracteres no permitidos:</i> <b>${vDesc.list}</b>`, 'Entiendo')
+      return
+    }
+
     const dataUpdate = { id_nota: idNote, description: inputEdit }
     const actionUpdate = () => {
       ActFunc.updateNote(dataUpdate, true, ActState.activityDetails.id_det)

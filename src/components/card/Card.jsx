@@ -14,9 +14,10 @@ import Button from "@material-tailwind/react/Button"
 import Textarea from "@material-tailwind/react/Textarea"
 import "@material-tailwind/react/tailwind.css"
 import PDefaultNotes from '../ui/text/PDefaultNotes';
-import { alertTimer } from '../../helpers/alerts';
+import { alertTimer, normalAlert } from '../../helpers/alerts';
 import moment from 'moment';
 import ButtonUnText from '../ui/buttons/ButtonUnText';
+import { checkForms } from '../../helpers/auxFunctions';
 
 let initialState = { inputEdit: '', inputAdd: '' }
 let today = new Date()
@@ -101,6 +102,13 @@ function Card(props) {
   }
 
   const handleAddNewNote = () => {
+
+    const vDesc = checkForms(inputAdd)
+    if (vDesc.state) {
+      normalAlert('warning', `Caracter <b class="text-gray-600 text-xl">${vDesc.char}</b> no pemitido, campo: <b>Nota</b> <br><br> <i class="text-blue-500">Caracteres no permitidos:</i> <b>${vDesc.list}</b>`, 'Entiendo')
+      return
+    }
+
     const data = { id_actividad: id, description: inputAdd }
     const action = () => {
       ActFunc.addNewNote(data)
@@ -111,6 +119,13 @@ function Card(props) {
   }
 
   const handleUpdateNote = () => {
+
+    const vDesc = checkForms(inputEdit)
+    if (vDesc.state) {
+      normalAlert('warning', `Caracter <b class="text-gray-600 text-xl">${vDesc.char}</b> no pemitido, campo: <b>Nota</b> <br><br> <i class="text-blue-500">Caracteres no permitidos:</i> <b>${vDesc.list}</b>`, 'Entiendo')
+      return
+    }
+
     const dataUpdate = { id_nota: noteActive.idNote, description: inputEdit }
     const actionUpdate = () => {
       ActFunc.updateNote(dataUpdate)
