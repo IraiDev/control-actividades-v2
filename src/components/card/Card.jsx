@@ -248,10 +248,10 @@ function Card(props) {
               textTippy="Dias transcurridos"
             />
           </div>
-          <div className="col-span-4 2xl:col-span-5">
+          <div className="col-span-4 md:col-span-5 lg:col-span-4 2xl:col-span-5">
             <Ptext tag="Descripcion:" />
             <div className="h-48 scroll-row">
-              <p className="px-2 leading-tight text-2xs font-semibold salto">{desc}</p>
+              <p className="px-2 leading-tight text-2xs font-semibold text-justify salto">{desc}</p>
             </div>
           </div>
           <div className="col-span-5">
