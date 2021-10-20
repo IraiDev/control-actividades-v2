@@ -8,11 +8,11 @@ import ModalHeader from "@material-tailwind/react/ModalHeader"
 import ModalBody from "@material-tailwind/react/ModalBody"
 import ModalFooter from "@material-tailwind/react/ModalFooter"
 import Button from "@material-tailwind/react/Button"
-import Input from "@material-tailwind/react/Input"
-import Textarea from "@material-tailwind/react/Textarea"
-import "@material-tailwind/react/tailwind.css"
+import Input from "../ui/inputs/Input"
 import ButtonText from '../ui/buttons/ButtonText'
 import PResp from '../ui/text/PResp'
+import TextArea from '../ui/inputs/TextArea'
+import "@material-tailwind/react/tailwind.css"
 
 const buttonStyle = 'text-blue-500 border-2 border-blue-500 font-semibold bg-white'
 const buttonStyleHover = 'hover:bg-blue-500 hover:text-white transition duration-300'
@@ -85,25 +85,17 @@ function Todo() {
         <ModalBody>
           <div className="w-430"></div>
           <Input
-            value={input}
-            name="input"
-            onChange={onChangeValues}
+            field="Titulo"
             type="text"
-            color="blue"
-            size="regular"
-            outline={true}
-            placeholder="Titulo..."
-          />
+            name="input"
+            value={input}
+            onChange={onChangeValues} />
           <br />
-          <Textarea
+          <TextArea
+            field="descripcion"
             value={textArea}
             name="textArea"
-            onChange={onChangeValues}
-            color="blue"
-            size="sm"
-            outline={true}
-            placeholder="Descripcion..."
-          />
+            onChange={onChangeValues} />
         </ModalBody>
         <ModalFooter>
           <Button

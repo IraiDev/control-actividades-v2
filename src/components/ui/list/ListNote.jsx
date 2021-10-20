@@ -106,7 +106,6 @@ function ListNote(props) {
               onclick={handleDeleteNote}
             />
           </li>
-
       }
     </>
   )

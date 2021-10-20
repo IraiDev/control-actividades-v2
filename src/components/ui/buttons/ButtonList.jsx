@@ -7,7 +7,7 @@ import ModalHeader from "@material-tailwind/react/ModalHeader"
 import ModalBody from "@material-tailwind/react/ModalBody"
 import ModalFooter from "@material-tailwind/react/ModalFooter"
 import Button from "@material-tailwind/react/Button"
-import Input from "@material-tailwind/react/Input"
+import Input from "../inputs/Input"
 import "@material-tailwind/react/tailwind.css"
 
 let baseStyle = 'z-50 hover:bg-gray-800 rounded-md hover:shadow-inner my-1 px-4 flex justify-between items-center text-transparent hover:text-blue-400'
@@ -107,16 +107,11 @@ function ButtonList(props) {
         <ModalBody>
           <div className="w-430"></div>
           <Input
-            value={input}
-            name="input"
-            onChange={onChangeValues}
+            field="Titulo"
             type="text"
-            color="blue"
-            size="regular"
-            outline={true}
-            placeholder="Titulo..."
-          />
-          <br />
+            name="input"
+            value={input}
+            onChange={onChangeValues} />
         </ModalBody>
         <ModalFooter>
           <Button

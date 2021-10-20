@@ -11,13 +11,13 @@ import ModalHeader from "@material-tailwind/react/ModalHeader"
 import ModalBody from "@material-tailwind/react/ModalBody"
 import ModalFooter from "@material-tailwind/react/ModalFooter"
 import Button from "@material-tailwind/react/Button"
-import Textarea from "@material-tailwind/react/Textarea"
-import "@material-tailwind/react/tailwind.css"
+import TextArea from "../ui/inputs/TextArea"
 import PDefaultNotes from '../ui/text/PDefaultNotes';
-import { alertTimer, normalAlert } from '../../helpers/alerts';
 import moment from 'moment';
 import ButtonUnText from '../ui/buttons/ButtonUnText';
+import { alertTimer, normalAlert } from '../../helpers/alerts';
 import { checkForms } from '../../helpers/auxFunctions';
+import "@material-tailwind/react/tailwind.css"
 
 let initialState = { inputEdit: '', inputAdd: '' }
 let today = new Date()
@@ -250,8 +250,8 @@ function Card(props) {
           </div>
           <div className="col-span-4 md:col-span-5 lg:col-span-4 2xl:col-span-5">
             <Ptext tag="Descripcion:" />
-            <div className="h-48 scroll-row">
-              <p className="px-2 leading-tight text-2xs font-semibold text-justify salto">{desc}</p>
+            <div className="h-48 scroll-row text-justify">
+              <p className="px-2 leading-tight text-2xs font-semibold salto">{desc}</p>
             </div>
           </div>
           <div className="col-span-5">
@@ -390,51 +390,44 @@ function Card(props) {
                   <PDefaultNotes idAct={id} noteText="sin avance" onclick={showModalFalse} />
                   <PDefaultNotes idAct={id} noteText="en cola" onclick={showModalFalse} isSeparator={false} />
                 </div>
-                <Textarea
+                <TextArea
+                  field="Descripcion nota"
                   value={inputAdd}
                   name="inputAdd"
-                  onChange={onChangeValues}
-                  color="blue"
-                  size="regular"
-                  outline={true}
-                  placeholder="Nota"
-                />
+                  onChange={onChangeValues} />
               </div>) :
               (<div className="w-600">
                 <label className="mb-2 text-xs">Notas:</label>
                 <ul className="min-h-80 scroll-row">
                   {
-                    notas.map(obj => {
-                      if (id === obj.id_det) {
-                        return (
-                          <ListNote
-                            isModal={true}
-                            key={obj.id_nota}
-                            idNote={obj.id_nota}
-                            desc={obj.desc_nota}
-                            date={obj.fecha_hora_crea}
-                            user={obj.user_crea}
-                            dateColor={dateColor}
-                            onclick={handleGetidNote}
-                            activeColor={noteActive.idNote === obj.id_nota ? 'text-green-600' : 'text-gray-500'}
-                          />
-                        )
-                      } else {
-                        return 'No hay notas...'
-                      }
-                    })
+                    notas.length > 0 ?
+                      notas.map(obj => {
+                        if (id === obj.id_det) {
+                          return (
+                            <ListNote
+                              isModal={true}
+                              key={obj.id_nota}
+                              idNote={obj.id_nota}
+                              desc={obj.desc_nota}
+                              date={obj.fecha_hora_crea}
+                              user={obj.user_crea}
+                              dateColor={dateColor}
+                              onclick={handleGetidNote}
+                              activeColor={noteActive.idNote === obj.id_nota ? 'text-green-600' : 'text-gray-500'}
+                            />
+                          )
+                        } else {
+                          return ''
+                        }
+                      }) : <p className="text-xs text-gray-400 pl-2">No hay notas...</p>
                   }
                 </ul>
                 <br />
-                <Textarea
+                <TextArea
+                  field="Descripcion nota"
                   value={inputEdit}
                   name="inputEdit"
-                  onChange={onChangeValues}
-                  color="blue"
-                  size="regular"
-                  outline={true}
-                  placeholder="Nota"
-                />
+                  onChange={onChangeValues} />
               </div>)
           }
         </ModalBody>

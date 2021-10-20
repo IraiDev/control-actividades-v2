@@ -13,7 +13,7 @@ import Modal from '@material-tailwind/react/Modal'
 import ModalHeader from '@material-tailwind/react/ModalHeader'
 import ModalBody from '@material-tailwind/react/ModalBody'
 import PDefaultNotes from '../ui/text/PDefaultNotes'
-import Textarea from '@material-tailwind/react/Textarea'
+import TextArea from '../ui/inputs/TextArea'
 import ModalFooter from '@material-tailwind/react/ModalFooter'
 import { alertTimer, normalAlert } from '../../helpers/alerts'
 import { useForm } from '../../hooks/useForm'
@@ -514,7 +514,7 @@ function ActivityDetailScreen() {
               {
                 updateOrAdd ?
                   <div className="w-600">
-                    <label className="text-xs">Mensajes predeterminados:</label>
+                    <p className="text-xs">Mensajes predeterminados:</p>
                     <div className="py-3 pl-3 pr-1 mx-auto mt-1 mb-5 bg-gray-100 rounded-md">
                       <PDefaultNotes from={true} idAct={ActState.activityDetails.id_det} noteText="Inicializar actividad urgente" onclick={showModalFalse} updatePriority={true} />
                       <PDefaultNotes from={true} idAct={ActState.activityDetails.id_det} noteText="esperando respuesta de cliente" onclick={showModalFalse} />
@@ -523,52 +523,45 @@ function ActivityDetailScreen() {
                       <PDefaultNotes from={true} idAct={ActState.activityDetails.id_det} noteText="sin avance" onclick={showModalFalse} />
                       <PDefaultNotes from={true} idAct={ActState.activityDetails.id_det} noteText="en cola" onclick={showModalFalse} isSeparator={false} />
                     </div>
-                    <Textarea
+                    <TextArea
+                      field="Descripcion nota"
                       value={inputAdd}
                       name="inputAdd"
-                      onChange={onChangeValues}
-                      color="blue"
-                      size="sm"
-                      outline={true}
-                      placeholder="Nota"
-                    />
+                      onChange={onChangeValues} />
                   </div> :
                   <div className="w-600">
                     <label className="mb-2 text-xs">Notas:</label>
                     <ul className="min-h-80 scroll-row">
                       {
-                        ActState.activityDetails.notas.map(obj => {
-                          if (ActState.activityDetails.id_det === obj.id_det) {
-                            return (
-                              <ListNote
-                                isModal={true}
-                                key={obj.id_nota}
-                                idNote={obj.id_nota}
-                                desc={obj.desc_nota}
-                                date={obj.fecha_hora_crea}
-                                user={obj.user_crea}
-                                idActivity={ActState.activityDetails.id_det}
-                                dateColor="text-white"
-                                onclick={handleGetIdNote}
-                                activeColor={idNote === obj.id_nota ? 'text-green-600' : 'text-gray-500'}
-                              />
-                            )
-                          } else {
-                            return 'No hay notas...'
-                          }
-                        })
+                        ActState.activityDetails.notas.length > 0 ?
+                          ActState.activityDetails.notas.map(obj => {
+                            if (ActState.activityDetails.id_det === obj.id_det) {
+                              return (
+                                <ListNote
+                                  isModal={true}
+                                  key={obj.id_nota}
+                                  idNote={obj.id_nota}
+                                  desc={obj.desc_nota}
+                                  date={obj.fecha_hora_crea}
+                                  user={obj.user_crea}
+                                  idActivity={ActState.activityDetails.id_det}
+                                  dateColor="text-white"
+                                  onclick={handleGetIdNote}
+                                  activeColor={idNote === obj.id_nota ? 'text-green-600' : 'text-gray-500'}
+                                />
+                              )
+                            } else {
+                              return 'No hay notas...'
+                            }
+                          }) : <p className="text-xs text-gray-400 pl-2">No hay notas...</p>
                       }
                     </ul>
                     <br />
-                    <Textarea
+                    <TextArea
+                      field="Descripcion nota"
                       value={inputEdit}
                       name="inputEdit"
-                      onChange={onChangeValues}
-                      color="blue"
-                      size="sm"
-                      outline={true}
-                      placeholder="Nota"
-                    />
+                      onChange={onChangeValues} />
                   </div>
               }
             </ModalBody>
@@ -592,18 +585,14 @@ function ActivityDetailScreen() {
             </ModalHeader>
             <ModalBody>
               <div className="w-600">
-                <Textarea
+                <TextArea
+                  field="Descripcion"
                   name="inputDesc"
                   value={inputDesc}
                   onChange={(e) => setValues({
                     ...values,
                     inputDesc: e.target.value
-                  })}
-                  color="blue"
-                  size="sm"
-                  outline={true}
-                  placeholder="Descripcion"
-                />
+                  })} />
               </div>
             </ModalBody>
             <ModalFooter>
