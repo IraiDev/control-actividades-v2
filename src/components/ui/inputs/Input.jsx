@@ -4,7 +4,7 @@ const styleDefault = 'w-full text-xs text-gray-900 border-gray-400 focus:border-
 function Input({ type = 'text', id, name, value, onChange, placeholder = 'Escriba aqui', className = styleDefault, field = 'campo' }) {
   return (
     <div className="mx-2">
-      <p className="capitalize left-0 -top-3.5 text-xs">{field}</p>
+      <p className="capitalize text-black left-0 -top-3.5 text-xs">{field}</p>
       <input
         id={id}
         name={name}

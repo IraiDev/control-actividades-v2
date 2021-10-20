@@ -61,7 +61,7 @@ function SideMenu() {
 
   return (
     <>
-      <div className="sticky z-10 h-full px-3 py-10 mt-10 ml-3 text-white bg-gray-700 border-r rounded-md shadow-md top-44">
+      <div className="sticky z-50 h-full px-3 py-10 mt-10 ml-3 text-white bg-gray-700 border-r rounded-md shadow-md top-60">
         <ButtonList
           title={"Crear Lista"}
           icon="mr-4 fas fa-plus"

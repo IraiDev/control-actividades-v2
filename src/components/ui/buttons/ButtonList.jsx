@@ -10,7 +10,7 @@ import Button from "@material-tailwind/react/Button"
 import Input from "../inputs/Input"
 import "@material-tailwind/react/tailwind.css"
 
-let baseStyle = 'z-50 hover:bg-gray-800 rounded-md hover:shadow-inner my-1 px-4 flex justify-between items-center text-transparent hover:text-blue-400'
+let baseStyle = 'hover:bg-gray-800 rounded-md hover:shadow-inner my-1 px-4 flex justify-between items-center text-transparent hover:text-blue-400'
 
 function ButtonList(props) {
   const {
@@ -112,6 +112,7 @@ function ButtonList(props) {
             name="input"
             value={input}
             onChange={onChangeValues} />
+
         </ModalBody>
         <ModalFooter>
           <Button
