@@ -12,13 +12,13 @@ import Tippy from '@tippyjs/react'
 import { useWindowSize } from '../../../hooks/useWindowSize'
 import "@material-tailwind/react/tailwind.css"
 
-let baseStyle = 'hover:bg-gray-800 rounded-md hover:shadow-inner mb-1 px-4 flex justify-between items-center text-transparent hover:text-blue-400'
+let baseStyle = 'hover:bg-gray-800 px-4 rounded-md hover:shadow-inner mb-1 flex justify-between items-center text-transparent'
 
 function ButtonList(props) {
   const {
     idList,
     title,
-    icon = 'mr-4 fas fa-bars',
+    icon = 'fas fa-bars',
     actions = true,
     onclick,
     isOnclickeable = true,
@@ -62,16 +62,16 @@ function ButtonList(props) {
 
   return (
     <>
-      <div className={`${baseStyle} ${active}`}>
+      <div className={`${baseStyle} ${active} ${size.width > 1024 && 'hover:text-blue-400'}`}>
         <Tippy
           disabled={size.width > 1024}
-          offset={[0, 10]}
+          offset={[0, 30]}
           delay={[200, 0]}
           placement={"left"}
           content={<span>{title}</span>}
         >
           <button
-            className={`text-left focus:outline-none flex items-center text-white hover:text-blue-400 ${size.width < 1024 ? 'w-full py-2' : 'w-44 py-3'}`}
+            className={`focus:outline-none flex items-center text-white ${size.width < 1024 ? 'w-full py-2' : 'w-44 py-3'}`}
             onClick={() => {
               isOnclickeable && handleClick();
             }}
@@ -79,19 +79,22 @@ function ButtonList(props) {
             <span>
               <i className={icon}></i>
             </span>
-            <p className="font-semibold">{size.width > 1024 && title}</p>
+            {
+              size.width > 1024 &&
+              <p className="font-semibold ml-4">{title}</p>
+            }
           </button>
         </Tippy>
         {
           actions &&
-          <div className="flex justify-between hover:text-blue-400">
+          <div className={`flex justify-between left-12 hover:text-blue-400 ${size.width < 1024 && 'absolute hover:bg-gray-800 py-2 pr-4 pl-10 -m-3 rounded-r'}`}>
             <button
               className="active:outline-none focus:outline-none"
               onClick={() => {
                 setShowModal(true);
               }}
             >
-              <i className={`transition duration-500 fas fa-pen hover:text-green-400 ${size.width < 1024 && 'fa-xs'}`}></i>
+              <i className={`transition duration-500 fas fa-pen hover:text-green-400 ${size.width < 1024 && 'fa-sm'}`}></i>
             </button>
             <button
               className="active:outline-none focus:outline-none"
@@ -99,7 +102,7 @@ function ButtonList(props) {
                 handleDeleteList();
               }}
             >
-              <i className={`transition duration-500 ml-3 fas fa-trash hover:text-red-400 ${size.width < 1024 && 'fa-xs'}`}></i>
+              <i className={`transition duration-500 ml-3 fas fa-trash hover:text-red-400 ${size.width < 1024 && 'fa-sm'}`}></i>
             </button>
           </div>
         }

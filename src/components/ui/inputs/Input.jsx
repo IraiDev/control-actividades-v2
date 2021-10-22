@@ -1,5 +1,5 @@
 import React from 'react'
-const styleDefault = 'w-full text-xs text-gray-900 border-gray-400 focus:border-blue-500'
+const styleDefault = 'w-full text-xs text-gray-900 border-gray-300 focus:border-blue-400'
 
 function Input({ type = 'text', id, name, value, onChange, placeholder = 'Escriba aqui', className = styleDefault, field = 'campo' }) {
   return (

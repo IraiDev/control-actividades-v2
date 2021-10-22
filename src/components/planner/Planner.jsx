@@ -14,12 +14,15 @@ function Planner() {
               key={obj.id}
               idTask={obj.id}
               title={obj.title}
-              desc={obj.details.description}
+              description={obj.details.description}
               assignments={obj.assignments}
               idPlan={obj.planId}
               createdBy={obj.createdBy}
               createdDateTime={obj.createdDateTime}
-              references={obj.details.references} />))
+              references={obj.details.references}
+              percentComplete={obj.percentComplete}
+              checklist={obj.details.checklist}
+              dueDateTime={obj.dueDateTime} />))
           : (<PResp />)
       }
     </>

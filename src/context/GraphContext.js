@@ -24,14 +24,15 @@ function GraphProvider({ children }) {
     await getFetch('/me/planner/tasks', '', 'details')
       .then(resp => {
         // getDetailsFetchs()
-        console.log(resp.value)
+        const { value } = resp
+        console.log(value[0])
         setPlannerTask(resp.value)
       })
     UiFunc.setIsLoading(false)
   }
 
   const getDetailsFetchs = async () => {
-    await getDetailsFetch('/groups/c0855abb-afb6-4adf-9c65-d05d2f43118b/sites/root')
+    await getDetailsFetch('/planner/tasks/f9txACXNXU67Ke0qifLnsGUAJCSf/details')
       .then(resp => {
         console.log(resp)
       })

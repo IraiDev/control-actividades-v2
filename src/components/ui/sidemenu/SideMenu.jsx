@@ -10,8 +10,8 @@ import ModalBody from "@material-tailwind/react/ModalBody"
 import ModalFooter from "@material-tailwind/react/ModalFooter"
 import Button from "@material-tailwind/react/Button"
 import Input from "../inputs/Input"
-import "@material-tailwind/react/tailwind.css"
 import { useWindowSize } from '../../../hooks/useWindowSize'
+import "@material-tailwind/react/tailwind.css"
 
 function SideMenu() {
   const [{ input }, onChangeValues, reset] = useForm({ input: '' })
@@ -63,58 +63,60 @@ function SideMenu() {
 
   return (
     <>
-      <div className={`sticky z-50 h-full px-3 mt-10 ml-3 text-white bg-gray-700 border-r rounded-md shadow-md top-60 ${size.width > 1024 ? 'py-10' : 'py-3'}`}>
-        <ButtonList
-          title={"Crear Lista"}
-          icon="mr-4 fas fa-plus"
-          actions={false}
-          onclick={showModalTrue}
-        />
-        <ButtonList
-          title={"Asignados a ti"}
-          icon="mr-4 far fa-user"
-          actions={false}
-          onclick={handleClickPlanner}
-          active={plannerActive && 'bg-gray-800'}
-        />
-        {
-          GraphState.todoList.map(obj => {
-            if (!obj.isOwner || (obj.isOwner && obj.wellknownListName === "defaultList")) {
-              return (
-                <ButtonList
-                  key={obj.id}
-                  idList={obj.id}
-                  title={obj.displayName}
-                  icon={`mr-4 fas ${!obj.isOwner ? 'fa-user-friends' : 'fa-home'}`}
-                  actions={false}
-                  onclick={handleClickTodo}
-                  active={obj.id === idTodoList && 'bg-gray-800'}
-                />
-              )
-            } else {
-              return ''
-            }
-          })
-        }
-        <hr className="my-3" />
-        {
-          GraphState.todoList.map(obj => {
-            if (obj.wellknownListName !== "defaultList" && obj.isOwner) {
-              return (
-                <ButtonList
-                  key={obj.id}
-                  idList={obj.id}
-                  title={obj.displayName}
-                  icon="mr-4 fas fa-list-ul"
-                  onclick={handleClickTodo}
-                  active={obj.id === idTodoList && 'bg-gray-800'}
-                />
-              )
-            } else {
-              return ''
-            }
-          })
-        }
+      <div className={`sticky z-50 h-full px-3 ml-3 mt-5 text-white bg-gray-700 border-r rounded-md shadow-md top-52 lg:top-40 ${size.width > 1024 ? 'py-10' : 'py-3'}`}>
+        <div className="relative">
+          <ButtonList
+            title={"Crear Lista"}
+            icon="fas fa-plus"
+            actions={false}
+            onclick={showModalTrue}
+          />
+          <ButtonList
+            title={"Asignados a ti"}
+            icon="far fa-user"
+            actions={false}
+            onclick={handleClickPlanner}
+            active={plannerActive && 'bg-gray-800'}
+          />
+          {
+            GraphState.todoList.map(obj => {
+              if (!obj.isOwner || (obj.isOwner && obj.wellknownListName === "defaultList")) {
+                return (
+                  <ButtonList
+                    key={obj.id}
+                    idList={obj.id}
+                    title={obj.displayName}
+                    icon={`fas ${!obj.isOwner ? 'fa-user-friends' : 'fa-home'}`}
+                    actions={false}
+                    onclick={handleClickTodo}
+                    active={obj.id === idTodoList && 'bg-gray-800'}
+                  />
+                )
+              } else {
+                return ''
+              }
+            })
+          }
+          <hr className="my-3" />
+          {
+            GraphState.todoList.map(obj => {
+              if (obj.wellknownListName !== "defaultList" && obj.isOwner) {
+                return (
+                  <ButtonList
+                    key={obj.id}
+                    idList={obj.id}
+                    title={obj.displayName}
+                    icon="fas fa-list-ul"
+                    onclick={handleClickTodo}
+                    active={obj.id === idTodoList && 'bg-gray-800'}
+                  />
+                )
+              } else {
+                return ''
+              }
+            })
+          }
+        </div>
       </div>
 
       {/* modal create todo */}

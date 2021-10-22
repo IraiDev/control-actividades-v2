@@ -1,5 +1,5 @@
 import React from 'react'
-const styleDefault = 'w-full text-gray-900 text-sm border-gray-300 focus:border-blue-500'
+const styleDefault = 'w-full text-gray-900 text-sm border-gray-300 focus:border-blue-400'
 
 function TextArea({ type = 'text', name, value, onChange, placeholder = 'Escriba aqui', className = styleDefault, field = 'campo' }) {
   return (
@@ -11,7 +11,7 @@ function TextArea({ type = 'text', name, value, onChange, placeholder = 'Escriba
         value={value}
         onChange={onChange}
         type={type}
-        className={`scroll-row border-2 p-2 text-justify rounded-md resize-none transition duration-500 focus:bg-gray-50 focus:outline-none focus:shadow-lg ${className}`}
+        className={`scroll-row border-2 p-2 text-justify rounded-md resize-none transition duration-500 focus:outline-none focus:shadow-lg ${className}`}
         placeholder={placeholder}></textarea>
     </div>
   )

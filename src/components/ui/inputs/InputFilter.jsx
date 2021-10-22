@@ -5,7 +5,7 @@ function InputFilter(props) {
   const {
     isNumber = false,
     label,
-    placeholder = 'Escriba aqui...',
+    placeholder = 'Escriba aqui',
     name,
     onchange,
     type,
@@ -22,7 +22,7 @@ function InputFilter(props) {
       <div className="pl-1">
         <p className="text-xs mb-1">{label}:</p>
         <input
-          className="w-full pb-1 pl-1 text-sm bg-gray-100 border-b-2 placeholder-gray-400 border-gray-300 transitions duration-500 focus:border-blue-500 outline-none "
+          className="w-full pb-1 pl-1 text-sm bg-gray-100 border-b-2 placeholder-gray-400 border-gray-300 transitions duration-500 focus:border-blue-400 outline-none "
           placeholder={placeholder}
           name={name}
           value={value}

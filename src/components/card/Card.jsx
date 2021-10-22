@@ -1,5 +1,5 @@
 
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { UiContext } from '../../context/UiContext';
 import { ActivityContext } from '../../context/ActivityContext';
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
@@ -250,7 +250,7 @@ function Card(props) {
           </div>
           <div className="col-span-4 md:col-span-5 lg:col-span-4 2xl:col-span-5">
             <Ptext tag="Descripcion:" />
-            <div className="h-48 scroll-row text-justify">
+            <div className="h-48 scroll-row">
               <p className="px-2 leading-tight text-2xs font-semibold salto">{desc}</p>
             </div>
           </div>
