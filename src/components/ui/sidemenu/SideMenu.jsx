@@ -11,6 +11,7 @@ import ModalFooter from "@material-tailwind/react/ModalFooter"
 import Button from "@material-tailwind/react/Button"
 import Input from "../inputs/Input"
 import "@material-tailwind/react/tailwind.css"
+import { useWindowSize } from '../../../hooks/useWindowSize'
 
 function SideMenu() {
   const [{ input }, onChangeValues, reset] = useForm({ input: '' })
@@ -19,6 +20,7 @@ function SideMenu() {
   const [showModal, setShowModal] = useState(false)
   const [plannerActive, setPlannerActive] = useState(false)
   const [idTodoList, setIdTodoList] = useState(null)
+  const size = useWindowSize();
 
   const handleClickTodo = (idList) => {
     setIdTodoList(idList)
@@ -61,7 +63,7 @@ function SideMenu() {
 
   return (
     <>
-      <div className="sticky z-50 h-full px-3 py-10 mt-10 ml-3 text-white bg-gray-700 border-r rounded-md shadow-md top-60">
+      <div className={`sticky z-50 h-full px-3 mt-10 ml-3 text-white bg-gray-700 border-r rounded-md shadow-md top-60 ${size.width > 1024 ? 'py-10' : 'py-3'}`}>
         <ButtonList
           title={"Crear Lista"}
           icon="mr-4 fas fa-plus"
@@ -83,7 +85,7 @@ function SideMenu() {
                   key={obj.id}
                   idList={obj.id}
                   title={obj.displayName}
-                  icon="mr-4 fas fa-bars"
+                  icon={`mr-4 fas ${!obj.isOwner ? 'fa-user-friends' : 'fa-home'}`}
                   actions={false}
                   onclick={handleClickTodo}
                   active={obj.id === idTodoList && 'bg-gray-800'}
@@ -103,7 +105,7 @@ function SideMenu() {
                   key={obj.id}
                   idList={obj.id}
                   title={obj.displayName}
-                  icon="mr-4 fas fa-bars"
+                  icon="mr-4 fas fa-list-ul"
                   onclick={handleClickTodo}
                   active={obj.id === idTodoList && 'bg-gray-800'}
                 />

@@ -18,6 +18,22 @@ export const getFetch = async (endPoint = '', select = '', expand = '') => {
   }
 }
 
+export const getDetailsFetch = async (endPoint = '') => {
+  try {
+    let provider = Providers.globalProvider;
+    if (provider) {
+      let graphClient = provider.graph.client;
+      let resp = await graphClient
+        .api(endPoint)
+        .get();
+
+      return resp
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export const postFetch = async (endPoint = '', data) => {
   try {
     let provider = Providers.globalProvider;

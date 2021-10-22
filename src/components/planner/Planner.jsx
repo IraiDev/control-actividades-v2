@@ -9,16 +9,17 @@ function Planner() {
     <>
       {
         states.plannerTask.length > 0 ?
-          states.plannerTask.map(obj => {
-            return (
-              <PlannerCard
-                key={obj.id}
-                idTask={obj.id}
-                title={obj.title}
-                desc={obj.details.description}
-                assignments={obj.assignments}
-                idPlan={obj.planId} />)
-          })
+          states.plannerTask.map(obj => (
+            <PlannerCard
+              key={obj.id}
+              idTask={obj.id}
+              title={obj.title}
+              desc={obj.details.description}
+              assignments={obj.assignments}
+              idPlan={obj.planId}
+              createdBy={obj.createdBy}
+              createdDateTime={obj.createdDateTime}
+              references={obj.details.references} />))
           : (<PResp />)
       }
     </>

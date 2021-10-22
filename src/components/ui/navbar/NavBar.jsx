@@ -32,7 +32,7 @@ function NavBar() {
   }
 
   return (
-    <div className="sticky top-0 z-40 flex items-center justify-between bg-white shadow-md h-14">
+    <nav className="sticky w-full top-0 z-40 flex items-center justify-between bg-white shadow-md h-14">
       <div className="flex pl-4">
         <img className="w-6 h-6 mr-3" src={logo25x25} alt="logo" />
         <h1 className="font-semibold">ZionIT</h1>
@@ -63,7 +63,7 @@ function NavBar() {
       <button>
         <Login />
       </button>
-    </div>
+    </nav>
   )
 }
 

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react'
 import { UiContext } from './UiContext';
-import { deleteFetch, getFetch, postFetch, updateFetch } from '../helpers/fetchingGraph';
+import { deleteFetch, getDetailsFetch, getFetch, postFetch, updateFetch } from '../helpers/fetchingGraph';
 
 export const GraphContext = createContext()
 
@@ -15,14 +15,30 @@ function GraphProvider({ children }) {
   //funciones api microsoft graph
 
   const getUserData = async () => {
-    await getFetch('/me/').then(resp => setUserEmail(resp.mail))
+    await getFetch('/me/').then(resp => {
+      setUserEmail(resp.mail)
+    })
   }
 
   const getPlannerTask = async () => {
     await getFetch('/me/planner/tasks', '', 'details')
-      .then(resp => setPlannerTask(resp.value))
+      .then(resp => {
+        // getDetailsFetchs()
+        console.log(resp.value)
+        setPlannerTask(resp.value)
+      })
     UiFunc.setIsLoading(false)
   }
+
+  const getDetailsFetchs = async () => {
+    await getDetailsFetch('/groups/c0855abb-afb6-4adf-9c65-d05d2f43118b/sites/root')
+      .then(resp => {
+        console.log(resp)
+      })
+  }
+
+  // c0855abb-afb6-4adf-9c65-d05d2f43118b id grupo
+  // zionitcl254.sharepoint.com,b39fd2c3-4d71-4d00-934b-a8cb97f494fa,26cfd7fb-52a9-434b-ba56-e4ac1e40da24 id site
 
   const getTodoTask = async (idList) => {
     const endPoint = `/me/todo/lists/${idList}/tasks`

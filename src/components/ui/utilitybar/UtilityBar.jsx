@@ -159,8 +159,8 @@ function UtilityBar() {
   return (
     <>
       <div
-        className="flex flex-col lg:flex-row items-center bg-white shadow sticky top-14 z-20 pt-5 px-10">
-        <div className="flex justify-between order-last w-full pb-5 lg:order-first">
+        className="flex flex-col lg:flex-row items-center bg-white shadow min-w-full sticky top-14 z-20 pt-5 px-10">
+        <div className={`flex order-last w-full pb-5 lg:order-first ${UiState.disableBtnSideBar ? 'justify-center lg:justify-end' : 'justify-between'}`}>
           <div>
             <ButtonText disable={UiState.disableBtnSideBar} icon="fas fa-filter fa-sm" text="Filtrar" onclick={handleSideBar} />
           </div>
