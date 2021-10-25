@@ -45,7 +45,7 @@ function TimeScreen() {
               type="checkbox"
               checked={isChecked}
               onChange={handleOnChangeCheck} />
-            <p className={!isChecked && 'line-through'}>Cobrables</p>
+            <p className={!isChecked ? 'line-through' : ''}>Cobrables</p>
           </label>
         </div>
         <div className="rounded-full bg-white shadow p-2 my-4 flex justify-between items-center">
