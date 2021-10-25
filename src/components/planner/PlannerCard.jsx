@@ -45,10 +45,10 @@ function PlannerCard({ idTask: id_todo, idPlan, title, description, assignments,
       .then(resp => {
         setplannerPlan(resp.title)
       })
-    const sortedArray = Object.values(checklist)
-    const tempArray = sortedArray.sort((a, b) => moment(a.lastModifiedDateTime).format('yyyy-MM-DD HH:MM:ss') > moment(b.lastModifiedDateTime).format('yyyy-MM-DD HH:MM:ss'))
-    setDateOrder(tempArray)
-    console.log(moment(sortedArray[0].lastModifiedDateTime).format('DD-MM-yyyy HH:MM:ss'));
+    // const sortedArray = Object.values(checklist)
+    // const tempArray = sortedArray.sort((a, b) => moment(a.lastModifiedDateTime).format('yyyy-MM-DD HH:MM:ss') > moment(b.lastModifiedDateTime).format('yyyy-MM-DD HH:MM:ss'))
+    // setDateOrder(tempArray)
+    // console.log(moment(sortedArray[0].lastModifiedDateTime).format('DD-MM-yyyy HH:MM:ss'));
   }, [])
 
   return (
@@ -72,6 +72,7 @@ function PlannerCard({ idTask: id_todo, idPlan, title, description, assignments,
           <div className="text-center mr-5">
             <p className="text-xs mr-2 capitalize mb-2">{Object.keys(assignments).length > 1 ? 'encargados' : 'encargado'}</p>
             {Object.keys(assignments).map(obj => (
+              obj.length > 0 &&
               <Person className="rounded-full p-0.5 shadow-md mr-2" key={obj} userId={obj} />
             ))}
           </div>
@@ -88,9 +89,9 @@ function PlannerCard({ idTask: id_todo, idPlan, title, description, assignments,
       <p className="capitalize text-xs text-gray-400 mb-1">Lista de comprobacion</p>
       <ol className="mb-3">
         {
-          dateOrder.length > 0 &&
-          dateOrder.map((list, index) => (
-            <li className="text-xs text-gray-600 capitalize pl-2" key={list.lastModifiedDateTime}>{index + 1}.- {list.title}</li>
+          Object.entries(checklist).map((list, index) => (
+            list.length > 0 &&
+            <li key={list[0]} className="text-xs text-gray-600 capitalize pl-2">{index + 1}.- {list[1].title}</li>
           ))
         }
       </ol>
@@ -100,6 +101,7 @@ function PlannerCard({ idTask: id_todo, idPlan, title, description, assignments,
             <p className="text-xs capitalize text-gray-400 mb-1">archivos</p>
             {
               Object.entries(references).map(r => (
+                r.length > 0 &&
                 <li className="text-xs text-gray-600 pl-2 hover:text-blue-500 w-max" key={r}>
                   <a rel="noreferrer" target="_blank" href={decodeURIComponent(r[0])}>{decodeURIComponent(r[1].alias)}</a>
                 </li>

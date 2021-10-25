@@ -24,8 +24,8 @@ function GraphProvider({ children }) {
     await getFetch('/me/planner/tasks', '', 'details')
       .then(resp => {
         // getDetailsFetchs()
-        const { value } = resp
-        console.log(value[0])
+        // const { value } = resp
+        // console.log(value[0])
         setPlannerTask(resp.value)
       })
     UiFunc.setIsLoading(false)
