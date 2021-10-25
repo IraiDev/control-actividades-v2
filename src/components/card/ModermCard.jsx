@@ -18,12 +18,13 @@ import ButtonUnText from '../ui/buttons/ButtonUnText';
 import { alertTimer, normalAlert } from '../../helpers/alerts';
 import { checkForms } from '../../helpers/auxFunctions';
 import "@material-tailwind/react/tailwind.css"
+import ModernListNote from '../ui/list/ModermListNote';
 
 let initialState = { inputEdit: '', inputAdd: '' }
 let today = new Date()
 today = moment(today).format('yyyy-MM-DD')
 
-function Card(props) {
+function ModermCard(props) {
   const {
     actividad,
     encargado,
@@ -178,124 +179,67 @@ function Card(props) {
   return (
     <>
       <div
-        className={`rounded p-4 shadow-md text-sm transition duration-500 border-2 border-transparent hover:border-gray-600 ${bgColor} ${textColor} ${actPlay}`}
-        onDoubleClick={handleOpenDetails} >
-        <div className="flex items-center justify-between pb-2 text-base">
-          <Ptext tag="Actividad:" value={actividad} font="font-bold" />
-          <div className={`flex items-center justify-between px-3 ${prioridad === 1000 ? 'bg-opacity-10' : 'bg-opacity-25'}`}>
+        className={`p-3 bg-white rounded-md shadow-xl text-xs transition duration-500 grid border-2 border-transparent hover:border-gray-600 ${bgColor} ${textColor} ${actPlay}`}
+        onDoubleClick={handleOpenDetails}>
+        <div className="place-self-start w-full">
+          <div className="flex items-center place-self-start">
+            <h5 className="font-semibold text-base mb-2">{numberCard} - <p className="inline capitalize">{actividad}</p></h5>
+          </div>
+          <div className="grid grid-cols-2 mb-2">
+            <div className="col-span-1">
+              <Ptext tag="Encargado: " value={encargado} font="font-bold" />
+              <Ptext tag="Proyecto: " value={proyecto} font="font-bold" />
+              <Ptext tag="Sub proyecto: " value={subProyecto} />
+              <Ptext tag="Solicitante: " value={solicitante} />
+              <Ptext tag="Estado: " value={estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"} />
+            </div>
+            <div className="col-span-1">
+              <Ptext tag="ID: " value={id} />
+              <Ptext tag="Ticket: " value={ticket} />
+              <Ptext tag="Fecha: " value={moment(fechaCrea).format('DD-MM-YY')} />
+              <Ptext tag="Dias transcurridos: " value={days} />
+            </div>
+          </div>
+          <div className="mb-2">
+            <p className="text-opacity-75 font-bold">Descripcion</p>
+            <p className="salto scroll-row">{desc}</p>
+          </div>
+          <div className="">
+            <p className="text-opacity-75 font-bold">Notas</p>
+            <ul className="mt-1 font-normal scroll-row">
+              {
+                notas.length > 0 ?
+                  notas.map(obj => {
+                    if (id === obj.id_det) {
+                      return (
+                        <ModernListNote
+                          key={obj.id_nota}
+                          desc={obj.desc_nota}
+                          date={obj.fecha_hora_crea}
+                          user={obj.user_crea}
+                          dateColor={dateColor}
+                        />
+                      )
+                    } else {
+                      return ''
+                    }
+                  })
+                  : <p className="text-opacity-10 pl-2">no hay notas...</p>
+              }
+            </ul>
+          </div>
+        </div>
+        <div className="flex justify-between items-center place-self-end w-full">
+          <div className="flex items-center justify-between pt-1">
+            {isActPlay && <i className="ml-2 fas fa-user-clock fa-sm"></i>}
             <ButtonUnText
               icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
               color=""
-              hoverBgColor={`${isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'} hover:bg-black hover:bg-opacity-20`}
+              hoverBgColor={`${isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'}`}
               isOnclickeable={false}
               isTippy={true}
               offset={10}
               tippyText={isActPlay ? 'Detener tiempo' : 'Reanudar tiempo'} />
-            {isActPlay && <i className="ml-2 fas fa-user-clock fa-sm"></i>}
-            <p className="ml-4 mr-2 font-bold text-md">{numberCard}</p>
-          </div>
-        </div>
-        <div className={`grid grid-cols-12 mb-2 h-52 border-b pb-3 gap-2 ${lineColor}`}>
-          <div className="col-span-3 md:col-span-2 lg:col-span-3 2xl:col-span-2">
-            <Ptext
-              tag="Encar:"
-              value={encargado}
-              font="font-bold"
-              isTippy={true}
-              textTippy="Encargado"
-            />
-            <Ptext
-              tag="Proy:"
-              value={proyecto}
-              font="font-bold"
-              isTippy={true}
-              textTippy="Proyecto"
-            />
-            <Ptext
-              tag="Sub Proy:"
-              value={subProyecto}
-              isTippy={true}
-              textTippy="Sub Proyecto"
-            />
-            <Ptext
-              tag="Soli:"
-              value={solicitante}
-              isTippy={true}
-              textTippy="Solicitante"
-            />
-            <Ptext
-              tag="Est:"
-              value={estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"}
-              isTippy={true}
-              textTippy="Estado"
-            />
-            <Ptext
-              tag="ID:"
-              value={id}
-              isTippy={true}
-              textTippy="ID Actividad" />
-            <Ptext tag="Ticket:" value={ticket} />
-            <Ptext
-              tag="F. Crea:"
-              value={moment(fechaCrea).format('DD-MM-YY')}
-              isTippy={true}
-              textTippy="Fecha de creacion"
-            />
-            <Ptext
-              tag="D. transc:"
-              value={days}
-              isTippy={true}
-              textTippy="Dias transcurridos"
-            />
-          </div>
-          <div className="col-span-4 md:col-span-5 lg:col-span-4 2xl:col-span-5">
-            <Ptext tag="Descripcion:" />
-            <div className="h-48 scroll-row">
-              <p className="px-2 leading-tight text-2xs font-semibold salto">{desc}</p>
-            </div>
-          </div>
-          <div className="col-span-5">
-            <Ptext tag="Informes Diarios (notas):" />
-            <div className="scroll-row">
-              <ul className="mt-1 text-2xs">
-                {
-                  notas.length > 0 ?
-                    notas.map(obj => {
-                      if (id === obj.id_det) {
-                        return (
-                          <ListNote
-                            key={obj.id_nota}
-                            desc={obj.desc_nota}
-                            date={obj.fecha_hora_crea}
-                            user={obj.user_crea}
-                            dateColor={dateColor}
-                          />
-                        )
-                      } else {
-                        return ''
-                      }
-                    })
-                    : <p className="text-opacity-40 pl-2">no hay notas...</p>
-                }
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-between items-center mt-2 min-w-full">
-          <div className="flex">
-            <Ptext
-              tag="Prioridad:"
-              font="font-bold mr-1" />
-            <Ptext
-              tag={actPriority}
-              font="font-bold mr-1"
-              isTippy={true}
-              textTippy="Prioridad ToDo" />
-            <Ptext
-              tag={`(${prioridadRA})`}
-              font="font-bold"
-              isTippy={true}
-              textTippy="Prioridad RA" />
           </div>
           <div>
             <Menu
@@ -450,4 +394,4 @@ function Card(props) {
   )
 }
 
-export default Card
+export default ModermCard

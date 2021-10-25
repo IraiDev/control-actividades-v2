@@ -4,7 +4,6 @@ import TBody from './TBody'
 import THead from './THead'
 
 function Table({ toggleValue }) {
-
   const { states: ActState } = useContext(ActivityContext)
 
   return (
@@ -18,7 +17,6 @@ function Table({ toggleValue }) {
             })
             : <p className="text-center">No hay datos para mostrar</p>
         }
-        {/* <TBody project="TOTAL" user={ActState.totals} toggleValue={toggleValue} /> */}
       </div>
     </div>
   )

@@ -11,17 +11,10 @@ const dateFormat = moment(date).format('yyyy-MM-DD')
 
 function TimeScreen() {
 
-  const { functions: ActFunc, states: ActState } = useContext(ActivityContext)
+  const { functions: ActFunc } = useContext(ActivityContext)
   const { functions: UiFunc } = useContext(UiContext)
   const [{ input }, onChangeInput, reset] = useForm({ input: dateFormat })
   const [isChecked, setIsChecked] = useState(true)
-
-  useEffect(() => {
-    reset()
-    const param = `fecha=${dateFormat}`
-    ActFunc.getInfoTimes(param)
-
-  }, [])
 
   const handleNewDate = () => {
     UiFunc.setIsLoading(true)
@@ -34,6 +27,13 @@ function TimeScreen() {
     setIsChecked(!isChecked)
   }
 
+  useEffect(() => {
+    reset()
+    const param = `fecha=${dateFormat}`
+    ActFunc.getInfoTimes(param)
+
+  }, [])
+
   return (
     <>
       <div className="flex justify-center items-center">
@@ -45,7 +45,7 @@ function TimeScreen() {
               type="checkbox"
               checked={isChecked}
               onChange={handleOnChangeCheck} />
-            <p className={`${!isChecked && 'line-through'}`}>Cobrables</p>
+            <p className={!isChecked && 'line-through'}>Cobrables</p>
           </label>
         </div>
         <div className="rounded-full bg-white shadow p-2 my-4 flex justify-between items-center">

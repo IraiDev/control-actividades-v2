@@ -34,6 +34,7 @@ function UiProvider({ children }) {
   const [navTab, setNavTab] = useState(initialNavTab)
   const [activeOrder, setActiveOrder] = useState(false)
   const [allOrDetails, setAllOrDetails] = useState(true)
+  const [cardView, setCardView] = useState(false)
   //filtros en formato string y array
   const [filters, setFilters] = useState('')
   const [multiEncargados, setMultiEncargados] = useState([])
@@ -137,7 +138,8 @@ function UiProvider({ children }) {
       multiSubProyectos,
       multiSolicitantes,
       tabs,
-      allOrDetails
+      allOrDetails,
+      cardView
     },
     functions: {
       activityView,
@@ -161,7 +163,8 @@ function UiProvider({ children }) {
       timesView,
       setAllOrDetails,
       detailsView,
-      setNavTab
+      setNavTab,
+      setCardView
     }
   }
   return (

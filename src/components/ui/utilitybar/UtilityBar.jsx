@@ -24,15 +24,15 @@ import { types } from '../../../types/types'
 const { plannerView, activitiesView, timesView, detailsView } = types
 
 const colorArray = [
-  { id: "bg-gray-500", colorButton: "bg-gray-500" },
-  { id: "bg-blue-600", colorButton: "bg-blue-600" },
-  { id: "bg-indigo-600", colorButton: "bg-indigo-600" },
-  { id: "bg-purple-600", colorButton: "bg-purple-600" },
-  { id: "bg-pink-500", colorButton: "bg-pink-500" },
-  { id: "bg-red-600", colorButton: "bg-red-600" },
-  { id: "bg-yellow-900", colorButton: "bg-yellow-900" },
-  { id: "bg-yellow-400", colorButton: "bg-yellow-400" },
-  { id: "bg-green-500", colorButton: "bg-green-500" },
+  { id: "bg-gray-500", colorButton: "bg-gray-500 hover:bg-gray-600" },
+  { id: "bg-blue-600", colorButton: "bg-blue-600 hover:bg-blue-700" },
+  { id: "bg-indigo-600", colorButton: "bg-indigo-600 hover:bg-indigo-700" },
+  { id: "bg-purple-600", colorButton: "bg-purple-600 hover:bg-purple-700" },
+  { id: "bg-pink-500", colorButton: "bg-pink-500 hover:bg-pink-600" },
+  { id: "bg-red-600", colorButton: "bg-red-600 hover:bg-red-500" },
+  { id: "bg-yellow-900", colorButton: "bg-yellow-900 hover:bg-yellow-700" },
+  { id: "bg-yellow-400", colorButton: "bg-yellow-400  hover:bg-yellow-500" },
+  { id: "bg-green-500", colorButton: "bg-green-500  hover:bg-green-600" },
 ];
 
 const selectArray = [
@@ -69,6 +69,7 @@ function UtilityBar() {
   }
 
   const handleUpdateColorPriority = () => {
+    console.log(colorSelected);
     const data = { prioridad_numero: priority.value, prioridad_color: colorSelected }
     const action = () => {
       ActFunc.updateUserColors(data)
@@ -150,6 +151,14 @@ function UtilityBar() {
     }
   }
 
+  const handleChangeCardView = async () => {
+    await UiFunc.setIsLoading(true)
+    setTimeout(async () => {
+      await UiFunc.setCardView(!UiState.cardView)
+      UiFunc.setIsLoading(false)
+    }, 1000)
+  }
+
   useEffect(() => {
     if (UiState.isResetFilters) {
       toggleIsWorking(false)
@@ -166,11 +175,17 @@ function UtilityBar() {
           </div>
           <div className="flex">
             <ButtonUnText
+              disable={UiState.tabs !== activitiesView}
+              icon={UiState.cardView ? 'fas fa-th' : 'fas fa-th-large'}
+              tippyText="Cambiar grilla de tarjetas"
+              isTippy={true}
+              onclick={handleChangeCardView} />
+            <ButtonUnText
               disable={UiState.navTab.disabled !== activitiesView}
               icon="fas fa-user-clock"
               tippyText={isWorking ? "Todas las actividades" : "Mostrar actividades en Play"}
-              color={isWorking && 'text-blue-500'}
               isTippy={true}
+              color={isWorking && 'text-blue-500'}
               onclick={handleUserWorking} />
 
             <ButtonUnText

@@ -6,7 +6,7 @@ import PlannerCard from './PlannerCard'
 function Planner() {
   const { states } = useContext(GraphContext)
   return (
-    <>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
       {
         states.plannerTask.length > 0 ?
           states.plannerTask.map(obj => (
@@ -25,7 +25,7 @@ function Planner() {
               dueDateTime={obj.dueDateTime} />))
           : (<PResp />)
       }
-    </>
+    </div>
   )
 }
 
