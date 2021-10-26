@@ -35,7 +35,7 @@ function ModernListNote(props) {
     <li className="pb-2">
       <div className={dateColor}>
         <p className="inline font-semibold text-2xs">{name}</p>
-        <p className="ml-2 inline text-opacity-20">({moment(date).format("DD-MM-yyyy, HH:mm")})</p>
+        <p className="ml-2 inline text-opacity-20">({moment(date).format("DD-MM-yyyy, HH:mm")}):</p>
       </div>
       <div className="ml-2">
         <p className="leading-tight text-justify">{desc}</p>

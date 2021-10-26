@@ -20,6 +20,7 @@ import { useForm } from '../../hooks/useForm'
 import Tippy from '@tippyjs/react'
 import { checkForms, seekParam } from '../../helpers/auxFunctions'
 import TableTimes from '../ui/times/TableTimes'
+import ListDocs from '../ui/list/ListDocs'
 
 let today = new Date()
 today = moment(today).format('yyyy-MM-DD')
@@ -35,10 +36,19 @@ const initialStateRA = {
   inputTime: ''
 }
 
+const files = [
+  { id: 2, name: 'file_EJEMPLO1.png' },
+  { id: 3, name: 'file_EJEMPLO2.png' },
+  { id: 4, name: 'file_EJEMPLO3.png' },
+  { id: 5, name: 'file_EJEMPLO4.png' },
+  { id: 6, name: 'file_EJEMPLO5.png' },
+  { id: 7, name: 'file_EJEMPLO6.png' }
+]
+
 function ActivityDetailScreen() {
 
   const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
-  const { states: UiState, functions: UiFunc } = useContext(UiContext)
+  const { functions: UiFunc } = useContext(UiContext)
   const [{ inputEdit, inputAdd }, onChangeValues, reset] = useForm(initialState)
   const [{ idNote }, setNoteActive] = useState({ idNote: null })
   const [updateOrAdd, setUpdateOrAdd] = useState(false)
@@ -190,7 +200,7 @@ function ActivityDetailScreen() {
       {
         ActState.activityDetails !== null &&
         <>
-          <div className="container mx-auto">
+          <div className="container mx-auto text-gray-700">
             <div className="bg-white p-10 rounded-lg shadow-lg my-10">
               <div className="grid grid-cols-1 lg:grid-cols-3 mb-10">
                 <div className="text-2xl font-bold text-gray-700 capitalize col-span-2">
@@ -265,12 +275,12 @@ function ActivityDetailScreen() {
                   <Ptext tag="Ticket:" value={ActState.activityDetails.ticket === 0 ? 'Ninguno' : ActState.activityDetails.ticket} />
                   <Ptext tag="Fecha de Creacion:" value={moment(ActState.activityDetails.fecha_tx).format('DD-MM-yyyy')}
                   />
-                  <Ptext tag="Dias transcurridos:" value={moment(ActState.activityDetails.fecha_tx).diff(today, 'days') - (moment(ActState.activityDetails.fecha_tx).diff(today, 'days') * 2)}
+                  <Ptext tag="Transcurridos:" value={`${moment(ActState.activityDetails.fecha_tx).diff(today, 'days') - (moment(ActState.activityDetails.fecha_tx).diff(today, 'days') * 2)} Dias`}
                   />
                   <div className="flex items-center">
                     <Ptext
                       tag="Prioridad:"
-                      value={ActState.activityDetails.prioridad_etiqueta === 1000 ? 'Sin prioridad' : ActState.activityDetails.prioridad_etiqueta === 600 ? 'Prioridad baja' : ActState.activityDetails.prioridad_etiqueta === 400 ? 'Prioridad media' : ActState.activityDetails.prioridad_etiqueta === 100 && 'Prioridad alta'} />
+                      value={ActState.activityDetails.prioridad_etiqueta === 1000 ? 'S/P' : ActState.activityDetails.prioridad_etiqueta === 600 ? 'Baja' : ActState.activityDetails.prioridad_etiqueta === 400 ? 'Media' : ActState.activityDetails.prioridad_etiqueta === 100 && 'Alta'} />
                     <p className={`
                     ${ActState.activityDetails.prioridad_etiqueta === 1000 ? 'bg-gray-200' : ActState.activityDetails.prioridad_etiqueta === 600 ? ActState.userData.usuario.color_prioridad_baja : ActState.activityDetails.prioridad_etiqueta === 400 ? ActState.userData.usuario.color_prioridad_media : ActState.activityDetails.prioridad_etiqueta === 100 && ActState.userData.usuario.color_prioridad_alta} 
                     h-5 w-5 rounded-full ml-2`
@@ -407,7 +417,7 @@ function ActivityDetailScreen() {
                           ...values,
                           inputPriority: parseInt(e.target.value)
                         })}
-                        color="lightBlue"
+                        color="blue"
                         size="regular"
                         outline={true}
                         placeholder="Nᵒ prioridad"
@@ -424,7 +434,7 @@ function ActivityDetailScreen() {
                           ...values,
                           inputTicket: parseInt(e.target.value)
                         })}
-                        color="lightBlue"
+                        color="blue"
                         size="regular"
                         outline={true}
                         placeholder="Ticket"
@@ -441,7 +451,7 @@ function ActivityDetailScreen() {
                           ...values,
                           inputTime: parseInt(e.target.value)
                         })}
-                        color="lightBlue"
+                        color="blue"
                         size="regular"
                         outline={true}
                         placeholder="Tiempo estimado"
@@ -453,25 +463,66 @@ function ActivityDetailScreen() {
                       />
                     </div>
                     <hr />
-                    <div className="mt-10">
+                    <div className="my-10">
                       <TableTimes />
                     </div>
+                    <hr />
+                    <p className="mt-10 mb-2 font-bold">
+                      Archivos adjuntos:
+                      <label className="text-xs text-gray-400 ml-1 font-normal">(No hay archivo seleccionado)</label>
+                    </p>
+                    <ul className="text-sm grid grid-cols-2">
+                      {
+                        files.map((file, index) => {
+                          if (index > 4) return null
+                          return (
+                            <ListDocs key={file.id} name={file.name} />
+                          )
+                        })
+                      }
+                      {
+                        files.map((file, index) => {
+                          if (index < 5) return null
+                          return (
+                            <ListDocs key={file.id} name={file.name} />
+                          )
+                        })
+                      }
+                    </ul>
                   </div>
                 </div>
               </div>
               <div className="mt-16 flex justify-between">
-                <Button
-                  color="red"
-                  buttonType="link"
-                  size="regular"
-                  rounded={true}
-                  block={false}
-                  iconOnly={false}
-                  ripple="light"
-                  onClick={handleBack}
-                >
-                  eliminar actividad
-                </Button>
+                <div className="flex items-center">
+                  <Button
+                    color="red"
+                    buttonType="link"
+                    size="regular"
+                    rounded={true}
+                    block={false}
+                    iconOnly={false}
+                    ripple="light"
+                    onClick={handleBack}
+                  >
+                    <i className="fas fa-trash-alt fa-lg"></i>
+                    actividad
+                  </Button>
+                  <label
+                    htmlFor="archivoForm"
+                    className="transition duration-500 cursor-pointer hover:bg-blue-100 text-blue-600 text-xs font-bold uppercase py-2.5 px-6 rounded-full"
+                  >
+                    <input
+                      // key={resetFile || ''}
+                      id="archivoForm"
+                      className="text-xs hidden"
+                      name="archivo"
+                      // onChange={onChangeFile}
+                      type="file"
+                    />
+                    <i className="fas fa-cloud-upload-alt fa-lg mr-2"></i>
+                    archivo
+                  </label>
+                </div>
                 <div className="flex items-center">
                   <Button
                     color="red"

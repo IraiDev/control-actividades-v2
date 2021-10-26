@@ -4,7 +4,7 @@ import { ActivityContext } from '../../context/ActivityContext';
 import Card from '../card/Card'
 import PResp from '../ui/text/PResp';
 import ActivityDetailScreen from './ActivityDetailScreen';
-import ModermCard from '../card/ModermCard';
+import ModernCard from '../card/ModernCard';
 
 function ActivitiesScreen() {
   const { states: ActState } = useContext(ActivityContext)
@@ -57,7 +57,7 @@ function ActivitiesScreen() {
                     let subProyecto = obj.subproyectos_tareas !== null ?
                       obj.subproyectos_tareas.nombre_sub_proy : ""
                     return (
-                      <ModermCard
+                      <ModernCard
                         key={obj.id_det}
                         actividad={obj.actividad}
                         encargado={obj.encargado_actividad}
@@ -76,7 +76,7 @@ function ActivitiesScreen() {
                         fechaCrea={obj.fecha_tx}
                         numberCard={index + 1}
                       />
-                    );
+                    )
                   }) : <PResp />
                 }
               </div>

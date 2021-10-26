@@ -16,7 +16,7 @@ import PDefaultNotes from '../ui/text/PDefaultNotes';
 import moment from 'moment';
 import ButtonUnText from '../ui/buttons/ButtonUnText';
 import { alertTimer, normalAlert } from '../../helpers/alerts';
-import { checkForms } from '../../helpers/auxFunctions';
+import { checkForms, seekParam } from '../../helpers/auxFunctions';
 import "@material-tailwind/react/tailwind.css"
 import ModernListNote from '../ui/list/ModermListNote';
 
@@ -24,7 +24,7 @@ let initialState = { inputEdit: '', inputAdd: '' }
 let today = new Date()
 today = moment(today).format('yyyy-MM-DD')
 
-function ModermCard(props) {
+function ModernCard(props) {
   const {
     actividad,
     encargado,
@@ -60,28 +60,28 @@ function ModermCard(props) {
       textColor = 'text-white'
       lineColor = 'border-white'
       dateColor = 'text-white'
-      actPriority = 'Prioridad baja'
+      actPriority = 'Baja'
       break;
     case 400:
       bgColor = ActState.userData.usuario.color_prioridad_media
       textColor = 'text-white'
       lineColor = 'border-white'
       dateColor = 'text-white'
-      actPriority = 'Prioridad media'
+      actPriority = 'Media'
       break;
     case 100:
       bgColor = ActState.userData.usuario.color_prioridad_alta
       textColor = 'text-white'
       lineColor = 'border-white'
       dateColor = 'text-white'
-      actPriority = 'Prioridad alta'
+      actPriority = 'Alta'
       break;
     default:
       bgColor = 'bg-white hover:bg-gray-50'
       textColor = 'text-gray-600'
-      lineColor = 'border-black'
-      dateColor = 'text-white'
-      actPriority = 'Sin prioridad'
+      lineColor = 'border-gray-500'
+      dateColor = 'text-black'
+      actPriority = 'S/P'
       break;
   }
 
@@ -179,32 +179,31 @@ function ModermCard(props) {
   return (
     <>
       <div
-        className={`p-3 bg-white rounded-md shadow-xl text-xs transition duration-500 grid border-2 border-transparent hover:border-gray-600 ${bgColor} ${textColor} ${actPlay}`}
+        className={`grid grid-cols-1 p-3 bg-white rounded-md shadow-xl text-xs font-semibold transition duration-500 border-2 border-transparent hover:border-gray-600 ${bgColor} ${textColor} ${actPlay}`}
         onDoubleClick={handleOpenDetails}>
-        <div className="place-self-start w-full">
-          <div className="flex items-center place-self-start">
-            <h5 className="font-semibold text-base mb-2">{numberCard} - <p className="inline capitalize">{actividad}</p></h5>
-          </div>
+        <div>
+          <h5 className="font-semibold text-base mb-2">{numberCard} - <p className="inline capitalize">{actividad}</p></h5>
           <div className="grid grid-cols-2 mb-2">
-            <div className="col-span-1">
+            <div>
               <Ptext tag="Encargado: " value={encargado} font="font-bold" />
               <Ptext tag="Proyecto: " value={proyecto} font="font-bold" />
               <Ptext tag="Sub proyecto: " value={subProyecto} />
               <Ptext tag="Solicitante: " value={solicitante} />
               <Ptext tag="Estado: " value={estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"} />
             </div>
-            <div className="col-span-1">
+            <div>
               <Ptext tag="ID: " value={id} />
-              <Ptext tag="Ticket: " value={ticket} />
+              <Ptext tag="Ticket: " value={ticket === 0 ? 'S/T' : ticket} />
               <Ptext tag="Fecha: " value={moment(fechaCrea).format('DD-MM-YY')} />
-              <Ptext tag="Dias transcurridos: " value={days} />
+              <Ptext tag="Transcurridos: " value={`${days} Dias`} />
+              <Ptext tag="Prioridad: " value={`${actPriority} (${prioridadRA})`} />
             </div>
           </div>
           <div className="mb-2">
-            <p className="text-opacity-75 font-bold">Descripcion</p>
-            <p className="salto scroll-row">{desc}</p>
+            <p className="text-opacity-75 font-bold ">Descripcion</p>
+            <p className="scroll-row salto">{seekParam(desc, '- PAUSA')}</p>
           </div>
-          <div className="">
+          <div>
             <p className="text-opacity-75 font-bold">Notas</p>
             <ul className="mt-1 font-normal scroll-row">
               {
@@ -229,7 +228,7 @@ function ModermCard(props) {
             </ul>
           </div>
         </div>
-        <div className="flex justify-between items-center place-self-end w-full">
+        <div className={`flex justify-between items-center place-self-end w-full border-t mt-2 ${lineColor}`}>
           <div className="flex items-center justify-between pt-1">
             {isActPlay && <i className="ml-2 fas fa-user-clock fa-sm"></i>}
             <ButtonUnText
@@ -394,4 +393,4 @@ function ModermCard(props) {
   )
 }
 
-export default ModermCard
+export default ModernCard

@@ -16,7 +16,7 @@ import PDefaultNotes from '../ui/text/PDefaultNotes';
 import moment from 'moment';
 import ButtonUnText from '../ui/buttons/ButtonUnText';
 import { alertTimer, normalAlert } from '../../helpers/alerts';
-import { checkForms } from '../../helpers/auxFunctions';
+import { checkForms, seekParam } from '../../helpers/auxFunctions';
 import "@material-tailwind/react/tailwind.css"
 
 let initialState = { inputEdit: '', inputAdd: '' }
@@ -59,28 +59,28 @@ function Card(props) {
       textColor = 'text-white'
       lineColor = 'border-white'
       dateColor = 'text-white'
-      actPriority = 'Prioridad baja'
+      actPriority = 'Baja'
       break;
     case 400:
       bgColor = ActState.userData.usuario.color_prioridad_media
       textColor = 'text-white'
       lineColor = 'border-white'
       dateColor = 'text-white'
-      actPriority = 'Prioridad media'
+      actPriority = 'Media'
       break;
     case 100:
       bgColor = ActState.userData.usuario.color_prioridad_alta
       textColor = 'text-white'
       lineColor = 'border-white'
       dateColor = 'text-white'
-      actPriority = 'Prioridad alta'
+      actPriority = 'Alta'
       break;
     default:
       bgColor = 'bg-white hover:bg-gray-50'
       textColor = 'text-gray-600'
       lineColor = 'border-black'
       dateColor = 'text-white'
-      actPriority = 'Sin prioridad'
+      actPriority = 'S/P'
       break;
   }
 
@@ -242,8 +242,8 @@ function Card(props) {
               textTippy="Fecha de creacion"
             />
             <Ptext
-              tag="D. transc:"
-              value={days}
+              tag="Transc:"
+              value={`${days} Dias`}
               isTippy={true}
               textTippy="Dias transcurridos"
             />
@@ -251,7 +251,7 @@ function Card(props) {
           <div className="col-span-4 md:col-span-5 lg:col-span-4 2xl:col-span-5">
             <Ptext tag="Descripcion:" />
             <div className="h-48 scroll-row">
-              <p className="px-2 leading-tight text-2xs font-semibold salto">{desc}</p>
+              <p className="px-2 leading-tight text-2xs font-semibold salto">{seekParam(desc, '- PAUSA')}</p>
             </div>
           </div>
           <div className="col-span-5">
