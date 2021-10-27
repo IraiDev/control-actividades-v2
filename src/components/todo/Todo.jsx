@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react'
+import { UiContext } from '../../context/UiContext'
 import { GraphContext } from '../../context/GraphContext'
 import { useForm } from '../../hooks/useForm'
 import { alertTimer } from '../../helpers/alerts'
@@ -21,6 +22,7 @@ const buttonAddToDo = `${buttonStyle} ${buttonStyleHover}`
 function Todo() {
   const [{ input, textArea }, onChangeValues, reset] = useForm({ input: '', textArea: '' })
   const { states: GraphState, functions: GraphFunc } = useContext(GraphContext)
+  const { states: UiState } = useContext(UiContext)
   const [showModal, setShowModal] = useState(false)
 
   const handleCreateTodo = () => {
@@ -50,10 +52,11 @@ function Todo() {
 
   return (
     <>
-      <div className="flex justify-end mb-5">
+      <div className="bg-white mb-5 p-4 rounded-md shadow-md mt-1 flex justify-between items-center text-sm">
+        <p className="font-semibold text-lg text-gray-600"><i className={`${UiState.displayNameTodoList.icon} mr-2`}></i>{UiState.displayNameTodoList.title}</p>
         <ButtonText
           isIcon={false}
-          text="Agregar ToDo"
+          text="Agregar To-do"
           color={buttonAddToDo}
           onclick={showModalTrue}
         />

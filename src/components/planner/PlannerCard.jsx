@@ -5,16 +5,25 @@ import { Person } from '@microsoft/mgt-react';
 import { alertQuest } from '../../helpers/alerts';
 import ButtonUnText from '../ui/buttons/ButtonUnText';
 import moment from 'moment';
+import { GraphContext } from '../../context/GraphContext';
 
 let state = ''
 
-function PlannerCard({ idTask: id_todo, idPlan, title, description, assignments, createdBy, createdDateTime, references, percentComplete, checklist, dueDateTime }) {
+function PlannerCard({ idTask, idPlan, title, description, assignments, createdBy, createdDateTime, references, percentComplete, checklist, dueDateTime, etag }) {
   const [plannerPlan, setplannerPlan] = useState('')
   const { functions: ActFunc } = useContext(ActivityContext)
+  const { functions: GraphFunc } = useContext(GraphContext)
 
   const handleAddTask = () => {
-    const data = { title, description, id_todo, proyect: plannerPlan }
-    const action = () => ActFunc.addTaskToRA(data)
+    const data = { title, description, id_todo: idTask, proyect: plannerPlan }
+    const updateData = {
+      percentComplete: 50
+    }
+    const action = async () => {
+      const flag = await ActFunc.addTaskToRA(data)
+      if (!flag) return
+      await GraphFunc.updateTask(idTask, updateData, decodeURIComponent(Object.values(etag)[0]))
+    }
     alertQuest(
       'info',
       '¿Desea crear esta tarea como una actividad en RA?',
@@ -47,7 +56,7 @@ function PlannerCard({ idTask: id_todo, idPlan, title, description, assignments,
   }, [])
 
   return (
-    <div className="transition duration-500 w-full gap-2 p-4 bg-white border-2 rounded-md shadow-lg border-transparent hover:border-gray-500">
+    <div className="relative transition duration-500 w-full gap-2 p-4 bg-white border-2 rounded-md shadow-lg border-transparent hover:border-gray-500">
       <div className="flex items-center justify-between">
         <div>
           <h5 className="font-semibold text-sm capitalize mb-1">{title}</h5>
@@ -74,7 +83,7 @@ function PlannerCard({ idTask: id_todo, idPlan, title, description, assignments,
             <p className="text-xs mr-2 capitalize mb-2">{Object.keys(assignments).length > 1 ? 'encargados' : 'encargado'}</p>
             {Object.keys(assignments).map(obj => (
               obj.length > 0 &&
-              <Person className="rounded-full p-0.5 shadow-md mr-2" key={obj} userId={obj} />
+              <Person className="rounded-full p-0.5 shadow-md" key={obj} userId={obj} />
             ))}
           </div>
           <div className="text-center mr-2">
@@ -97,20 +106,21 @@ function PlannerCard({ idTask: id_todo, idPlan, title, description, assignments,
             : <p className="text-xs text-gray-400 mb-1 pl-2">No hay notas...</p>
         }
       </ul>
-      <div className="row-span-full flex items-center">
-        <div className="flex items-center justify-between w-full">
-          <ul>
-            <p className="text-xs capitalize text-gray-600 mb-1">archivos</p>
-            {
-              Object.entries(references).length > 0 ?
-                Object.entries(references).map(r => (
-                  <li className="text-xs text-gray-600 pl-2 hover:text-blue-500 w-max" key={r}>
-                    <a rel="noreferrer" target="_blank" href={decodeURIComponent(r[0])}>{decodeURIComponent(r[1].alias)}</a>
-                  </li>
-                ))
-                : <p className="text-xs text-gray-400 mb-1 pl-2">No hay archivos...</p>
-            }
-          </ul>
+      <ul className="w-full">
+        <p className="text-xs capitalize text-gray-600 mb-1">archivos</p>
+        {
+          Object.entries(references).length > 0 ?
+            Object.entries(references).map(r => (
+              <li className="text-xs text-gray-600 pl-2 hover:text-blue-500 w-max" key={r}>
+                <a rel="noreferrer" target="_blank" href={decodeURIComponent(r[0])}>{decodeURIComponent(r[1].alias)}</a>
+              </li>
+            ))
+            : <p className="text-xs text-gray-400 mb-1 pl-2">No hay archivos...</p>
+        }
+      </ul>
+      <div className="absolute bottom-3 right-3">
+        {
+          percentComplete === 0 &&
           <ButtonUnText
             icon="fas fa-reply"
             styles="h-8 w-8 mr-1 mt-4"
@@ -118,7 +128,7 @@ function PlannerCard({ idTask: id_todo, idPlan, title, description, assignments,
             isTippy={true}
             offset={10}
             tippyText="Crear actividad en RA" />
-        </div>
+        }
       </div>
     </div>
   )

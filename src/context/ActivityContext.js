@@ -346,13 +346,14 @@ function ActivityProvider({ children }) {
     const body = await resp.json()
     if (body.ok) {
       alertTimer(false, 'info', 1500, 'Tarea agregada correctamente al RA')
-      return
+      return true
     } else {
-      if (data.desc === '') {
+      if (data.description === '') {
         normalAlert('warning', 'La tarea debe tener una descripcion para ser agregada al RA', 'Entiendo...')
       } else {
         normalAlert('warning', 'El ID de la tarea ya exsite en el RA', 'Entiendo...')
       }
+      return false
     }
   }
 

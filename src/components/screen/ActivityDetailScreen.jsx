@@ -15,7 +15,7 @@ import ModalBody from '@material-tailwind/react/ModalBody'
 import PDefaultNotes from '../ui/text/PDefaultNotes'
 import TextArea from '../ui/inputs/TextArea'
 import ModalFooter from '@material-tailwind/react/ModalFooter'
-import { alertTimer, normalAlert } from '../../helpers/alerts'
+import { alertQuest, alertTimer, normalAlert } from '../../helpers/alerts'
 import { useForm } from '../../hooks/useForm'
 import Tippy from '@tippyjs/react'
 import { checkForms, seekParam } from '../../helpers/auxFunctions'
@@ -150,6 +150,13 @@ function ActivityDetailScreen() {
     reset()
     setNoteActive({ idNote, description })
     initialState.inputEdit = description
+  }
+
+  const handleDeleteActivity = () => {
+    const action = () => {
+      console.log('se elimino fake');
+    }
+    alertQuest('info', '¿Estas seguro de eliminar esta actividad?', 'No Cancelar', 'Si, eliminar', action)
   }
 
   useEffect(() => {
@@ -471,18 +478,9 @@ function ActivityDetailScreen() {
                       Archivos adjuntos:
                       <label className="text-xs text-gray-400 ml-1 font-normal">(No hay archivo seleccionado)</label>
                     </p>
-                    <ul className="text-sm grid grid-cols-2">
+                    <ul className="text-sm flex flex-wrap">
                       {
-                        files.map((file, index) => {
-                          if (index > 4) return null
-                          return (
-                            <ListDocs key={file.id} name={file.name} />
-                          )
-                        })
-                      }
-                      {
-                        files.map((file, index) => {
-                          if (index < 5) return null
+                        files.map(file => {
                           return (
                             <ListDocs key={file.id} name={file.name} />
                           )
@@ -502,7 +500,7 @@ function ActivityDetailScreen() {
                     block={false}
                     iconOnly={false}
                     ripple="light"
-                    onClick={handleBack}
+                    onClick={handleDeleteActivity}
                   >
                     <i className="fas fa-trash-alt fa-lg"></i>
                     actividad

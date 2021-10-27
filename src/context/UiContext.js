@@ -35,6 +35,7 @@ function UiProvider({ children }) {
   const [activeOrder, setActiveOrder] = useState(false)
   const [allOrDetails, setAllOrDetails] = useState(true)
   const [cardView, setCardView] = useState(false)
+  const [displayNameTodoList, setDisplayNameTodoList] = useState({})
   //filtros en formato string y array
   const [filters, setFilters] = useState('')
   const [multiEncargados, setMultiEncargados] = useState([])
@@ -139,7 +140,8 @@ function UiProvider({ children }) {
       multiSolicitantes,
       tabs,
       allOrDetails,
-      cardView
+      cardView,
+      displayNameTodoList
     },
     functions: {
       activityView,
@@ -164,7 +166,8 @@ function UiProvider({ children }) {
       setAllOrDetails,
       detailsView,
       setNavTab,
-      setCardView
+      setCardView,
+      setDisplayNameTodoList
     }
   }
   return (

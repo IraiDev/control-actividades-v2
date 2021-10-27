@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react'
 import { UiContext } from './UiContext';
-import { deleteFetch, getFetch, postFetch, updateFetch } from '../helpers/fetchingGraph';
+import { deleteFetch, getFetch, postFetch, updateFetch, updateFetchTask } from '../helpers/fetchingGraph';
 
 export const GraphContext = createContext()
 
@@ -10,7 +10,7 @@ function GraphProvider({ children }) {
   const [todoTask, setTodoTask] = useState([])
   const [todoList, setTodoList] = useState([])
   const [idListSelected, setIdListSelected] = useState(null)
-  const { functions: UiFunc } = useContext(UiContext)
+  const { functions: UiFunc, states: UiState } = useContext(UiContext)
 
   //funciones api microsoft graph
 
@@ -71,8 +71,11 @@ function GraphProvider({ children }) {
   const updateTodoList = async (idList, data) => {
     UiFunc.setIsLoading(true)
     const endPoint = `todo/lists/${idList}`
-    await updateFetch(endPoint, data)
-    getTodoList()
+    const flag = await updateFetch(endPoint, data)
+    if (flag) {
+      UiFunc.setDisplayNameTodoList({ ...UiState.displayNameTodoList, title: data.displayName })
+      getTodoList()
+    }
   }
 
   const deleteTodoList = async (idList) => {
@@ -82,7 +85,13 @@ function GraphProvider({ children }) {
     getTodoList()
   }
 
-  // vaariables de contexto globa
+  const updateTask = async (idTask, data, etag) => {
+    const endPoint = `planner/tasks/${idTask}`
+    await updateFetchTask(endPoint, data, etag)
+    getPlannerTask()
+  }
+
+  // vaariables de contexto global
 
   const value = {
     states: {
@@ -104,6 +113,7 @@ function GraphProvider({ children }) {
       updateTodo,
       deleteTodo,
       setIdListSelected,
+      updateTask
     }
   }
   return (

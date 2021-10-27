@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { UiContext } from '../../../context/UiContext'
 import { GraphContext } from '../../../context/GraphContext'
 import { alertTimer, alertQuest } from '../../../helpers/alerts'
 import { useForm } from '../../../hooks/useForm'
@@ -27,11 +28,17 @@ function ButtonList(props) {
 
   const [{ input }, onChangeValues, reset] = useForm({ input: title })
   const { functions: GraphFunc } = useContext(GraphContext)
+  const { functions: UiFunc } = useContext(UiContext)
   const [showModal, setShowModal] = useState(false)
   const size = useWindowSize();
 
   const handleClick = () => {
+    const data = {
+      title,
+      icon
+    }
     onclick(idList)
+    UiFunc.setDisplayNameTodoList(data)
   }
 
   const handleUpdateList = () => {
