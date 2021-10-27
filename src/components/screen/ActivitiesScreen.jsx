@@ -1,26 +1,59 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { UiContext } from '../../context/UiContext';
 import { ActivityContext } from '../../context/ActivityContext';
 import Card from '../card/Card'
 import PResp from '../ui/text/PResp';
 import ActivityDetailScreen from './ActivityDetailScreen';
 import ModernCard from '../card/ModernCard';
+import Button from '../ui/buttons/Button';
 
 function ActivitiesScreen() {
   const { states: ActState } = useContext(ActivityContext)
-  const { states: UiState } = useContext(UiContext)
+  const { states: UiState, functions: UiFunc } = useContext(UiContext)
+  const [cardView, setCardView] = useState(false)
 
-  useEffect(() => {
+  const handleList = () => {
+    UiFunc.setIsLoading(true)
+    setTimeout(() => {
+      setCardView(true)
+      UiFunc.setIsLoading(false)
+    }, 1000)
+  }
 
-  }, [])
+  const handleGrid = () => {
+    UiFunc.setIsLoading(true)
+    setTimeout(() => {
+      setCardView(false)
+      UiFunc.setIsLoading(false)
+    }, 500)
+  }
 
   return (
     <>
 
       {UiState.allOrDetails ?
-        <div className="container mx-auto my-5">
+        <div className="container mx-auto my-3">
+          <div className="flex justify-between items-center border-b-2 border-gray-300 mb-5">
+            <p className="ml-1 font-semibold text-gray-500">{ActState.activitiesRA.length} {ActState.activitiesRA.length <= 1 ? 'Actividad' : 'Actividades'}</p>
+            <div>
+              <Button
+                type="icon"
+                shadow={false}
+                className={`bg-transparent text-gray-800 rounded-md hover:bg-gray-300 px-2 py-1 mb-1 ${!cardView && 'text-blue-600'}`}
+                icon="fas fa-border-all"
+                onClick={handleGrid}
+              />
+              <Button
+                type="icon"
+                shadow={false}
+                className={`bg-transparent text-gray-800 rounded-md hover:bg-gray-300 px-2 py-1 mb-1 ${cardView && 'text-blue-600'}`}
+                icon="fas fa-th-list"
+                onClick={handleList}
+              />
+            </div>
+          </div>
           {
-            UiState.cardView ?
+            cardView ?
               <div className="grid gap-5 xl:grid-cols-2 lg:grid-cols-1">
                 {ActState.activitiesRA.length > 0 ?
                   ActState.activitiesRA.map((obj, index) => {

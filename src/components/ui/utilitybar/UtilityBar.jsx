@@ -175,12 +175,6 @@ function UtilityBar() {
           </div>
           <div className="flex">
             <ButtonUnText
-              disable={UiState.tabs !== activitiesView || UiState.navTab.disabled === detailsView}
-              icon={UiState.cardView ? 'fas fa-grip-horizontal' : 'fas fa-grip-vertical'}
-              tippyText="Cambiar grilla de tarjetas"
-              isTippy={true}
-              onclick={handleChangeCardView} />
-            <ButtonUnText
               disable={UiState.navTab.disabled !== activitiesView}
               icon="fas fa-user-clock"
               tippyText={isWorking ? "Todas las actividades" : "Mostrar actividades en Play"}
