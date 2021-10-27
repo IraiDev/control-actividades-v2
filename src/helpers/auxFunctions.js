@@ -38,3 +38,11 @@ export const checkForms = (value) => {
   })
   return obj
 }
+
+export const sliceString = (value, index) => {
+  if (value.length <= index) {
+    return value
+  }
+  const newValue = value.slice(0, index - 3) + '...'
+  return newValue
+}

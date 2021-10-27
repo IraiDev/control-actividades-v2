@@ -46,7 +46,7 @@ function Planner() {
 
   return (
     <>
-      <div className="bg-white mb-5 p-4 rounded-md shadow-md mt-1 flex justify-between text-sm">
+      <div className="bg-white mb-5 p-4 rounded-md shadow-md mt-1 flex justify-around text-sm">
         <label htmlFor="check01" className={checkP ? 'text-blue-500' : ''}>
           <input
             className="mr-1"
@@ -55,7 +55,7 @@ function Planner() {
             checked={checkP}
             onChange={onChangeCheckP}
           />
-          Mostrar Pendientes
+          Pendientes
         </label>
         <label htmlFor="check02" className={check50 ? 'text-blue-500' : ''}>
           <input
@@ -65,7 +65,7 @@ function Planner() {
             checked={check50}
             onChange={onChangeCheck50}
           />
-          Mostrar En Trabajo
+          En Trabajo
         </label>
         <label htmlFor="check03" className={check100 ? 'text-blue-500' : ''}>
           <input
@@ -75,7 +75,7 @@ function Planner() {
             checked={check100}
             onChange={onChangeCheck100}
           />
-          Mostrar Completadas
+          Completadas
         </label>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">

@@ -61,7 +61,7 @@ function TodoCard({ idTodo, title, desc }) {
           <h5 className="capitalize">{title}</h5>
         </div>
         <hr />
-        <div className="pr-2 my-2 text-xs text-justify h-52 scroll-row">
+        <div className="pr-2 my-2 text-xs h-52 scroll-row salto">
           <p>{desc}</p>
         </div>
         <hr />

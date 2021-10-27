@@ -182,7 +182,7 @@ function ModernCard(props) {
         className={`grid grid-cols-1 p-3 bg-white rounded-md shadow-xl text-xs font-semibold transition duration-500 border-2 border-transparent hover:border-gray-600 ${bgColor} ${textColor} ${actPlay}`}
         onDoubleClick={handleOpenDetails}>
         <div>
-          <h5 className="font-semibold text-base mb-2">{numberCard} - <p className="inline capitalize">{actividad}</p></h5>
+          <h5 className="font-bold text-base mb-2">{numberCard} - <p className="inline capitalize">{actividad}</p></h5>
           <div className="grid grid-cols-2 mb-2">
             <div>
               <Ptext tag="Encargado: " value={encargado} font="font-bold" />

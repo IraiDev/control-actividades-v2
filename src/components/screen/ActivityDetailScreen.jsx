@@ -39,14 +39,14 @@ const initialStateRA = {
 const files = [
   { id: 2, name: 'file_EJEMPLO1.png' },
   { id: 3, name: 'file_EJEMPLO2.png' },
-  { id: 4, name: 'file_EJEMPLO3.png' },
+  { id: 4, name: 'file_EJEMPLO3asass.png' },
   { id: 5, name: 'file_EJEMPLO4.png' },
-  { id: 6, name: 'file_EJEMPLO5.png' },
-  { id: 7, name: 'file_EJEMPLO6.png' }
+  { id: 6, name: 'file_EJEMPLO5.png' }
 ]
 
 function ActivityDetailScreen() {
 
+  let randomString = Math.random().toString(36)
   const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
   const { functions: UiFunc } = useContext(UiContext)
   const [{ inputEdit, inputAdd }, onChangeValues, reset] = useForm(initialState)
@@ -59,6 +59,8 @@ function ActivityDetailScreen() {
   const [userR, setUserR] = useState(null)
   const [userS, setUserS] = useState(null)
   const [userE, setUserE] = useState(null)
+  const [file, setFile] = useState(null)
+  const [resetFile, setResetFile] = useState(randomString)
   const [newSubProjectArray, setNewSubProjectArray] = useState(null)
   const [values, setValues] = useState(initialStateRA)
   const [isActPlay, setIsActPlay] = useState(false)
@@ -70,6 +72,8 @@ function ActivityDetailScreen() {
     await UiFunc.activityView()
     await ActFunc.getNotify()
     await ActFunc.getTimes()
+    setResetFile(randomString)
+    setFile(null)
   }
 
   const handleUpdatePriority = (id, priority) => {
@@ -159,6 +163,22 @@ function ActivityDetailScreen() {
     alertQuest('info', '¿Estas seguro de eliminar esta actividad?', 'No Cancelar', 'Si, eliminar', action)
   }
 
+  const onChangeFile = (event) => {
+    if (event.target.files[0].size < 5242881) {
+      setFile(event.target.files[0])
+    }
+    else {
+      setFile(null)
+      setResetFile(randomString)
+      alertTimer(
+        false,
+        'info',
+        3000,
+        'Archivo excede el peso permitido por el sistema, peso maximo 5 mb'
+      )
+    }
+  }
+
   useEffect(() => {
     if (project !== null) {
       const tempArray = ActState.arraySubProject.filter(item => project.id === item.id)
@@ -197,10 +217,6 @@ function ActivityDetailScreen() {
       validation1 && validation2 && setIsActPlay(true)
     }
   }, [ActState.activityDetails])
-
-  useEffect(() => {
-    // console.log('values: ', values)
-  }, [values])
 
   return (
     <>
@@ -476,9 +492,9 @@ function ActivityDetailScreen() {
                     <hr />
                     <p className="mt-10 mb-2 font-bold">
                       Archivos adjuntos:
-                      <label className="text-xs text-gray-400 ml-1 font-normal">(No hay archivo seleccionado)</label>
+                      <label className="text-xs text-gray-400 ml-1 font-normal">{file !== null ? file.name : '(No hay archivo seleccionado)'}</label>
                     </p>
-                    <ul className="text-sm flex flex-wrap">
+                    <ul className="text-sm grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2">
                       {
                         files.map(file => {
                           return (
@@ -510,11 +526,11 @@ function ActivityDetailScreen() {
                     className="transition duration-500 cursor-pointer hover:bg-blue-100 text-blue-600 text-xs font-bold uppercase py-2.5 px-6 rounded-full"
                   >
                     <input
-                      // key={resetFile || ''}
+                      key={resetFile || ''}
                       id="archivoForm"
                       className="text-xs hidden"
                       name="archivo"
-                      // onChange={onChangeFile}
+                      onChange={onChangeFile}
                       type="file"
                     />
                     <i className="fas fa-cloud-upload-alt fa-lg mr-2"></i>
