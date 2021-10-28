@@ -1,14 +1,14 @@
 import React from 'react'
 import Tippy from '@tippyjs/react'
 
-function Button({ name = 'boton', icon = 'fas fa-bars', size, className, block = false, shadow = true, onClick, type = 'text', isTippy = false, tippyText = 'tippy text', offset = 5 }) {
+function Button({ name = 'boton', icon = 'fas fa-bars', size, className, block = false, shadow = true, onClick, type = 'text', isTippy = false, tippyText = 'tippy text', offset = 5, delay = 300 }) {
 
   return (
     <>
       <Tippy
         disabled={!isTippy}
         offset={[0, offset]}
-        delay={[200, 0]}
+        delay={[delay, 0]}
         placement={"bottom"}
         content={<span>{tippyText}</span>}
       >

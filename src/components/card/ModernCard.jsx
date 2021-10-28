@@ -350,7 +350,7 @@ function ModernCard(props) {
               disabled={isExpand}
               offset={[0, 6]}
               placement="bottom"
-              delay={[100, 0]}
+              delay={[700, 0]}
               content={<span>{actividad}</span>}
             >
               <p className={!isExpand && 'truncate'}>{actividad}</p>
@@ -361,7 +361,7 @@ function ModernCard(props) {
               disabled={isExpand}
               offset={[0, 6]}
               placement="bottom"
-              delay={[100, 0]}
+              delay={[700, 0]}
               content={<span>{desc}</span>}
             >
               <p className={!isExpand ? 'truncate' : 'salto'}>{seekParam(desc, '- PAUSA')}</p>
@@ -376,6 +376,7 @@ function ModernCard(props) {
               icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
               isTippy={true}
               offset={10}
+              delay={700}
               tippyText={isActPlay ? 'Detener tiempo' : 'Reanudar tiempo'} />
             <Menu
               direction="left"
@@ -514,14 +515,11 @@ function ModernCard(props) {
         </ModalBody>
         <ModalFooter>
           <Button
-            buttonType="link"
-            size="sm"
-            rounded={true}
-            color="blue"
+            className="hover:bg-blue-100 text-blue-500 rounded-full"
+            name={noteActive.idNote !== null ? (updateOrAdd ? 'Agregar' : 'Editar') : 'Agregar'}
+            shadow={false}
             onClick={updateOrAdd ? () => handleAddNewNote() : () => handleUpdateNote()}
-            ripple="light"
           >
-            {noteActive.idNote !== null ? (updateOrAdd ? 'Agregar' : 'Editar') : 'Agregar'}
           </Button>
         </ModalFooter>
       </Modal>

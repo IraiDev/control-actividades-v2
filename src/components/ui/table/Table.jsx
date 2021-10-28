@@ -7,7 +7,7 @@ function Table({ toggleValue }) {
   const { states: ActState } = useContext(ActivityContext)
 
   return (
-    <div className="sm:mx-5 xl:mx-16 2xl:mx-30" >
+    <div className="sm:mx-5 xl:mx-16 2xl:mx-30 min-w-tiempos" >
       <THead />
       <div className="h-table scroll-row">
         {

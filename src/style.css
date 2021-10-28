@@ -18,7 +18,7 @@ body {
 .scroll-row {
   max-height: 10rem;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto;
   scroll-behavior: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(90, 81, 81, 0.5) transparent;
@@ -110,7 +110,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .h-table{
-  min-height: 70vh;
+  min-height: 75vh;
 }
 
 .h-desc{
@@ -121,12 +121,16 @@ input[type="number"]::-webkit-outer-spin-button {
   min-width: 1500px;
 }
 
+.min-w-tiempos{
+  min-width: 1200px;
+}
+
 @media only screen and (max-height: 1000px) {
   .h-700{
     min-height: 720px;
   }
   .h-table{
-    min-height: 67vh;
+    min-height: 65vh;
   }
 }
 

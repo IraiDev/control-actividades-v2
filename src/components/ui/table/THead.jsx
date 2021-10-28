@@ -15,7 +15,7 @@ function THead() {
           return <ColTable
             key={index}
             tag={item.usuario}
-            bgColor={`${index % 2 === 0 ? 'bg-blue-400' : 'bg-blue-500'}`}
+            bgColor={`${index % 2 === 0 ? 'bg-gray-500' : 'bg-gray-600'}`}
             first={index === 0}
             last={index === (ActState.infoTimes[0].usuarios.length - 1)} />
         })

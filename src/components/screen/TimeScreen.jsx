@@ -4,7 +4,7 @@ import Table from '../ui/table/Table'
 import moment from 'moment'
 import { useForm } from '../../hooks/useForm'
 import { UiContext } from '../../context/UiContext'
-import ButtonUnText from '../ui/buttons/ButtonUnText'
+import Button from '../ui/buttons/Button'
 
 const date = new Date()
 const dateFormat = moment(date).format('yyyy-MM-DD')
@@ -31,7 +31,6 @@ function TimeScreen() {
     reset()
     const param = `fecha=${dateFormat}`
     ActFunc.getInfoTimes(param)
-
   }, [])
 
   return (
@@ -56,12 +55,12 @@ function TimeScreen() {
             value={input}
             onChange={onChangeInput} />
           <div>
-            <ButtonUnText
+            <Button
+              type="icon"
+              className="hover:bg-blue-100 text-blue-500 rounded-full h-8 w-8"
+              shadow={false}
               icon="fas fa-check"
-              bgColor="bg-blue-500"
-              hoverBgColor="hover:bg-blue-400 shadow-lg"
-              color="text-white"
-              onclick={handleNewDate} />
+              onClick={handleNewDate} />
           </div>
         </div>
       </div>

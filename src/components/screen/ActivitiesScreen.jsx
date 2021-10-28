@@ -37,7 +37,7 @@ function ActivitiesScreen() {
 
       {UiState.allOrDetails ?
         <div className={`my-3 ${cardView ? 'px-5' : 'container mx-auto'}`}>
-          <div className="flex justify-between items-center border-b-2 border-gray-300 mb-5">
+          <div className="flex justify-between items-center border-b-2 border-gray-300 mb-5 container mx-auto">
             <p className="ml-1 font-semibold text-gray-500">{ActState.activitiesRA.length} {ActState.activitiesRA.length <= 1 ? 'Actividad' : 'Actividades'}</p>
             <div>
               <Button
@@ -45,6 +45,9 @@ function ActivitiesScreen() {
                 shadow={false}
                 className={`bg-transparent text-gray-800 rounded-md hover:bg-gray-300 px-2 py-1 mb-1 ${!cardView && 'text-blue-600'}`}
                 icon="fas fa-border-all"
+                isTippy
+                tippyText="Modo tarjeta"
+                offset={8}
                 onClick={handleGrid}
               />
               <Button
@@ -52,14 +55,17 @@ function ActivitiesScreen() {
                 shadow={false}
                 className={`bg-transparent text-gray-800 rounded-md hover:bg-gray-300 px-2 py-1 mb-1 ${cardView && 'text-blue-600'}`}
                 icon="fas fa-th-list"
+                isTippy
+                tippyText="Modo lista"
+                offset={8}
                 onClick={handleList}
               />
             </div>
           </div>
           {
             cardView ?
-              <div className="overflow-x-auto overflow-y-hidden text-center text-sm pb-10">
-                <div className="grid grid-cols-12 shadow-md rounded-md font-semibold text-white min-w-fake-table">
+              <div className="overflow-x-auto overflow-y-hidden text-center text-sm h-table scroll-row">
+                <div className="grid grid-cols-12 shadow-md rounded-md font-semibold text-white min-w-fake-table sticky top-0">
                   <div className="bg-gray-500 rounded-l-md px-2 py-4 col-span-1">ID</div>
                   <div className="bg-gray-600 px-2 py-4 col-span-1">Ticket</div>
                   <div className="bg-gray-500 px-2 py-4 col-span-1">Proyecto</div>
@@ -72,7 +78,7 @@ function ActivitiesScreen() {
                     <Button type="icon" icon={isExpand ? 'fas fa-angle-up' : 'fas fa-angle-down'} className="ml-2" shadow={false} onClick={handleExpand} />
                   </div>
                   <div className="bg-gray-500 px-2 py-4 col-span-1">Estado</div>
-                  <div className="bg-gray-600 rounded-r-md px-2 py-4 col-span-1 py-4">Acciones</div>
+                  <div className="bg-gray-600 rounded-r-md px-2 py-4 col-span-1">Acciones</div>
                 </div>
                 {ActState.activitiesRA.length > 0 ?
                   ActState.activitiesRA.map((obj, index) => {
