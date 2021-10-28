@@ -40,7 +40,8 @@ function ModernCard(props) {
     prioridadRA,
     notas,
     fechaCrea,
-    numberCard
+    numberCard,
+    type = 'card'
   } = props;
 
   const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
@@ -178,141 +179,159 @@ function ModernCard(props) {
 
   return (
     <>
-      <div
-        className={`grid grid-cols-1 p-3 bg-white rounded-md shadow-xl text-xs font-semibold transition duration-500 border-2 border-transparent hover:border-gray-600 ${bgColor} ${textColor} ${actPlay}`}
-        onDoubleClick={handleOpenDetails}>
-        <div>
-          <h5 className="font-bold text-base mb-2">{numberCard} - <p className="inline capitalize">{actividad}</p></h5>
-          <div className="grid grid-cols-2 mb-2">
-            <div>
-              <Ptext tag="Encargado: " value={encargado} font="font-bold" />
-              <Ptext tag="Proyecto: " value={proyecto} font="font-bold" />
-              <Ptext tag="Sub proyecto: " value={subProyecto} />
-              <Ptext tag="Solicitante: " value={solicitante} />
-              <Ptext tag="Estado: " value={estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"} />
+      {
+        type === 'card' &&
+        <div
+          className={`grid grid-cols-1 p-3 bg-white rounded-md shadow-xl text-xs font-semibold transition duration-500 border-2 border-transparent hover:border-gray-600 ${bgColor} ${textColor} ${actPlay}`}
+          onDoubleClick={handleOpenDetails}>
+          <div>
+            <h5 className="font-bold text-base mb-2">{numberCard} - <p className="inline capitalize">{actividad}</p></h5>
+            <div className="grid grid-cols-2 mb-2">
+              <div>
+                <Ptext tag="Encargado: " value={encargado} font="font-bold" />
+                <Ptext tag="Proyecto: " value={proyecto} font="font-bold" />
+                <Ptext tag="Sub proyecto: " value={subProyecto} />
+                <Ptext tag="Solicitante: " value={solicitante} />
+                <Ptext tag="Estado: " value={estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"} />
+              </div>
+              <div>
+                <Ptext tag="ID: " value={id} />
+                <Ptext tag="Ticket: " value={ticket === 0 ? 'S/T' : ticket} />
+                <Ptext tag="Fecha: " value={moment(fechaCrea).format('DD-MM-YY')} />
+                <Ptext tag="Transcurridos: " value={`${days} Dias`} />
+                <Ptext tag="Prioridad: " value={`${actPriority} (${prioridadRA})`} />
+              </div>
+            </div>
+            <div className="mb-2">
+              <p className="text-opacity-75 font-bold ">Descripcion</p>
+              <p className="scroll-row salto">{seekParam(desc, '- PAUSA')}</p>
             </div>
             <div>
-              <Ptext tag="ID: " value={id} />
-              <Ptext tag="Ticket: " value={ticket === 0 ? 'S/T' : ticket} />
-              <Ptext tag="Fecha: " value={moment(fechaCrea).format('DD-MM-YY')} />
-              <Ptext tag="Transcurridos: " value={`${days} Dias`} />
-              <Ptext tag="Prioridad: " value={`${actPriority} (${prioridadRA})`} />
+              <p className="text-opacity-75 font-bold">Notas</p>
+              <ul className="mt-1 font-normal scroll-row">
+                {
+                  notas.length > 0 ?
+                    notas.map(obj => {
+                      if (id === obj.id_det) {
+                        return (
+                          <ModernListNote
+                            key={obj.id_nota}
+                            desc={obj.desc_nota}
+                            date={obj.fecha_hora_crea}
+                            user={obj.user_crea}
+                            dateColor={dateColor}
+                          />
+                        )
+                      } else {
+                        return ''
+                      }
+                    })
+                    : <p className="text-opacity-10 pl-2">no hay notas...</p>
+                }
+              </ul>
             </div>
           </div>
-          <div className="mb-2">
-            <p className="text-opacity-75 font-bold ">Descripcion</p>
-            <p className="scroll-row salto">{seekParam(desc, '- PAUSA')}</p>
-          </div>
-          <div>
-            <p className="text-opacity-75 font-bold">Notas</p>
-            <ul className="mt-1 font-normal scroll-row">
-              {
-                notas.length > 0 ?
-                  notas.map(obj => {
-                    if (id === obj.id_det) {
-                      return (
-                        <ModernListNote
-                          key={obj.id_nota}
-                          desc={obj.desc_nota}
-                          date={obj.fecha_hora_crea}
-                          user={obj.user_crea}
-                          dateColor={dateColor}
-                        />
-                      )
-                    } else {
-                      return ''
-                    }
-                  })
-                  : <p className="text-opacity-10 pl-2">no hay notas...</p>
-              }
-            </ul>
-          </div>
-        </div>
-        <div className={`flex justify-between items-center place-self-end w-full border-t mt-2 ${lineColor}`}>
-          <div className="flex items-center justify-between pt-1">
-            {isActPlay && <i className="ml-2 fas fa-user-clock fa-sm"></i>}
-            <ButtonUnText
-              icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
-              color=""
-              hoverBgColor={`${isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'}`}
-              isOnclickeable={false}
-              isTippy={true}
-              offset={10}
-              tippyText={isActPlay ? 'Detener tiempo' : 'Reanudar tiempo'} />
-          </div>
-          <div>
-            <Menu
-              direction="left"
-              menuButton={
-                <MenuButton className="focus:outline-none active:outline-none h-7 w-7 rounded-full transition duration-500 hover:bg-black hover:bg-opacity-25 mt-1">
-                  <i className="fas fa-ellipsis-v"></i>
-                </MenuButton>
-              }
-            >
-              <MenuItem
-                className="font-medium text-left"
-                onClick={() => {
-                  showModalAddNote();
-                }}
+          <div className={`flex justify-between items-center place-self-end w-full border-t mt-2 ${lineColor}`}>
+            <div className="flex items-center justify-between pt-1">
+              {isActPlay && <i className="ml-2 fas fa-user-clock fa-sm"></i>}
+              <ButtonUnText
+                icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
+                color=""
+                hoverBgColor={`${isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'}`}
+                isOnclickeable={false}
+                isTippy={true}
+                offset={10}
+                tippyText={isActPlay ? 'Detener tiempo' : 'Reanudar tiempo'} />
+            </div>
+            <div>
+              <Menu
+                direction="left"
+                menuButton={
+                  <MenuButton className="focus:outline-none active:outline-none h-7 w-7 rounded-full transition duration-500 hover:bg-black hover:bg-opacity-25 mt-1">
+                    <i className="fas fa-ellipsis-v"></i>
+                  </MenuButton>
+                }
               >
-                Agregar Nota
-              </MenuItem>
-              <MenuItem
-                className="font-medium text-left"
-                onClick={() => {
-                  showModalUpdateNote();
-                }}
-              >
-                Agregar/Editar Nota
-              </MenuItem>
-              <MenuItem
-                className="flex justify-between"
-                onClick={() => {
-                  handleUpdatePriority(id, 100);
-                }}
-              >
-                <p className="font-medium">Prioridad Alta</p>
-                <p
-                  className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_alta} rounded-full focus:outline-none active:outline-none`}
-                ></p>
-              </MenuItem>
-              <MenuItem
-                className="flex justify-between"
-                onClick={() => {
-                  handleUpdatePriority(id, 400);
-                }}
-              >
-                <p className="font-medium">Prioridad Media</p>
-                <p
-                  className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_media} rounded-full focus:outline-none active:outline-none`}
-                ></p>
-              </MenuItem>
-              <MenuItem
-                className="flex justify-between"
-                onClick={() => {
-                  handleUpdatePriority(id, 600);
-                }}
-              >
-                <p className="font-medium">Prioridad Baja</p>
-                <p
-                  className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_baja} rounded-full focus:outline-none active:outline-none`}
-                ></p>
-              </MenuItem>
-              <MenuItem
-                className="flex justify-between"
-                onClick={() => {
-                  handleUpdatePriority(id, 1000);
-                }}
-              >
-                <p className="font-medium">Sin Prioridad</p>
-                <p
-                  className={`p-2 ml-3 bg-gray-200 rounded-full focus:outline-none active:outline-none`}
-                ></p>
-              </MenuItem>
-            </Menu>
+                <MenuItem
+                  className="font-medium text-left"
+                  onClick={() => {
+                    showModalAddNote();
+                  }}
+                >
+                  Agregar Nota
+                </MenuItem>
+                <MenuItem
+                  className="font-medium text-left"
+                  onClick={() => {
+                    showModalUpdateNote();
+                  }}
+                >
+                  Agregar/Editar Nota
+                </MenuItem>
+                <MenuItem
+                  className="flex justify-between"
+                  onClick={() => {
+                    handleUpdatePriority(id, 100);
+                  }}
+                >
+                  <p className="font-medium">Prioridad Alta</p>
+                  <p
+                    className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_alta} rounded-full focus:outline-none active:outline-none`}
+                  ></p>
+                </MenuItem>
+                <MenuItem
+                  className="flex justify-between"
+                  onClick={() => {
+                    handleUpdatePriority(id, 400);
+                  }}
+                >
+                  <p className="font-medium">Prioridad Media</p>
+                  <p
+                    className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_media} rounded-full focus:outline-none active:outline-none`}
+                  ></p>
+                </MenuItem>
+                <MenuItem
+                  className="flex justify-between"
+                  onClick={() => {
+                    handleUpdatePriority(id, 600);
+                  }}
+                >
+                  <p className="font-medium">Prioridad Baja</p>
+                  <p
+                    className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_baja} rounded-full focus:outline-none active:outline-none`}
+                  ></p>
+                </MenuItem>
+                <MenuItem
+                  className="flex justify-between"
+                  onClick={() => {
+                    handleUpdatePriority(id, 1000);
+                  }}
+                >
+                  <p className="font-medium">Sin Prioridad</p>
+                  <p
+                    className={`p-2 ml-3 bg-gray-200 rounded-full focus:outline-none active:outline-none`}
+                  ></p>
+                </MenuItem>
+              </Menu>
+            </div>
           </div>
         </div>
-      </div>
+      }
+      {
+        type === 'list' &&
+        <div className={`table-row text-gray-600 ${numberCard % 2 === 0 ? 'bg-gray-200' : 'bg-white'}`}>
+          <div className="table-cell p-2">{id}</div>
+          <div className="table-cell p-2">{ticket}</div>
+          <div className="table-cell p-2">{proyecto}</div>
+          <div className="table-cell p-2">{subProyecto}</div>
+          <div className="table-cell p-2">{solicitante}</div>
+          <div className="table-cell p-2">{encargado}</div>
+          <div className="table-cell p-2">{actividad}</div>
+          <div className="table-cell p-2 text-justify">{desc}</div>
+          <div className="table-cell p-2">Archivos</div>
+          <div className="table-cell p-2">{estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"}</div>
+        </div>
+      }
 
       {/* modal update todo */}
 
