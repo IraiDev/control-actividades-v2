@@ -39,7 +39,7 @@ const initialStateRA = {
 const files = [
   { id: 2, name: 'file_EJEMPLO1.png' },
   { id: 3, name: 'file_EJEMPLO2.png' },
-  { id: 4, name: 'file_EJEMPLO3asass.png' },
+  { id: 4, name: 'file_EJEMPLO3asassssssssss.png' },
   { id: 5, name: 'file_EJEMPLO4.png' },
   { id: 6, name: 'file_EJEMPLO5.png' }
 ]

@@ -1,5 +1,5 @@
 
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { UiContext } from '../../context/UiContext';
 import { ActivityContext } from '../../context/ActivityContext';
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
@@ -10,7 +10,7 @@ import Modal from "@material-tailwind/react/Modal"
 import ModalHeader from "@material-tailwind/react/ModalHeader"
 import ModalBody from "@material-tailwind/react/ModalBody"
 import ModalFooter from "@material-tailwind/react/ModalFooter"
-import Button from "@material-tailwind/react/Button"
+import Button from "../ui/buttons/Button"
 import TextArea from "../ui/inputs/TextArea"
 import PDefaultNotes from '../ui/text/PDefaultNotes';
 import moment from 'moment';
@@ -19,6 +19,7 @@ import { alertTimer, normalAlert } from '../../helpers/alerts';
 import { checkForms, seekParam } from '../../helpers/auxFunctions';
 import "@material-tailwind/react/tailwind.css"
 import ModernListNote from '../ui/list/ModermListNote';
+import Tippy from '@tippyjs/react';
 
 let initialState = { inputEdit: '', inputAdd: '' }
 let today = new Date()
@@ -41,7 +42,8 @@ function ModernCard(props) {
     notas,
     fechaCrea,
     numberCard,
-    type = 'card'
+    type = 'card',
+    expand
   } = props;
 
   const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
@@ -50,6 +52,7 @@ function ModernCard(props) {
   const [showModal, setShowModal] = useState(false)
   const [updateOrAdd, setUpdateOrAdd] = useState(false)
   const [noteActive, setNoteActive] = useState({ idNote: null, description: '' })
+  const [isExpand, setIsExpand] = useState(false)
 
   let dateTo = moment(fechaCrea)
   let days = dateTo.diff(today, 'days') - (dateTo.diff(today, 'days') * 2)
@@ -176,6 +179,19 @@ function ModernCard(props) {
     await UiFunc.setAllOrDetails(false)
     await UiFunc.detailsView(true, true)
   }
+
+  const handleExpand = () => {
+    setIsExpand(!isExpand)
+  }
+
+  useEffect(() => {
+    if (expand) {
+      setIsExpand(true)
+    }
+    else {
+      setIsExpand(false)
+    }
+  }, [expand])
 
   return (
     <>
@@ -319,17 +335,118 @@ function ModernCard(props) {
       }
       {
         type === 'list' &&
-        <div className={`table-row text-gray-600 ${numberCard % 2 === 0 ? 'bg-gray-200' : 'bg-white'}`}>
-          <div className="table-cell p-2">{id}</div>
-          <div className="table-cell p-2">{ticket}</div>
-          <div className="table-cell p-2">{proyecto}</div>
-          <div className="table-cell p-2">{subProyecto}</div>
-          <div className="table-cell p-2">{solicitante}</div>
-          <div className="table-cell p-2">{encargado}</div>
-          <div className="table-cell p-2">{actividad}</div>
-          <div className="table-cell p-2 text-justify">{desc}</div>
-          <div className="table-cell p-2">Archivos</div>
-          <div className="table-cell p-2">{estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"}</div>
+        <div
+          className={`grid grid-cols-12 my-2 shadow-sm rounded-md min-w-fake-table border hover:border-gray-700 transition duration-500 ${bgColor} ${textColor} ${actPlay}`}
+          onDoubleClick={handleOpenDetails}
+        >
+          <div className="p-2 col-span-1 font-semibold text-base">{id}</div>
+          <div className="p-2 col-span-1">{ticket === 0 ? '--' : ticket}</div>
+          <div className="p-2 col-span-1 font-semibold text-base">{proyecto}</div>
+          <div className="p-2 col-span-1">{subProyecto === '' ? '--' : subProyecto}</div>
+          <div className="p-2 col-span-1 text-base">{solicitante}</div>
+          <div className="p-2 col-span-1 font-semibold text-base">{encargado}</div>
+          <div className="p-2 col-span-1 font-semibold text-left">
+            <Tippy
+              disabled={isExpand}
+              offset={[0, 6]}
+              placement="bottom"
+              delay={[100, 0]}
+              content={<span>{actividad}</span>}
+            >
+              <p className={!isExpand && 'truncate'}>{actividad}</p>
+            </Tippy>
+          </div>
+          <div className="p-2 col-span-3 text-justify flex items-start justify-between">
+            <Tippy
+              disabled={isExpand}
+              offset={[0, 6]}
+              placement="bottom"
+              delay={[100, 0]}
+              content={<span>{desc}</span>}
+            >
+              <p className={!isExpand ? 'truncate' : 'salto'}>{seekParam(desc, '- PAUSA')}</p>
+            </Tippy>
+            <Button type="icon" icon={isExpand ? 'fas fa-angle-up' : 'fas fa-angle-down'} className="ml-2" shadow={false} onClick={handleExpand} />
+          </div>
+          <div className="p-2 col-span-1 font-semibold text-base">{estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"}</div>
+          <div className="p-2 col-span-1 flex mx-auto items-center">
+            <Button
+              type="icon"
+              className={isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'}
+              icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
+              isTippy={true}
+              offset={10}
+              tippyText={isActPlay ? 'Detener tiempo' : 'Reanudar tiempo'} />
+            <Menu
+              direction="left"
+              menuButton={
+                <MenuButton className="focus:outline-none active:outline-none h-7 w-7 rounded-full transition duration-500 hover:bg-black hover:bg-opacity-25 ml-5">
+                  <i className="fas fa-bars"></i>
+                </MenuButton>
+              }
+            >
+              {/* <MenuItem
+                className="font-medium text-left"
+                onClick={() => {
+                  showModalAddNote();
+                }}
+              >
+                Agregar Nota
+              </MenuItem>
+              <MenuItem
+                className="font-medium text-left"
+                onClick={() => {
+                  showModalUpdateNote();
+                }}
+              >
+                Agregar/Editar Nota
+              </MenuItem> */}
+              <MenuItem
+                className="flex justify-between"
+                onClick={() => {
+                  handleUpdatePriority(id, 100);
+                }}
+              >
+                <p className="font-medium">Prioridad Alta</p>
+                <p
+                  className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_alta} rounded-full focus:outline-none active:outline-none`}
+                ></p>
+              </MenuItem>
+              <MenuItem
+                className="flex justify-between"
+                onClick={() => {
+                  handleUpdatePriority(id, 400);
+                }}
+              >
+                <p className="font-medium">Prioridad Media</p>
+                <p
+                  className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_media} rounded-full focus:outline-none active:outline-none`}
+                ></p>
+              </MenuItem>
+              <MenuItem
+                className="flex justify-between"
+                onClick={() => {
+                  handleUpdatePriority(id, 600);
+                }}
+              >
+                <p className="font-medium">Prioridad Baja</p>
+                <p
+                  className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_baja} rounded-full focus:outline-none active:outline-none`}
+                ></p>
+              </MenuItem>
+              <MenuItem
+                className="flex justify-between"
+                onClick={() => {
+                  handleUpdatePriority(id, 1000);
+                }}
+              >
+                <p className="font-medium">Sin Prioridad</p>
+                <p
+                  className={`p-2 ml-3 bg-gray-200 rounded-full focus:outline-none active:outline-none`}
+                ></p>
+              </MenuItem>
+            </Menu>
+          </div>
         </div>
       }
 

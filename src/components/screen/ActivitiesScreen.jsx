@@ -11,6 +11,7 @@ function ActivitiesScreen() {
   const { states: ActState } = useContext(ActivityContext)
   const { states: UiState, functions: UiFunc } = useContext(UiContext)
   const [cardView, setCardView] = useState(false)
+  const [isExpand, setIsExpand] = useState(false)
 
   const handleList = () => {
     UiFunc.setIsLoading(true)
@@ -26,6 +27,9 @@ function ActivitiesScreen() {
       setCardView(false)
       UiFunc.setIsLoading(false)
     }, 500)
+  }
+  const handleExpand = () => {
+    setIsExpand(!isExpand)
   }
 
   return (
@@ -54,49 +58,51 @@ function ActivitiesScreen() {
           </div>
           {
             cardView ?
-              <div className="overflow-x-auto overflow-y-hidden">
-                <div className="table w-full capitalize text-sm">
-                  <div className="table-header-group shadow-md bg-gray-500 font-semibold text-white">
-                    <div className="table-cell p-2">ID</div>
-                    <div className="table-cell p-2">Ticket</div>
-                    <div className="table-cell p-2">Proyecto</div>
-                    <div className="table-cell p-2">SubProy.</div>
-                    <div className="table-cell p-2">Solicitante</div>
-                    <div className="table-cell p-2">Encargado</div>
-                    <div className="table-cell p-2">Actividad</div>
-                    <div className="table-cell p-2 text-center">Descripcion</div>
-                    <div className="table-cell p-2">Archivos</div>
-                    <div className="table-cell p-2">Estado</div>
+              <div className="overflow-x-auto overflow-y-hidden text-center text-sm pb-10">
+                <div className="grid grid-cols-12 shadow-md rounded-md font-semibold text-white min-w-fake-table">
+                  <div className="bg-gray-500 rounded-l-md px-2 py-4 col-span-1">ID</div>
+                  <div className="bg-gray-600 px-2 py-4 col-span-1">Ticket</div>
+                  <div className="bg-gray-500 px-2 py-4 col-span-1">Proyecto</div>
+                  <div className="bg-gray-600 px-2 py-4 col-span-1">SubProy.</div>
+                  <div className="bg-gray-500 px-2 py-4 col-span-1">Solicitante</div>
+                  <div className="bg-gray-600 px-2 py-4 col-span-1">Encargado</div>
+                  <div className="bg-gray-500 px-2 py-4 col-span-1">Actividad</div>
+                  <div className="bg-gray-600 px-2 py-4 col-span-3">
+                    Descripcion
+                    <Button type="icon" icon={isExpand ? 'fas fa-angle-up' : 'fas fa-angle-down'} className="ml-2" shadow={false} onClick={handleExpand} />
                   </div>
-                  {ActState.activitiesRA.length > 0 ?
-                    ActState.activitiesRA.map((obj, index) => {
-                      let subProyecto = obj.subproyectos_tareas !== null ?
-                        obj.subproyectos_tareas.nombre_sub_proy : ""
-                      return (
-                        <ModernCard
-                          type="list"
-                          key={obj.id_det}
-                          actividad={obj.actividad}
-                          encargado={obj.encargado_actividad}
-                          estado={obj.estado}
-                          desc={obj.func_objeto}
-                          id={obj.id_det}
-                          solicitante={obj.user_solicita}
-                          ticket={obj.num_ticket_edit}
-                          proyecto={obj.proyecto_tarea.abrev}
-                          subProyecto={subProyecto}
-                          bgColor={obj.color_prioridad}
-                          notas={obj.notas}
-                          pausas={obj.pausas}
-                          prioridad={obj.prioridad_etiqueta}
-                          prioridadRA={obj.num_prioridad}
-                          fechaCrea={obj.fecha_tx}
-                          numberCard={index + 1}
-                        />
-                      );
-                    }) : <PResp />
-                  }
+                  <div className="bg-gray-500 px-2 py-4 col-span-1">Estado</div>
+                  <div className="bg-gray-600 rounded-r-md px-2 py-4 col-span-1 py-4">Acciones</div>
                 </div>
+                {ActState.activitiesRA.length > 0 ?
+                  ActState.activitiesRA.map((obj, index) => {
+                    let subProyecto = obj.subproyectos_tareas !== null ?
+                      obj.subproyectos_tareas.nombre_sub_proy : ""
+                    return (
+                      <ModernCard
+                        expand={isExpand}
+                        type="list"
+                        key={obj.id_det}
+                        actividad={obj.actividad}
+                        encargado={obj.encargado_actividad}
+                        estado={obj.estado}
+                        desc={obj.func_objeto}
+                        id={obj.id_det}
+                        solicitante={obj.user_solicita}
+                        ticket={obj.num_ticket_edit}
+                        proyecto={obj.proyecto_tarea.abrev}
+                        subProyecto={subProyecto}
+                        bgColor={obj.color_prioridad}
+                        notas={obj.notas}
+                        pausas={obj.pausas}
+                        prioridad={obj.prioridad_etiqueta}
+                        prioridadRA={obj.num_prioridad}
+                        fechaCrea={obj.fecha_tx}
+                        numberCard={index + 1}
+                      />
+                    );
+                  }) : <PResp />
+                }
               </div>
               :
               <div className="grid gap-3 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1">
