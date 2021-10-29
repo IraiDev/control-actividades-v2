@@ -1,11 +1,10 @@
 import React, { useContext, useState } from 'react'
-import { UiContext } from '../../context/UiContext';
-import { ActivityContext } from '../../context/ActivityContext';
-import Card from '../card/Card'
+import { UiContext } from '../../context/UiContext'
+import { ActivityContext } from '../../context/ActivityContext'
 import PResp from '../ui/text/PResp';
-import ActivityDetailScreen from './ActivityDetailScreen';
-import ModernCard from '../card/ModernCard';
-import Button from '../ui/buttons/Button';
+import ActivityDetailScreen from './ActivityDetailScreen'
+import ModernCard from '../card/ModernCard'
+import Button from '../ui/buttons/Button'
 
 function ActivitiesScreen() {
   const { states: ActState } = useContext(ActivityContext)
@@ -66,19 +65,29 @@ function ActivitiesScreen() {
             cardView ?
               <div className="overflow-x-auto overflow-y-hidden text-center text-sm h-table scroll-row">
                 <div className="grid grid-cols-12 shadow-md rounded-md font-semibold text-white min-w-fake-table sticky top-0">
-                  <div className="bg-gray-500 rounded-l-md px-2 py-4 col-span-1">ID</div>
-                  <div className="bg-gray-600 px-2 py-4 col-span-1">Ticket</div>
-                  <div className="bg-gray-500 px-2 py-4 col-span-1">Proyecto</div>
-                  <div className="bg-gray-600 px-2 py-4 col-span-1">SubProy.</div>
-                  <div className="bg-gray-500 px-2 py-4 col-span-1">Solicitante</div>
-                  <div className="bg-gray-600 px-2 py-4 col-span-1">Encargado</div>
-                  <div className="bg-gray-500 px-2 py-4 col-span-1">Actividad</div>
-                  <div className="bg-gray-600 px-2 py-4 col-span-3">
-                    Descripcion
-                    <Button type="icon" icon={isExpand ? 'fas fa-angle-up' : 'fas fa-angle-down'} className="ml-2" shadow={false} onClick={handleExpand} />
+                  <div className="bg-gray-500 hover:bg-gray-700 rounded-l-md px-2 py-4 transition duration-500 col-span-1">ID</div>
+                  <div className="bg-gray-600 hover:bg-gray-800 px-2 py-4 transition duration-500 col-span-1">Ticket</div>
+                  <div className="bg-gray-500 hover:bg-gray-700 px-2 py-4 transition duration-500 col-span-1">Proyecto</div>
+                  <div className="bg-gray-600 hover:bg-gray-800 px-2 py-4 transition duration-500 col-span-1">SubProy.</div>
+                  <div className="bg-gray-500 hover:bg-gray-700 px-2 py-2 transition duration-500 col-span-1">
+                    Solicitante
+                    <span className="block text-xs font-normal">(Fecha)</span>
                   </div>
-                  <div className="bg-gray-500 px-2 py-4 col-span-1">Estado</div>
-                  <div className="bg-gray-600 rounded-r-md px-2 py-4 col-span-1">Acciones</div>
+                  <div className="bg-gray-600 hover:bg-gray-800 px-2 py-4 transition duration-500 col-span-1">Encargado</div>
+                  <div className="bg-gray-500 hover:bg-gray-700 px-2 py-4 transition duration-500 col-span-1">Actividad</div>
+                  <div className="bg-gray-600 hover:bg-gray-800 px-2 py-4 transition duration-500 col-span-3">
+                    Descripcion
+                    <Button
+                      type="icon"
+                      icon={isExpand ? 'fas fa-angle-up' : 'fas fa-angle-down'}
+                      className="ml-2"
+                      shadow={false}
+                      isTippy
+                      tippyText={isExpand ? 'Ocultar' : 'Mostrar'}
+                      onClick={handleExpand} />
+                  </div>
+                  <div className="bg-gray-500 hover:bg-gray-700 px-2 py-4 transition duration-500 col-span-1">Estado</div>
+                  <div className="bg-gray-600 hover:bg-gray-800 rounded-r-md px-2 py-4 transition duration-500 col-span-1">Acciones</div>
                 </div>
                 {ActState.activitiesRA.length > 0 ?
                   ActState.activitiesRA.map((obj, index) => {

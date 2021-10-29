@@ -11,10 +11,8 @@ import Modal from "@material-tailwind/react/Modal"
 import ModalHeader from "@material-tailwind/react/ModalHeader"
 import ModalBody from "@material-tailwind/react/ModalBody"
 import ModalFooter from "@material-tailwind/react/ModalFooter"
-import ButtonUnText from '../buttons/ButtonUnText';
 import ButtonColor from '../buttons/ButtonColor';
-import ButtonText from '../buttons/ButtonText';
-import Button from "@material-tailwind/react/Button"
+import Button from "../buttons/Button"
 import PColor from '../text/PColor';
 import "@szhsin/react-menu/dist/index.css";
 import "@material-tailwind/react/tailwind.css"
@@ -151,14 +149,6 @@ function UtilityBar() {
     }
   }
 
-  const handleChangeCardView = async () => {
-    await UiFunc.setIsLoading(true)
-    setTimeout(async () => {
-      await UiFunc.setCardView(!UiState.cardView)
-      UiFunc.setIsLoading(false)
-    }, 1000)
-  }
-
   useEffect(() => {
     if (UiState.isResetFilters) {
       toggleIsWorking(false)
@@ -171,23 +161,75 @@ function UtilityBar() {
         className="flex flex-col lg:flex-row items-center bg-white shadow min-w-full sticky top-14 z-20 pt-5 px-10">
         <div className={`flex order-last w-full pb-5 lg:order-first ${UiState.disableBtnSideBar ? 'justify-center lg:justify-end' : 'justify-between'}`}>
           <div>
-            <ButtonText disable={UiState.disableBtnSideBar} icon="fas fa-filter fa-sm" text="Filtrar" onclick={handleSideBar} />
+            <Button
+              type="iconText"
+              className="rounded-full font-semibold px-4 py-1 hover:bg-gray-100 border border-gray-50"
+              disabled={UiState.disableBtnSideBar}
+              icon="fas fa-filter fa-sm"
+              name="Filtrar"
+              onClick={handleSideBar} />
           </div>
           <div className="flex">
-            <ButtonUnText
-              disable={UiState.navTab.disabled !== activitiesView}
+            <div className="md:hidden">
+              <Menu
+                direction="bottom"
+                overflow="auto"
+                position="anchor"
+                menuButton={
+                  <MenuButton className="transition duration-500 relative focus:outline-none active:outline-none h-8 w-8 text-gray-700 rounded-full hover:bg-gray-300">
+                    <Tippy
+                      offset={[0, 12]}
+                      delay={[200, 0]}
+                      placement={"bottom"}
+                      content={<span>Mostrar tiempo de usuarios</span>}
+                    >
+                      <i className="fas fa-clock"></i>
+                    </Tippy>
+                  </MenuButton>
+                }
+              >
+                <MenuGroup takeOverflow>
+                  {ActState.usersTimes.length > 0 ?
+                    ActState.usersTimes.map((obj, index) => {
+                      return (
+                        <MenuItem
+                          disabled
+                          key={index}>
+                          <UserTimer
+                            key={index}
+                            user={obj.usuario}
+                            time={obj.tiempo}
+                            isPause={obj.estado}
+                          />
+                        </MenuItem>
+                      );
+                    })
+                    :
+                    <MenuItem>
+                      <p>No hay informacion</p>
+                    </MenuItem>
+                  }
+                </MenuGroup>
+              </Menu>
+            </div>
+            <Button
+              disabled={UiState.navTab.disabled !== activitiesView}
+              className={`h-8 w-8 hover:bg-gray-200 rounded-full ${isWorking && 'text-blue-500'}`}
+              shadow={false}
+              type="icon"
               icon="fas fa-user-clock"
+              isTippy
               tippyText={isWorking ? "Todas las actividades" : "Mostrar actividades en Play"}
-              isTippy={true}
-              color={isWorking && 'text-blue-500'}
-              onclick={handleUserWorking} />
-
-            <ButtonUnText
-              disable={UiState.navTab.disabled === detailsView}
+              onClick={handleUserWorking} />
+            <Button
+              disabled={UiState.navTab.disabled === detailsView}
+              className="h-8 w-8 hover:bg-gray-200 rounded-full"
+              shadow={false}
+              type="icon"
               icon="fas fa-sync-alt"
+              isTippy
               tippyText={UiState.tabs === plannerView ? "Actualizar Planner" : UiState.tabs === activitiesView ? "Actualizar Actividades" : UiState.tabs === timesView && "Actualizar Informe de tiempos"}
-              isTippy={true}
-              onclick={UiState.tabs === plannerView ? updatePlannerComponents : UiState.tabs === activitiesView ? updateActivityComponents : UiState.tabs === timesView && updateTimesComponents} />
+              onClick={UiState.tabs === plannerView ? updatePlannerComponents : UiState.tabs === activitiesView ? updateActivityComponents : UiState.tabs === timesView && updateTimesComponents} />
             <Menu
               direction="bottom"
               overflow="auto"
@@ -202,7 +244,7 @@ function UtilityBar() {
                     </label>
                   }
                   <Tippy
-                    offset={[0, 2]}
+                    offset={[0, 12]}
                     delay={[200, 0]}
                     placement={"bottom"}
                     content={<span>Notificaciones</span>}
@@ -249,14 +291,17 @@ function UtilityBar() {
                 </div>
               </MenuItem>
             </Menu>
-            <ButtonUnText
+            <Button
+              className="h-8 w-8 hover:bg-gray-200 rounded-full"
+              shadow={false}
+              type="icon"
               icon="fas fa-paint-brush"
+              isTippy
               tippyText="Ajustes de usuario"
-              isTippy={true}
-              onclick={showModalTrue} />
+              onClick={showModalTrue} />
           </div>
         </div>
-        <div className="flex items-center justify-around order-first pb-5 lg:order-last">
+        <div className="md:flex items-center justify-around order-first pb-5 lg:order-last hidden">
           {ActState.usersTimes.length > 0 &&
             ActState.usersTimes.map((obj, index) => {
               return (
@@ -319,15 +364,11 @@ function UtilityBar() {
         </ModalBody>
         <ModalFooter>
           <Button
-            buttonType="link"
-            size="sm"
-            rounded={true}
-            color="blue"
+            className="hover:bg-blue-100 text-blue-500 hover:text-blue-600 rounded-full"
+            name="Actualizar"
+            shadow={false}
             onClick={() => handleUpdateColorPriority()}
-            ripple="light"
-          >
-            Establecer
-          </Button>
+          />
         </ModalFooter>
       </Modal>
     </>

@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { ActivityContext } from '../../../context/ActivityContext';
 import { alertQuest } from '../../../helpers/alerts';
 import moment from "moment";
-import ButtonUnText from '../buttons/ButtonUnText';
+import Button from '../buttons/Button';
 
 let name = "NN"
 let buttonStyle = 'text-sm outline-none active:outline-none focus:outline-none hover:text-blue-500'
@@ -100,10 +100,12 @@ function ListNote(props) {
               <p className="flex ml-1 text-left text-xs">{desc}</p>
             </button>
             <br />
-            <ButtonUnText
-              icon="fas fa-trash fa-sm"
-              color="hover:text-red-600 transition duration-500"
-              onclick={handleDeleteNote}
+            <Button
+              className="text-blue-500 hover:text-red-600 transition duration-500 mr-2"
+              shadow={false}
+              type="icon"
+              icon="fas fa-trash-alt fa-sm"
+              onClick={handleDeleteNote}
             />
           </li>
       }

@@ -2,12 +2,11 @@ import React, { useContext, useState } from 'react'
 import { GraphContext } from '../../context/GraphContext'
 import { alertQuest, alertTimer } from '../../helpers/alerts'
 import { useForm } from '../../hooks/useForm'
-import ButtonUnText from '../ui/buttons/ButtonUnText'
+import Button from '../ui/buttons/Button'
 import Modal from "@material-tailwind/react/Modal"
 import ModalHeader from "@material-tailwind/react/ModalHeader"
 import ModalBody from "@material-tailwind/react/ModalBody"
 import ModalFooter from "@material-tailwind/react/ModalFooter"
-import Button from "@material-tailwind/react/Button"
 import Input from '../ui/inputs/Input'
 import TextArea from '../ui/inputs/TextArea'
 import "@material-tailwind/react/tailwind.css"
@@ -66,15 +65,19 @@ function TodoCard({ idTodo, title, desc }) {
         </div>
         <hr />
         <div className="flex justify-end pt-2 text-gray-700">
-          <ButtonUnText
+          <Button
+            className="h-8 w-8 hover:bg-gray-200 rounded-full hover:text-green-500 mr-2"
+            shadow={false}
+            type="icon"
             icon="fas fa-pen"
-            color="hover:text-blue-500 transition duration-500"
-            onclick={showModalTrue} />
+            onClick={showModalTrue} />
 
-          <ButtonUnText
+          <Button
+            className="h-8 w-8 hover:bg-gray-200 rounded-full hover:text-red-500 "
+            shadow={false}
+            type="icon"
             icon="fas fa-trash"
-            color="hover:text-red-500 transition duration-500"
-            onclick={handleDelete} />
+            onClick={handleDelete} />
         </div>
       </div>
 
@@ -85,31 +88,28 @@ function TodoCard({ idTodo, title, desc }) {
           Editar ToDo
         </ModalHeader>
         <ModalBody>
-          <div className="w-430"></div>
-          <Input
-            field="Titulo"
-            type="text"
-            name="input"
-            value={input}
-            onChange={onChangeValues} />
-          <br />
-          <TextArea
-            field="descripcion"
-            value={textArea}
-            name="textArea"
-            onChange={onChangeValues} />
+          <div className="w-430">
+            <Input
+              field="Titulo"
+              type="text"
+              name="input"
+              value={input}
+              onChange={onChangeValues} />
+            <br />
+            <TextArea
+              field="descripcion"
+              value={textArea}
+              name="textArea"
+              onChange={onChangeValues} />
+          </div>
         </ModalBody>
         <ModalFooter>
           <Button
-            buttonType="link"
-            size="sm"
-            rounded={true}
-            color="blue"
+            className="text-blue-500 hover:text-blue-600 hover:bg-blue-100 rounded-full"
+            shadow={false}
             onClick={() => handleUpdate()}
-            ripple="light"
-          >
-            Editar
-          </Button>
+            name="Editar"
+          />
         </ModalFooter>
       </Modal>
     </>

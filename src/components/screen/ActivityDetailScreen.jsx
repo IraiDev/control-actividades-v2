@@ -2,11 +2,10 @@ import moment from 'moment'
 import React, { useContext, useEffect, useState } from 'react'
 import { UiContext } from '../../context/UiContext'
 import { ActivityContext } from '../../context/ActivityContext'
-import ButtonUnText from '../ui/buttons/ButtonUnText'
 import ListNote from '../ui/list/ListNote'
 import Ptext from '../ui/text/Ptext'
 import Input from '@material-tailwind/react/Input'
-import Button from '@material-tailwind/react/Button'
+import Button from '../ui/buttons/Button'
 import Select from 'react-select';
 import ButtonColor from '../ui/buttons/ButtonColor'
 import Modal from '@material-tailwind/react/Modal'
@@ -227,12 +226,12 @@ function ActivityDetailScreen() {
             <div className="bg-white p-10 rounded-lg shadow-lg my-10">
               <div className="grid grid-cols-1 lg:grid-cols-3 mb-10">
                 <div className="text-2xl font-bold text-gray-700 capitalize col-span-2">
-                  <ButtonUnText
+                  <Button
+                    type="icon"
                     icon="fas fa-chevron-left"
-                    styles="mr-7"
-                    hoverBgColor='hover:bg-white'
-                    color='text-black hover:text-blue-500'
-                    onclick={handleBack} />
+                    className="mr-3 hover:text-blue-500 pr-2"
+                    shadow={false}
+                    onClick={handleBack} />
                   Detalle actividad: {ActState.activityDetails.id_det}, {ActState.activityDetails.actividad}
                 </div>
                 <div className="rounded-full p-1 bg-gray-100 place-self-end col-span-1 mt-4 lg:mt-0">
@@ -315,8 +314,8 @@ function ActivityDetailScreen() {
                   <div className="flex justify-between">
                     <Ptext tag="Informes Diarios (notas):" />
                     <div>
-                      <ButtonUnText icon="fas fa-plus" onclick={showModalAddNote} />
-                      <ButtonUnText icon="fas fa-pen" onclick={showModalUpdateNote} />
+                      <Button className="h-8 w-8 rounded-full hover:bg-gray-300" shadow={false} type="icon" icon="fas fa-plus" onClick={showModalAddNote} />
+                      <Button className="h-8 w-8 rounded-full hover:bg-gray-300" shadow={false} type="icon" icon="fas fa-pen" onClick={showModalUpdateNote} />
                     </div>
                   </div>
                   <div className="scroll-row-detail h-card-details">
@@ -344,9 +343,12 @@ function ActivityDetailScreen() {
               <div className="grid grid-cols-1 mt-6 bg-gray-100 rounded-md py-2 px-4">
                 <div className="flex justify-between">
                   <Ptext tag="Descripcion:" />
-                  <ButtonUnText
+                  <Button
+                    className="h-8 w-8 rounded-full hover:bg-gray-300"
+                    shadow={false}
+                    type="icon"
                     icon="fas fa-pen"
-                    onclick={() => setShowModalDesc(true)} />
+                    onClick={() => setShowModalDesc(true)} />
                 </div>
                 <div className="h-desc scroll-row-detail">
                   <p className="p-2 leading-tight text-justify salto text-sm">
@@ -369,21 +371,19 @@ function ActivityDetailScreen() {
                         <i className="ml-2 mr-1 mt-1 fas fa-user-clock fa-sm"></i>
                       </Tippy>
                     }
-                    <ButtonUnText
+                    <Button
+                      className="h-8 w-8 rounded-full hover:bg-gray-300"
+                      shadow={false}
+                      type="icon"
                       icon="fas fa-clone fa-sm"
-                      color=""
-                      hoverBgColor="hover:bg-gray-300 hover:text-blue-500"
-                      isOnclickeable={false}
-                      isTippy={true}
-                      offset={12}
+                      isTippy
                       tippyText="Clonar actividad" />
-                    <ButtonUnText
+                    <Button
+                      className={`h-8 w-8 rounded-full hover:bg-gray-300 ${isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'}`}
+                      shadow={false}
+                      type="icon"
                       icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
-                      color=""
-                      hoverBgColor={`hover:bg-gray-300 ${isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'}`}
-                      isOnclickeable={false}
-                      isTippy={true}
-                      offset={12}
+                      isTippy
                       tippyText={isActPlay ? 'Detener tiempo' : 'Reanudar tiempo'} />
                   </div>
                 </div>
@@ -509,18 +509,14 @@ function ActivityDetailScreen() {
               <div className="mt-16 flex justify-between">
                 <div className="flex items-center">
                   <Button
-                    color="red"
-                    buttonType="link"
-                    size="regular"
-                    rounded={true}
-                    block={false}
-                    iconOnly={false}
-                    ripple="light"
+                    className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-100 py-1 px-4"
+                    shadow={false}
+                    iconFirst
+                    type="iconText"
+                    name="Actividad"
+                    icon="fas fa-trash-alt fa-lg"
                     onClick={handleDeleteActivity}
-                  >
-                    <i className="fas fa-trash-alt fa-lg"></i>
-                    actividad
-                  </Button>
+                  />
                   <label
                     htmlFor="archivoForm"
                     className="transition duration-500 cursor-pointer hover:bg-blue-100 text-blue-600 text-xs font-bold uppercase py-2.5 px-6 rounded-full"
@@ -539,29 +535,15 @@ function ActivityDetailScreen() {
                 </div>
                 <div className="flex items-center">
                   <Button
-                    color="red"
-                    buttonType="filled"
-                    size="regular"
-                    rounded={true}
-                    block={false}
-                    iconOnly={false}
-                    ripple="light"
+                    className="bg-red-500 text-white rounded-full hover:bg-red-600"
+                    name="Cancelar"
                     onClick={handleBack}
-                  >
-                    cancelar
-                  </Button>
+                  />
                   <span className="mr-2"></span>
                   <Button
-                    color="green"
-                    buttonType="filled"
-                    size="regular"
-                    rounded={true}
-                    block={false}
-                    iconOnly={false}
-                    ripple="light"
-                  >
-                    Guardar cambios
-                  </Button>
+                    className="bg-green-500 text-white rounded-full hover:bg-green-600"
+                    name="Guardar cambios"
+                  />
                 </div>
               </div>
             </div>

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { ActivityContext } from '../../../context/ActivityContext'
-import ButtonUnText from '../buttons/ButtonUnText'
+import Button from '../buttons/Button'
 
 function PDefaultNotes({ idAct, noteText, isSeparator = true, onclick, updatePriority = false, from = false }) {
   const { functions: GraphFunc } = useContext(ActivityContext)
@@ -36,10 +36,12 @@ function PDefaultNotes({ idAct, noteText, isSeparator = true, onclick, updatePri
     <>
       <div className="flex items-center justify-between my-1">
         <p className="text-sm text-gray-600 capitalize">{noteText}</p>
-        <ButtonUnText
+        <Button
+          className="text-blue-500 hover:text-green-500 w-8 h-8"
+          shadow={false}
+          type="icon"
           icon="fas fa-tags fa-sm"
-          color="text-blue-500 hover:text-green-500 transition duration-500"
-          onclick={handleAddNote} />
+          onClick={handleAddNote} />
       </div>
       {isSeparator && <hr />}
     </>

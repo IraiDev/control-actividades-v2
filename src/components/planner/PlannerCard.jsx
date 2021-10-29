@@ -3,7 +3,7 @@ import { ActivityContext } from '../../context/ActivityContext';
 import { getFetch } from '../../helpers/fetchingGraph';
 import { Person } from '@microsoft/mgt-react';
 import { alertQuest } from '../../helpers/alerts';
-import ButtonUnText from '../ui/buttons/ButtonUnText';
+import Button from '../ui/buttons/Button';
 import moment from 'moment';
 import { GraphContext } from '../../context/GraphContext';
 
@@ -13,6 +13,21 @@ function PlannerCard({ idTask, idPlan, title, description, assignments, createdB
   const [plannerPlan, setplannerPlan] = useState('')
   const { functions: ActFunc } = useContext(ActivityContext)
   const { functions: GraphFunc } = useContext(GraphContext)
+
+  switch (percentComplete) {
+    case 0:
+      state = 'Pendiente'
+      break
+    case 50:
+      state = 'En trabajo'
+      break
+    case 100:
+      state = 'Completada'
+      break
+    default:
+      state = 'Desconocido'
+      break;
+  }
 
   const handleAddTask = () => {
     const data = { title, description, id_todo: idTask, proyect: plannerPlan }
@@ -31,21 +46,6 @@ function PlannerCard({ idTask, idPlan, title, description, assignments, createdB
       'Si, crear',
       action
     )
-  }
-
-  switch (percentComplete) {
-    case 0:
-      state = 'Pendiente'
-      break
-    case 50:
-      state = 'En trabajo'
-      break
-    case 100:
-      state = 'Completada'
-      break
-    default:
-      state = 'Desconocido'
-      break;
   }
 
   useEffect(() => {
@@ -118,18 +118,18 @@ function PlannerCard({ idTask, idPlan, title, description, assignments, createdB
             : <p className="text-xs text-gray-400 mb-1 pl-2">No hay archivos...</p>
         }
       </ul>
-      <div className="absolute bottom-3 right-3">
-        {
-          percentComplete === 0 &&
-          <ButtonUnText
-            icon="fas fa-reply"
-            styles="h-8 w-8 mr-1 mt-4"
-            onclick={handleAddTask}
-            isTippy={true}
-            offset={10}
-            tippyText="Crear actividad en RA" />
-        }
-      </div>
+      {
+        percentComplete === 0 &&
+        <Button
+          type="icon"
+          icon="fas fa-reply"
+          className="h-8 w-8 hover:bg-gray-200 rounded-full absolute bottom-3 right-3"
+          shadow={false}
+          onClick={handleAddTask}
+          isTippy={true}
+          offset={10}
+          tippyText="Crear actividad en RA" />
+      }
     </div>
   )
 }

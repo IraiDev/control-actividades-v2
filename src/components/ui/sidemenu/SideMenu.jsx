@@ -8,7 +8,7 @@ import Modal from "@material-tailwind/react/Modal"
 import ModalHeader from "@material-tailwind/react/ModalHeader"
 import ModalBody from "@material-tailwind/react/ModalBody"
 import ModalFooter from "@material-tailwind/react/ModalFooter"
-import Button from "@material-tailwind/react/Button"
+import Button from "../buttons/Button"
 import Input from "../inputs/Input"
 import { useWindowSize } from '../../../hooks/useWindowSize'
 import "@material-tailwind/react/tailwind.css"
@@ -63,7 +63,7 @@ function SideMenu() {
 
   return (
     <>
-      <div className={`sticky z-50 h-full px-3 ml-3 mt-5 text-white bg-gray-700 border-r rounded-md shadow-md top-52 lg:top-40 ${size.width > 1024 ? 'py-10' : 'py-3'}`}>
+      <div className={`sticky z-40 h-full px-3 ml-3 mt-5 text-white bg-gray-700 border-r rounded-md shadow-md top-52 lg:top-40 ${size.width > 1024 ? 'py-10' : 'py-3'}`}>
         <div className="relative">
           <ButtonList
             title={"Crear Lista"}
@@ -136,15 +136,11 @@ function SideMenu() {
         </ModalBody>
         <ModalFooter>
           <Button
-            buttonType="link"
-            size="sm"
-            rounded={true}
-            color="blue"
+            className="text-blue-500 hover:text-blue-600 hover:bg-blue-100 rounded-full"
+            shadow={false}
+            name="Crear"
             onClick={() => handleCreateTodoList()}
-            ripple="light"
-          >
-            Crear
-          </Button>
+          />
         </ModalFooter>
       </Modal>
     </>

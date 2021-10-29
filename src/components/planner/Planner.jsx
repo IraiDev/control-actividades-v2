@@ -46,7 +46,7 @@ function Planner() {
 
   return (
     <>
-      <div className="bg-white mb-5 p-4 rounded-md shadow-md mt-1 flex justify-around text-sm">
+      <div className="bg-white mb-5 p-4 rounded-md shadow-md mt-1 flex justify-around sm:flex-nowrap flex-wrap text-sm">
         <label htmlFor="check01" className={checkP ? 'text-blue-500' : ''}>
           <input
             className="mr-1"

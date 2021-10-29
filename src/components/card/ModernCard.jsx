@@ -4,6 +4,7 @@ import { UiContext } from '../../context/UiContext';
 import { ActivityContext } from '../../context/ActivityContext';
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 import { useForm } from '../../hooks/useForm';
+import Tippy from '@tippyjs/react';
 import ListNote from '../ui/list/ListNote';
 import Ptext from '../ui/text/Ptext';
 import Modal from "@material-tailwind/react/Modal"
@@ -14,12 +15,10 @@ import Button from "../ui/buttons/Button"
 import TextArea from "../ui/inputs/TextArea"
 import PDefaultNotes from '../ui/text/PDefaultNotes';
 import moment from 'moment';
-import ButtonUnText from '../ui/buttons/ButtonUnText';
+import ModernListNote from '../ui/list/ModermListNote';
 import { alertTimer, normalAlert } from '../../helpers/alerts';
 import { checkForms, seekParam } from '../../helpers/auxFunctions';
 import "@material-tailwind/react/tailwind.css"
-import ModernListNote from '../ui/list/ModermListNote';
-import Tippy from '@tippyjs/react';
 
 let initialState = { inputEdit: '', inputAdd: '' }
 let today = new Date()
@@ -56,7 +55,7 @@ function ModernCard(props) {
 
   let dateTo = moment(fechaCrea)
   let days = dateTo.diff(today, 'days') - (dateTo.diff(today, 'days') * 2)
-  let dateColor, textColor, lineColor, bgColor, actPriority, actPlay = '', isActPlay = false
+  let dateColor, textColor, lineColor, bgColor, actPriority, actPlay = '', isActPlay = false, actPlayList = 'border'
 
   switch (prioridad) {
     case 600:
@@ -93,10 +92,12 @@ function ModernCard(props) {
     if (pausas[pausas.length - 1].boton === 2) {
       isActPlay = true
       actPlay = 'border-4 border-black border-opacity-25'
+      actPlayList = 'border-3 border-black border-opacity-25'
     }
     else {
       isActPlay = false
       actPlay = ''
+      actPlayList = 'border'
     }
   }
 
@@ -250,11 +251,10 @@ function ModernCard(props) {
           <div className={`flex justify-between items-center place-self-end w-full border-t mt-2 ${lineColor}`}>
             <div className="flex items-center justify-between pt-1">
               {isActPlay && <i className="ml-2 fas fa-user-clock fa-sm"></i>}
-              <ButtonUnText
+              <Button
+                type="icon"
                 icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
-                color=""
-                hoverBgColor={`${isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'}`}
-                isOnclickeable={false}
+                className={` ml-3 ${isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'}`}
                 isTippy={true}
                 offset={10}
                 tippyText={isActPlay ? 'Detener tiempo' : 'Reanudar tiempo'} />
@@ -336,16 +336,19 @@ function ModernCard(props) {
       {
         type === 'list' &&
         <div
-          className={`grid grid-cols-12 my-2 shadow-sm rounded-md min-w-fake-table border hover:border-gray-700 transition duration-500 ${bgColor} ${textColor} ${actPlay}`}
+          className={`grid grid-cols-12 my-2 shadow-md rounded-md min-w-fake-table border-transparent hover:border-gray-700 transition duration-500 ${bgColor} ${textColor} ${actPlayList}`}
           onDoubleClick={handleOpenDetails}
         >
-          <div className="p-2 col-span-1 font-semibold text-base">{id}</div>
-          <div className="p-2 col-span-1">{ticket === 0 ? '--' : ticket}</div>
-          <div className="p-2 col-span-1 font-semibold text-base">{proyecto}</div>
-          <div className="p-2 col-span-1">{subProyecto === '' ? '--' : subProyecto}</div>
-          <div className="p-2 col-span-1 text-base">{solicitante}</div>
-          <div className="p-2 col-span-1 font-semibold text-base">{encargado}</div>
-          <div className="p-2 col-span-1 font-semibold text-left">
+          <div className="py-3 px-2 col-span-1 font-semibold text-base">{id}</div>
+          <div className="py-3 px-2 col-span-1">{ticket === 0 ? '--' : ticket}</div>
+          <div className="py-3 px-2 col-span-1 font-semibold text-base">{proyecto}</div>
+          <div className="py-3 px-2 col-span-1">{subProyecto === '' ? '--' : subProyecto}</div>
+          <div className="py-2 px-2 col-span-1 font-semibold">
+            {solicitante}
+            <span className="block text-xs font-normal">({moment(fechaCrea).format('DD-MM-yyyy')})</span>
+          </div>
+          <div className="py-3 px-2 col-span-1 font-semibold text-base">{encargado}</div>
+          <div className="py-3 px-2 col-span-1 font-semibold text-left">
             <Tippy
               disabled={isExpand}
               offset={[0, 6]}
@@ -356,7 +359,7 @@ function ModernCard(props) {
               <p className={!isExpand && 'truncate'}>{actividad}</p>
             </Tippy>
           </div>
-          <div className="p-2 col-span-3 text-justify flex items-start justify-between">
+          <div className="py-3 px-2 col-span-3 text-justify flex items-start justify-between">
             <Tippy
               disabled={isExpand}
               offset={[0, 6]}
@@ -368,11 +371,22 @@ function ModernCard(props) {
             </Tippy>
             <Button type="icon" icon={isExpand ? 'fas fa-angle-up' : 'fas fa-angle-down'} className="ml-2" shadow={false} onClick={handleExpand} />
           </div>
-          <div className="p-2 col-span-1 font-semibold text-base">{estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"}</div>
-          <div className="p-2 col-span-1 flex mx-auto items-center">
+          <div className="py-3 px-2 col-span-1 font-semibold text-base">
+            <Tippy
+              disabled={!isActPlay}
+              offset={[0, 8]}
+              placement="bottom"
+              delay={[700, 0]}
+              content={<span>Actividad en play</span>}
+            >
+              <p className={isActPlay && 'bg-black bg-opacity-10 rounded-full w-max mx-auto px-2'}>{estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"}</p>
+            </Tippy>
+          </div>
+          <div className="py-3 px-2 col-span-1 flex mx-auto">
             <Button
               type="icon"
-              className={isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'}
+              className={isActPlay ? 'hover:text-red-500 h-7 w-7' : 'hover:text-green-500 h-7 w-7'}
+              shadow={false}
               icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
               isTippy={true}
               offset={10}
