@@ -7,7 +7,7 @@ import Modal from "@material-tailwind/react/Modal"
 import ModalHeader from "@material-tailwind/react/ModalHeader"
 import ModalBody from "@material-tailwind/react/ModalBody"
 import ModalFooter from "@material-tailwind/react/ModalFooter"
-import Button from "@material-tailwind/react/Button"
+import Button from "../buttons/Button"
 import Input from "../inputs/Input"
 import Tippy from '@tippyjs/react'
 import { useWindowSize } from '../../../hooks/useWindowSize'
@@ -133,15 +133,11 @@ function ButtonList(props) {
         </ModalBody>
         <ModalFooter>
           <Button
-            buttonType="link"
-            size="sm"
-            rounded={true}
-            color="blue"
+            className="text-blue-500 hover:text-blue-600 hover:bg-blue-100 rounded-full"
+            shadow={false}
+            name="Editar"
             onClick={() => handleUpdateList()}
-            ripple="light"
-          >
-            Editar
-          </Button>
+          />
         </ModalFooter>
       </Modal>
     </>

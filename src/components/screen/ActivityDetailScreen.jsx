@@ -614,15 +614,11 @@ function ActivityDetailScreen() {
             </ModalBody>
             <ModalFooter>
               <Button
-                buttonType="link"
-                size="sm"
-                rounded={true}
-                color="blue"
+                className="text-blue-500 hover:text-blue-600 hover:bg-blue-100 rounded-full"
+                shadow={false}
+                name={idNote !== null ? (updateOrAdd ? 'Agregar' : 'Editar') : 'Agregar'}
                 onClick={updateOrAdd ? () => handleAddNewNote() : () => handleUpdateNote()}
-                ripple="light"
-              >
-                {idNote !== null ? (updateOrAdd ? 'Agregar' : 'Editar') : 'Agregar'}
-              </Button>
+              />
             </ModalFooter>
           </Modal>
 
@@ -644,16 +640,10 @@ function ActivityDetailScreen() {
             </ModalBody>
             <ModalFooter>
               <Button
-                color="blue"
-                buttonType="link"
-                size="sm"
-                rounded={true}
-                block={false}
-                iconOnly={false}
-                ripple="dark"
-              >
-                Editar
-              </Button>
+                className="text-blue-500 hover:text-blue-600 hover:bg-blue-100 rounded-full"
+                shadow={false}
+                name="Editar"
+              />
             </ModalFooter>
           </Modal>
         </>
