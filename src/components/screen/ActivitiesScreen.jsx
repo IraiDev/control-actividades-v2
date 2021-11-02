@@ -40,23 +40,17 @@ function ActivitiesScreen() {
             <p className="ml-1 font-semibold text-gray-500">{ActState.activitiesRA.length} {ActState.activitiesRA.length <= 1 ? 'Actividad' : 'Actividades'}</p>
             <div>
               <Button
-                type="icon"
-                shadow={false}
                 className={`bg-transparent text-gray-800 rounded-md hover:bg-gray-300 px-2 py-1 mb-1 ${!cardView && 'text-blue-600'}`}
+                type="icon"
                 icon="fas fa-border-all"
-                isTippy
                 tippyText="Modo tarjeta"
-                offset={8}
                 onClick={handleGrid}
               />
               <Button
-                type="icon"
-                shadow={false}
                 className={`bg-transparent text-gray-800 rounded-md hover:bg-gray-300 px-2 py-1 mb-1 ${cardView && 'text-blue-600'}`}
+                type="icon"
                 icon="fas fa-th-list"
-                isTippy
                 tippyText="Modo lista"
-                offset={8}
                 onClick={handleList}
               />
             </div>
@@ -78,11 +72,9 @@ function ActivitiesScreen() {
                   <div className="bg-gray-600 hover:bg-gray-800 px-2 py-4 transition duration-500 col-span-3">
                     Descripcion
                     <Button
+                      className="ml-2"
                       type="icon"
                       icon={isExpand ? 'fas fa-angle-up' : 'fas fa-angle-down'}
-                      className="ml-2"
-                      shadow={false}
-                      isTippy
                       tippyText={isExpand ? 'Ocultar' : 'Mostrar'}
                       onClick={handleExpand} />
                   </div>

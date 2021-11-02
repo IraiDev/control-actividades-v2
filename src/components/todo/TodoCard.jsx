@@ -1,12 +1,9 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { GraphContext } from '../../context/GraphContext'
 import { alertQuest, alertTimer } from '../../helpers/alerts'
 import { useForm } from '../../hooks/useForm'
 import Button from '../ui/buttons/Button'
-import Modal from "@material-tailwind/react/Modal"
-import ModalHeader from "@material-tailwind/react/ModalHeader"
-import ModalBody from "@material-tailwind/react/ModalBody"
-import ModalFooter from "@material-tailwind/react/ModalFooter"
+import Modal from "../ui/modal/Modal"
 import Input from '../ui/inputs/Input'
 import TextArea from '../ui/inputs/TextArea'
 import "@material-tailwind/react/tailwind.css"
@@ -67,14 +64,12 @@ function TodoCard({ idTodo, title, desc }) {
         <div className="flex justify-end pt-2 text-gray-700">
           <Button
             className="h-8 w-8 hover:bg-gray-200 rounded-full hover:text-green-500 mr-2"
-            shadow={false}
             type="icon"
             icon="fas fa-pen"
             onClick={showModalTrue} />
 
           <Button
-            className="h-8 w-8 hover:bg-gray-200 rounded-full hover:text-red-500 "
-            shadow={false}
+            className="h-8 w-8 hover:bg-gray-200 rounded-full hover:text-red-500"
             type="icon"
             icon="fas fa-trash"
             onClick={handleDelete} />
@@ -83,34 +78,29 @@ function TodoCard({ idTodo, title, desc }) {
 
       {/* modal update todo */}
 
-      <Modal size="regular" active={showModal} toggler={() => showModalFalse()}>
-        <ModalHeader toggler={() => showModalFalse()}>
-          Editar ToDo
-        </ModalHeader>
-        <ModalBody>
-          <div className="w-430">
-            <Input
-              field="Titulo"
-              type="text"
-              name="input"
-              value={input}
-              onChange={onChangeValues} />
-            <br />
-            <TextArea
-              field="descripcion"
-              value={textArea}
-              name="textArea"
-              onChange={onChangeValues} />
-          </div>
-        </ModalBody>
-        <ModalFooter>
+      <Modal showModal={showModal} onClose={showModalFalse} className="md:w-4/5 lg:w-4/6 xl:w-3/6">
+        <h1 className="text-xl font-semibold mb-5">Editar ToDo</h1>
+        <div className="w-full">
+          <Input
+            field="Titulo"
+            type="text"
+            name="input"
+            value={input}
+            onChange={onChangeValues} />
+          <br />
+          <TextArea
+            field="descripcion"
+            value={textArea}
+            name="textArea"
+            onChange={onChangeValues} />
+        </div>
+        <div className="flex justify-end">
           <Button
             className="text-blue-500 hover:text-blue-600 hover:bg-blue-100 rounded-full"
-            shadow={false}
             onClick={() => handleUpdate()}
             name="Editar"
           />
-        </ModalFooter>
+        </div>
       </Modal>
     </>
   )

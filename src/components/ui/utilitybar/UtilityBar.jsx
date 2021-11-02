@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { UiContext } from '../../../context/UiContext';
 import { ActivityContext } from '../../../context/ActivityContext';
 import { GraphContext } from '../../../context/GraphContext';
@@ -7,10 +7,7 @@ import { alertTimer } from '../../../helpers/alerts';
 import Select from "react-select";
 import UserTimer from './UserTimer';
 import Tippy from '@tippyjs/react';
-import Modal from "@material-tailwind/react/Modal"
-import ModalHeader from "@material-tailwind/react/ModalHeader"
-import ModalBody from "@material-tailwind/react/ModalBody"
-import ModalFooter from "@material-tailwind/react/ModalFooter"
+import Modal from "../modal/Modal"
 import ButtonColor from '../buttons/ButtonColor';
 import Button from "../buttons/Button"
 import PColor from '../text/PColor';
@@ -162,9 +159,10 @@ function UtilityBar() {
         <div className={`flex order-last w-full pb-5 lg:order-first ${UiState.disableBtnSideBar ? 'justify-center lg:justify-end' : 'justify-between'}`}>
           <div>
             <Button
-              type="iconText"
-              className="rounded-full font-semibold px-4 py-1 hover:bg-gray-100 border border-gray-50"
               disabled={UiState.disableBtnSideBar}
+              className="rounded-full px-4 py-1 hover:bg-gray-100 border border-gray-100"
+              shadow
+              type="iconText"
               icon="fas fa-filter fa-sm"
               name="Filtrar"
               onClick={handleSideBar} />
@@ -176,16 +174,16 @@ function UtilityBar() {
                 overflow="auto"
                 position="anchor"
                 menuButton={
-                  <MenuButton className="transition duration-500 relative focus:outline-none active:outline-none h-8 w-8 text-gray-700 rounded-full hover:bg-gray-300">
-                    <Tippy
-                      offset={[0, 12]}
-                      delay={[200, 0]}
-                      placement={"bottom"}
-                      content={<span>Mostrar tiempo de usuarios</span>}
-                    >
+                  <Tippy
+                    offset={[0, 10]}
+                    delay={[700, 0]}
+                    placement={"bottom"}
+                    content={<span>Mostrar tiempo de usuarios</span>}
+                  >
+                    <MenuButton className="transition duration-500 relative focus:outline-none active:outline-none h-8 w-8 text-gray-700 rounded-full hover:bg-gray-300">
                       <i className="fas fa-clock"></i>
-                    </Tippy>
-                  </MenuButton>
+                    </MenuButton>
+                  </Tippy>
                 }
               >
                 <MenuGroup takeOverflow>
@@ -215,19 +213,15 @@ function UtilityBar() {
             <Button
               disabled={UiState.navTab.disabled !== activitiesView}
               className={`h-8 w-8 hover:bg-gray-200 rounded-full ${isWorking && 'text-blue-500'}`}
-              shadow={false}
               type="icon"
               icon="fas fa-user-clock"
-              isTippy
               tippyText={isWorking ? "Todas las actividades" : "Mostrar actividades en Play"}
               onClick={handleUserWorking} />
             <Button
               disabled={UiState.navTab.disabled === detailsView}
               className="h-8 w-8 hover:bg-gray-200 rounded-full"
-              shadow={false}
               type="icon"
               icon="fas fa-sync-alt"
-              isTippy
               tippyText={UiState.tabs === plannerView ? "Actualizar Planner" : UiState.tabs === activitiesView ? "Actualizar Actividades" : UiState.tabs === timesView && "Actualizar Informe de tiempos"}
               onClick={UiState.tabs === plannerView ? updatePlannerComponents : UiState.tabs === activitiesView ? updateActivityComponents : UiState.tabs === timesView && updateTimesComponents} />
             <Menu
@@ -235,23 +229,23 @@ function UtilityBar() {
               overflow="auto"
               position="anchor"
               menuButton={
-                <MenuButton className="transition duration-500 relative focus:outline-none active:outline-none h-8 w-8 text-gray-700 rounded-full hover:bg-gray-300 ">
-                  {
-                    ActState.userNotify.length > 0 &&
-                    <label
-                      className="absolute -right-1 px-1.5 text-xs text-white bg-red-500 rounded-full h-min w-min -top-0">
-                      {ActState.userNotify.length}
-                    </label>
-                  }
-                  <Tippy
-                    offset={[0, 12]}
-                    delay={[200, 0]}
-                    placement={"bottom"}
-                    content={<span>Notificaciones</span>}
-                  >
+                <Tippy
+                  offset={[0, 10]}
+                  delay={[700, 0]}
+                  placement={"bottom"}
+                  content={<span>Notificaciones</span>}
+                >
+                  <MenuButton className="transition duration-500 relative focus:outline-none active:outline-none h-8 w-8 text-gray-700 rounded-full hover:bg-gray-300 ">
+                    {
+                      ActState.userNotify.length > 0 &&
+                      <label
+                        className="absolute -right-1 px-1.5 text-xs text-white bg-red-500 rounded-full h-min w-min -top-0">
+                        {ActState.userNotify.length}
+                      </label>
+                    }
                     <i className="fas fa-bell"></i>
-                  </Tippy>
-                </MenuButton>
+                  </MenuButton>
+                </Tippy>
               }
             >
               <MenuGroup takeOverflow>
@@ -293,10 +287,8 @@ function UtilityBar() {
             </Menu>
             <Button
               className="h-8 w-8 hover:bg-gray-200 rounded-full"
-              shadow={false}
               type="icon"
               icon="fas fa-paint-brush"
-              isTippy
               tippyText="Ajustes de usuario"
               onClick={showModalTrue} />
           </div>
@@ -318,15 +310,13 @@ function UtilityBar() {
 
       {/* modal update todo */}
 
-      <Modal size="regular" active={showModal} toggler={() => showModalFalse()}>
-        <ModalHeader toggler={() => showModalFalse()}>
-          Colores prioridades ToDo
-        </ModalHeader>
-        <ModalBody>
+      <Modal showModal={showModal} onClose={showModalFalse} className="md:w-3/5 lg:w-3/6 xl:w-2/6">
+        <h1 className="text-xl font-semibold mb-5">Colores prioridades ToDo</h1>
+        <div className="w-full">
           <label className="text-sm text-gray-500">Colores actuales:</label>
           {
             ActState.userData.usuario !== undefined && (
-              <div className="flex justify-between mt-2 mb-5 w-430">
+              <div className="flex justify-between mt-2 mb-5 w-full">
                 <PColor userColor={ActState.userData.usuario.color_prioridad_baja} text="Prioridad baja" />
                 <PColor userColor={ActState.userData.usuario.color_prioridad_media} text="Prioridad media" />
                 <PColor userColor={ActState.userData.usuario.color_prioridad_alta} text="Prioridad alta" />
@@ -345,7 +335,7 @@ function UtilityBar() {
               value={priority}
             />
           </div>
-          <div>
+          <div className="mb-5">
             <label className="text-sm text-gray-500">
               Seleccione un color:
             </label>
@@ -361,15 +351,14 @@ function UtilityBar() {
               })}
             </div>
           </div>
-        </ModalBody>
-        <ModalFooter>
+        </div>
+        <div className="flex justify-end">
           <Button
-            className="hover:bg-blue-100 text-blue-500 hover:text-blue-600 rounded-full"
+            className="hover:bg-blue-100 text-blue-500 hover:text-blue-700 rounded-full"
             name="Actualizar"
-            shadow={false}
             onClick={() => handleUpdateColorPriority()}
           />
-        </ModalFooter>
+        </div>
       </Modal>
     </>
   )

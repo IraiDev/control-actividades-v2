@@ -1,13 +1,10 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { UiContext } from '../../context/UiContext'
 import { GraphContext } from '../../context/GraphContext'
 import { useForm } from '../../hooks/useForm'
 import { alertTimer } from '../../helpers/alerts'
 import TodoCard from './TodoCard'
-import Modal from "@material-tailwind/react/Modal"
-import ModalHeader from "@material-tailwind/react/ModalHeader"
-import ModalBody from "@material-tailwind/react/ModalBody"
-import ModalFooter from "@material-tailwind/react/ModalFooter"
+import Modal from "../ui/modal/Modal"
 import Input from "../ui/inputs/Input"
 import Button from '../ui/buttons/Button'
 import PResp from '../ui/text/PResp'
@@ -51,7 +48,6 @@ function Todo() {
         <p className="font-semibold text-lg text-gray-600 hidden sm:inline"><i className={`${UiState.displayNameTodoList.icon} mr-2`}></i>{UiState.displayNameTodoList.title}</p>
         <Button
           className="text-blue-500 font-semibold border-2 border-blue-500 rounded-full hover:text-white hover:bg-blue-500"
-          shadow={false}
           name="Agregar to-do"
           onClick={showModalTrue}
         />
@@ -76,34 +72,30 @@ function Todo() {
 
       {/* modal create todo */}
 
-      <Modal size="regular" active={showModal} toggler={() => showModalFalse()}>
-        <ModalHeader toggler={() => showModalFalse()}>
-          Crear ToDo
-        </ModalHeader>
-        <ModalBody>
-          <div className="w-430">
-            <Input
-              field="Titulo"
-              type="text"
-              name="input"
-              value={input}
-              onChange={onChangeValues} />
-            <br />
-            <TextArea
-              field="descripcion"
-              value={textArea}
-              name="textArea"
-              onChange={onChangeValues} />
-          </div>
-        </ModalBody>
-        <ModalFooter>
+      <Modal showModal={showModal} onClose={showModalFalse} className="md:w-4/5 lg:w-4/6 xl:w-3/6">
+        <h1 className="text-xl font-semibold mb-5">Crear ToDo</h1>
+        <div className="w-full">
+          <Input
+            field="Titulo"
+            type="text"
+            name="input"
+            value={input}
+            onChange={onChangeValues} />
+          <br />
+          <TextArea
+            field="descripcion"
+            value={textArea}
+            name="textArea"
+            onChange={onChangeValues} />
+        </div>
+        <br />
+        <div className="flex justify-end">
           <Button
-            className="text-blue-500 hover:text-blue-600 hover:bg-blue-100 rounded-full"
-            shadow={false}
+            className="text-blue-500 hover:text-blue-700 hover:bg-blue-100 rounded-full font-semibold"
             name="Crear"
             onClick={() => handleCreateTodo()}
           />
-        </ModalFooter>
+        </div>
       </Modal>
     </>
   )

@@ -121,14 +121,11 @@ function PlannerCard({ idTask, idPlan, title, description, assignments, createdB
       {
         percentComplete === 0 &&
         <Button
+          className="h-8 w-8 hover:bg-gray-200 rounded-full absolute bottom-3 right-3"
           type="icon"
           icon="fas fa-reply"
-          className="h-8 w-8 hover:bg-gray-200 rounded-full absolute bottom-3 right-3"
-          shadow={false}
-          onClick={handleAddTask}
-          isTippy={true}
-          offset={10}
-          tippyText="Crear actividad en RA" />
+          tippyText="Crear actividad en RA"
+          onClick={handleAddTask} />
       }
     </div>
   )

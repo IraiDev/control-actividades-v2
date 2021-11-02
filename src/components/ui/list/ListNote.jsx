@@ -1,23 +1,25 @@
 import React, { useContext } from 'react'
-import { ActivityContext } from '../../../context/ActivityContext';
-import { alertQuest } from '../../../helpers/alerts';
-import moment from "moment";
-import Button from '../buttons/Button';
+import { ActivityContext } from '../../../context/ActivityContext'
+import { alertQuest } from '../../../helpers/alerts'
+import moment from "moment"
+import Button from '../buttons/Button'
 
 let name = "NN"
-let buttonStyle = 'text-sm outline-none active:outline-none focus:outline-none hover:text-blue-500'
 
 function ListNote(props) {
   const {
     idNote,
     desc,
     date,
-    dateColor,
     user,
-    isModal = false,
+    type = false,
     onclick,
     activeColor,
-    idActivity = null
+    idActivity = null,
+    separator = true,
+    updatePriority,
+    callBack,
+    from = false
   } = props
 
   const { functions: ActFunc } = useContext(ActivityContext)
@@ -74,42 +76,66 @@ function ListNote(props) {
     }
   }
 
+  const handleAddNote = () => {
+    if (updatePriority) {
+      const data = { prioridad_numero: 100, id_actividad: idActivity }
+      ActFunc.updatePriority(data, from, idActivity)
+      const data2 = { description: desc, id_actividad: idActivity }
+      ActFunc.addNewNote(data2, from, idActivity)
+    } else {
+      const data = { description: desc, id_actividad: idActivity }
+      ActFunc.addNewNote(data, from, idActivity)
+    }
+    callBack()
+  }
+
+  if (type === 'modal') {
+    return (
+      <>
+        <li className="flex justify-between items-center">
+          <button
+            className={`text-left my-2 focus:outline-none hover:text-blue-500 ${activeColor}`}
+            onClick={() => {
+              handleGetidNote()
+            }}>
+            <p className="inline font-bold text-sm mr-2">{name}</p>
+            <p className="inline font-semibold text-2xs">{moment(date).format("DD/MM/yyyy, HH:mm")}:</p>
+            <p className="text-2xs mx-2">{desc}</p>
+          </button>
+          <Button
+            className="text-blue-500 hover:text-red-600 transition duration-500 mr-2"
+            type="icon"
+            icon="fas fa-trash-alt fa-sm"
+            onClick={handleDeleteNote}
+          />
+        </li>
+        {separator && <hr className="mx-5 bg-gray-200" />}
+      </>
+    )
+  }
+
+  if (type === 'listAction') {
+    return (
+      <>
+        <div className="flex items-center justify-between my-1">
+          <p className="text-sm text-gray-600 capitalize">{desc}</p>
+          <Button
+            className="text-blue-500 hover:text-green-500 w-8 h-8"
+            type="icon"
+            icon="fas fa-tags fa-sm"
+            onClick={handleAddNote} />
+        </div>
+        {separator && <hr className="mx-5 bg-gray-200" />}
+      </>
+    )
+  }
+
   return (
-    <>
-      {
-        !isModal ?
-          <li className="pb-2">
-            <p className={`bg-black bg-opacity-20 px-2 rounded-full inline font-semibold text-2xs ${dateColor}`}>
-              <label className="mr-2">{name}</label>({moment(date).format("DD-MM-yyyy, HH:mm")})
-            </p>
-            <br />
-            <div className="ml-2">
-              <p className="font-semibold leading-tight text-justify">{desc}</p>
-            </div>
-          </li>
-          :
-          <li className="flex justify-between w-full pb-2 border-b">
-            <button
-              className={`${buttonStyle} ${activeColor}`}
-              onClick={() => {
-                handleGetidNote()
-              }}>
-              <p className="flex font-bold text-sm">
-                <label className="mr-2">{name}</label>({moment(date).format("DD-MM-yyyy, HH:mm")})
-              </p>
-              <p className="flex ml-1 text-left text-xs">{desc}</p>
-            </button>
-            <br />
-            <Button
-              className="text-blue-500 hover:text-red-600 transition duration-500 mr-2"
-              shadow={false}
-              type="icon"
-              icon="fas fa-trash-alt fa-sm"
-              onClick={handleDeleteNote}
-            />
-          </li>
-      }
-    </>
+    <li className="leading-tight">
+      <p className="inline font-bold text-2xs mr-2">{name}</p>
+      <p className="inline font-semibold text-xs">{moment(date).format("DD-MM-yyyy, HH:mm")}</p>
+      <p className="text-justify m-2">{desc}</p>
+    </li>
   )
 }
 

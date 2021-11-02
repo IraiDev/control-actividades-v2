@@ -56,9 +56,8 @@ function TimeScreen() {
             onChange={onChangeInput} />
           <div>
             <Button
-              type="icon"
               className="hover:bg-blue-100 text-blue-500 rounded-full h-8 w-8"
-              shadow={false}
+              type="icon"
               icon="fas fa-check"
               onClick={handleNewDate} />
           </div>

@@ -1,12 +1,9 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { UiContext } from '../../../context/UiContext'
 import { GraphContext } from '../../../context/GraphContext'
 import { alertTimer, alertQuest } from '../../../helpers/alerts'
 import { useForm } from '../../../hooks/useForm'
-import Modal from "@material-tailwind/react/Modal"
-import ModalHeader from "@material-tailwind/react/ModalHeader"
-import ModalBody from "@material-tailwind/react/ModalBody"
-import ModalFooter from "@material-tailwind/react/ModalFooter"
+import Modal from "../modal/Modal"
 import Button from "../buttons/Button"
 import Input from "../inputs/Input"
 import Tippy from '@tippyjs/react'
@@ -117,28 +114,24 @@ function ButtonList(props) {
 
       {/* modal create list */}
 
-      <Modal size="sm" active={showModal} toggler={() => showModalFalse()}>
-        <ModalHeader toggler={() => showModalFalse()}>
-          Editar lista
-        </ModalHeader>
-        <ModalBody>
-          <div className="w-430"></div>
+      <Modal showModal={showModal} onClose={showModalFalse} className="md:w-96">
+        <h1 className="text-xl font-semibold mb-5">Editar lista</h1>
+        <div className="w-full">
           <Input
             field="Titulo"
             type="text"
             name="input"
             value={input}
             onChange={onChangeValues} />
-
-        </ModalBody>
-        <ModalFooter>
+        </div>
+        <br />
+        <div className="flex justify-end">
           <Button
-            className="text-blue-500 hover:text-blue-600 hover:bg-blue-100 rounded-full"
-            shadow={false}
+            className="text-blue-500 hover:text-blue-700 hover:bg-blue-100 rounded-full font-semibold"
             name="Editar"
             onClick={() => handleUpdateList()}
           />
-        </ModalFooter>
+        </div>
       </Modal>
     </>
   )

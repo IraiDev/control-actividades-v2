@@ -1,22 +1,18 @@
 
 import React, { useContext, useState } from 'react'
-import { UiContext } from '../../context/UiContext';
-import { ActivityContext } from '../../context/ActivityContext';
-import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
-import { useForm } from '../../hooks/useForm';
-import ListNote from '../ui/list/ListNote';
-import Ptext from '../ui/text/Ptext';
-import Modal from "@material-tailwind/react/Modal"
-import ModalHeader from "@material-tailwind/react/ModalHeader"
-import ModalBody from "@material-tailwind/react/ModalBody"
-import ModalFooter from "@material-tailwind/react/ModalFooter"
-import Button from "@material-tailwind/react/Button"
+import { UiContext } from '../../context/UiContext'
+import { ActivityContext } from '../../context/ActivityContext'
+import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu"
+import { useForm } from '../../hooks/useForm'
+import ListNote from '../ui/list/ListNote'
+import Ptext from '../ui/text/Ptext'
+import Modal from "../ui/modal/Modal"
+import Button from '../ui/buttons/Button'
 import TextArea from "../ui/inputs/TextArea"
-import PDefaultNotes from '../ui/text/PDefaultNotes';
-import moment from 'moment';
-import ButtonUnText from '../ui/buttons/ButtonUnText';
-import { alertTimer, normalAlert } from '../../helpers/alerts';
-import { checkForms, seekParam } from '../../helpers/auxFunctions';
+import PDefaultNotes from '../ui/text/PDefaultNotes'
+import moment from 'moment'
+import { alertTimer, normalAlert } from '../../helpers/alerts'
+import { checkForms, seekParam } from '../../helpers/auxFunctions'
 import "@material-tailwind/react/tailwind.css"
 
 let initialState = { inputEdit: '', inputAdd: '' }
@@ -183,7 +179,7 @@ function Card(props) {
         <div className="flex items-center justify-between pb-2 text-base">
           <Ptext tag="Actividad:" value={actividad} font="font-bold" />
           <div className={`flex items-center justify-between px-3 ${prioridad === 1000 ? 'bg-opacity-10' : 'bg-opacity-25'}`}>
-            <ButtonUnText
+            <Button
               icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
               color=""
               hoverBgColor={`${isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'} hover:bg-black hover:bg-opacity-20`}
@@ -373,16 +369,12 @@ function Card(props) {
 
       {/* modal update todo */}
 
-      <Modal size="lg" active={showModal} toggler={() => showModalFalse()}>
-        <ModalHeader toggler={() => showModalFalse()}>
-          {
-            noteActive.idNote !== null ? 'Editar Nota' : 'Agregar nueva nota'
-          }
-        </ModalHeader>
-        <ModalBody>
+      <Modal showModal={showModal} onClose={showModalFalse} className="md:w-4/5 lg:w-4/6 xl:w-3/6">
+        <h1 className="text-xl font-semibold mb-5">{noteActive.idNote !== null ? 'Editar Nota' : 'Agregar nueva nota'}</h1>
+        <div className="w-full">
           {
             updateOrAdd ?
-              (<div className="w-600">
+              <>
                 <label className="text-xs">Mensajes predeterminados:</label>
                 <div className="py-3 pl-3 pr-1 mx-auto mt-1 mb-5 bg-gray-100 rounded-md">
                   <PDefaultNotes idAct={id} noteText="Inicializar actividad urgente" onclick={showModalFalse} updatePriority={true} />
@@ -397,8 +389,8 @@ function Card(props) {
                   value={inputAdd}
                   name="inputAdd"
                   onChange={onChangeValues} />
-              </div>) :
-              (<div className="w-600">
+              </> :
+              <>
                 <label className="mb-2 text-xs">Notas:</label>
                 <ul className="min-h-80 scroll-row">
                   {
@@ -430,21 +422,19 @@ function Card(props) {
                   value={inputEdit}
                   name="inputEdit"
                   onChange={onChangeValues} />
-              </div>)
+              </>
           }
-        </ModalBody>
-        <ModalFooter>
+        </div>
+        <br />
+        <div className="flex justify-end">
           <Button
-            buttonType="link"
-            size="sm"
-            rounded={true}
-            color="blue"
+            className="hover:bg-blue-100 text-blue-500 hover:text-blue-700 rounded-full font-semibold"
+            name={noteActive.idNote !== null ? (updateOrAdd ? 'Agregar' : 'Editar') : 'Agregar'}
+            shadow={false}
             onClick={updateOrAdd ? () => handleAddNewNote() : () => handleUpdateNote()}
-            ripple="light"
           >
-            {noteActive.idNote !== null ? (updateOrAdd ? 'Agregar' : 'Editar') : 'Agregar'}
           </Button>
-        </ModalFooter>
+        </div>
       </Modal>
     </>
   )

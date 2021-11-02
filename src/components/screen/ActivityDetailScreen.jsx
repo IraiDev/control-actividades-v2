@@ -1,5 +1,5 @@
 import moment from 'moment'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { UiContext } from '../../context/UiContext'
 import { ActivityContext } from '../../context/ActivityContext'
 import ListNote from '../ui/list/ListNote'
@@ -8,18 +8,15 @@ import Input from '@material-tailwind/react/Input'
 import Button from '../ui/buttons/Button'
 import Select from 'react-select';
 import ButtonColor from '../ui/buttons/ButtonColor'
-import Modal from '@material-tailwind/react/Modal'
-import ModalHeader from '@material-tailwind/react/ModalHeader'
-import ModalBody from '@material-tailwind/react/ModalBody'
+import Modal from '../ui/modal/Modal'
 import PDefaultNotes from '../ui/text/PDefaultNotes'
 import TextArea from '../ui/inputs/TextArea'
-import ModalFooter from '@material-tailwind/react/ModalFooter'
-import { alertQuest, alertTimer, normalAlert } from '../../helpers/alerts'
-import { useForm } from '../../hooks/useForm'
-import Tippy from '@tippyjs/react'
-import { checkForms, seekParam } from '../../helpers/auxFunctions'
 import TableTimes from '../ui/times/TableTimes'
 import ListDocs from '../ui/list/ListDocs'
+import Tippy from '@tippyjs/react'
+import { useForm } from '../../hooks/useForm'
+import { checkForms, seekParam } from '../../helpers/auxFunctions'
+import { alertQuest, alertTimer, normalAlert } from '../../helpers/alerts'
 
 let today = new Date()
 today = moment(today).format('yyyy-MM-DD')
@@ -227,10 +224,9 @@ function ActivityDetailScreen() {
               <div className="grid grid-cols-1 lg:grid-cols-3 mb-10">
                 <div className="text-2xl font-bold text-gray-700 capitalize col-span-2">
                   <Button
+                    className="mr-3 hover:text-blue-500 pr-2"
                     type="icon"
                     icon="fas fa-chevron-left"
-                    className="mr-3 hover:text-blue-500 pr-2"
-                    shadow={false}
                     onClick={handleBack} />
                   Detalle actividad: {ActState.activityDetails.id_det}, {ActState.activityDetails.actividad}
                 </div>
@@ -314,8 +310,16 @@ function ActivityDetailScreen() {
                   <div className="flex justify-between">
                     <Ptext tag="Informes Diarios (notas):" />
                     <div>
-                      <Button className="h-8 w-8 rounded-full hover:bg-gray-300" shadow={false} type="icon" icon="fas fa-plus" onClick={showModalAddNote} />
-                      <Button className="h-8 w-8 rounded-full hover:bg-gray-300" shadow={false} type="icon" icon="fas fa-pen" onClick={showModalUpdateNote} />
+                      <Button
+                        className="h-8 w-8 rounded-full hover:bg-gray-300"
+                        type="icon"
+                        icon="fas fa-plus"
+                        onClick={showModalAddNote} />
+                      <Button
+                        className="h-8 w-8 rounded-full hover:bg-gray-300"
+                        type="icon"
+                        icon="fas fa-pen"
+                        onClick={showModalUpdateNote} />
                     </div>
                   </div>
                   <div className="scroll-row-detail h-card-details">
@@ -328,8 +332,6 @@ function ActivityDetailScreen() {
                               desc={obj.desc_nota}
                               date={obj.fecha_hora_crea}
                               user={obj.user_crea}
-                              dateColor="text-white"
-                              styleList="font-normal text-justify"
                             />
                           )
                         })
@@ -345,7 +347,6 @@ function ActivityDetailScreen() {
                   <Ptext tag="Descripcion:" />
                   <Button
                     className="h-8 w-8 rounded-full hover:bg-gray-300"
-                    shadow={false}
                     type="icon"
                     icon="fas fa-pen"
                     onClick={() => setShowModalDesc(true)} />
@@ -373,17 +374,13 @@ function ActivityDetailScreen() {
                     }
                     <Button
                       className="h-8 w-8 rounded-full hover:bg-gray-300"
-                      shadow={false}
                       type="icon"
                       icon="fas fa-clone fa-sm"
-                      isTippy
                       tippyText="Clonar actividad" />
                     <Button
                       className={`h-8 w-8 rounded-full hover:bg-gray-300 ${isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'}`}
-                      shadow={false}
                       type="icon"
                       icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
-                      isTippy
                       tippyText={isActPlay ? 'Detener tiempo' : 'Reanudar tiempo'} />
                   </div>
                 </div>
@@ -510,11 +507,10 @@ function ActivityDetailScreen() {
                 <div className="flex items-center">
                   <Button
                     className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-100 py-1 px-4"
-                    shadow={false}
-                    iconFirst
                     type="iconText"
-                    name="Actividad"
                     icon="fas fa-trash-alt fa-lg"
+                    iconFirst
+                    name="Actividad"
                     onClick={handleDeleteActivity}
                   />
                   <label
@@ -551,16 +547,12 @@ function ActivityDetailScreen() {
             {/* container fin */}
           </div>
 
-          <Modal size="lg" active={showModal} toggler={() => showModalFalse()}>
-            <ModalHeader toggler={() => showModalFalse()}>
-              {
-                idNote !== null ? 'Editar Nota' : 'Agregar nueva nota'
-              }
-            </ModalHeader>
-            <ModalBody>
+          <Modal showModal={showModal} onClose={showModalFalse} className="md:w-4/5 lg:w-4/6 xl:w-3/6">
+            <h1 className="text-xl font-semibold mb-5">{idNote !== null ? 'Editar Nota' : 'Agregar nueva nota'}</h1>
+            <div className="w-full">
               {
                 updateOrAdd ?
-                  <div className="w-600">
+                  <>
                     <p className="text-xs">Mensajes predeterminados:</p>
                     <div className="py-3 pl-3 pr-1 mx-auto mt-1 mb-5 bg-gray-100 rounded-md">
                       <PDefaultNotes from={true} idAct={ActState.activityDetails.id_det} noteText="Inicializar actividad urgente" onclick={showModalFalse} updatePriority={true} />
@@ -575,24 +567,23 @@ function ActivityDetailScreen() {
                       value={inputAdd}
                       name="inputAdd"
                       onChange={onChangeValues} />
-                  </div> :
-                  <div className="w-600">
+                  </> :
+                  <>
                     <label className="mb-2 text-xs">Notas:</label>
-                    <ul className="min-h-80 scroll-row">
+                    <ul className="min-h-80 scroll-row bg-gray-100 rounded-md py-2 pl-2">
                       {
                         ActState.activityDetails.notas.length > 0 ?
                           ActState.activityDetails.notas.map(obj => {
                             if (ActState.activityDetails.id_det === obj.id_det) {
                               return (
                                 <ListNote
-                                  isModal={true}
+                                  type='modal'
                                   key={obj.id_nota}
                                   idNote={obj.id_nota}
                                   desc={obj.desc_nota}
                                   date={obj.fecha_hora_crea}
                                   user={obj.user_crea}
                                   idActivity={ActState.activityDetails.id_det}
-                                  dateColor="text-white"
                                   onclick={handleGetIdNote}
                                   activeColor={idNote === obj.id_nota ? 'text-green-600' : 'text-gray-500'}
                                 />
@@ -609,42 +600,38 @@ function ActivityDetailScreen() {
                       value={inputEdit}
                       name="inputEdit"
                       onChange={onChangeValues} />
-                  </div>
+                  </>
               }
-            </ModalBody>
-            <ModalFooter>
+            </div>
+            <br />
+            <div className="flex justify-end">
               <Button
-                className="text-blue-500 hover:text-blue-600 hover:bg-blue-100 rounded-full"
-                shadow={false}
+                className="text-blue-500 hover:text-blue-700 hover:bg-blue-100 rounded-full font-semibold"
                 name={idNote !== null ? (updateOrAdd ? 'Agregar' : 'Editar') : 'Agregar'}
                 onClick={updateOrAdd ? () => handleAddNewNote() : () => handleUpdateNote()}
               />
-            </ModalFooter>
+            </div>
           </Modal>
 
-          <Modal size="lg" active={showModalDesc} toggler={() => showModalDescFalse()}>
-            <ModalHeader toggler={() => showModalDescFalse()}>
-              Editar descripcion
-            </ModalHeader>
-            <ModalBody>
-              <div className="w-600">
-                <TextArea
-                  field="Descripcion"
-                  name="inputDesc"
-                  value={inputDesc}
-                  onChange={(e) => setValues({
-                    ...values,
-                    inputDesc: e.target.value
-                  })} />
-              </div>
-            </ModalBody>
-            <ModalFooter>
+          <Modal showModal={showModalDesc} onClose={showModalDescFalse} className="md:w-4/5 lg:w-4/6 xl:w-3/6">
+            <h1 className="text-xl font-semibold mb-5">Editar descripcion</h1>
+            <div className="w-full">
+              <TextArea
+                field="Descripcion"
+                name="inputDesc"
+                value={inputDesc}
+                onChange={(e) => setValues({
+                  ...values,
+                  inputDesc: e.target.value
+                })} />
+            </div>
+            <br />
+            <div className="flex justify-end">
               <Button
-                className="text-blue-500 hover:text-blue-600 hover:bg-blue-100 rounded-full"
-                shadow={false}
+                className="text-blue-500 hover:text-blue-700 hover:bg-blue-100 rounded-full font-semibold"
                 name="Editar"
               />
-            </ModalFooter>
+            </div>
           </Modal>
         </>
       }

@@ -19,7 +19,6 @@ function ListDocs({ id, name }) {
       <a className="text-gray-500 hover:text-blue-500 truncate" href="/" rel="noreferrer" target="_blank"><i className="fas fa-file mx-2"></i>{name}</a>
       <Button
         className="w-4 ml-2 hover:text-red-500"
-        shadow={false}
         type="icon"
         icon="fas fa-trash-alt"
         onClick={handleDelete} />

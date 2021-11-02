@@ -77,7 +77,6 @@ function SideBar() {
         <h1 className="pt-2 mb-4 text-xl">Filtros:</h1>
         <Button
           className="h-8 w-8 text-gray-600 hover:text-blue-500 mt-1"
-          shadow={false}
           type="icon"
           icon="fas fa-times fa-lg"
           onClick={toggleSideBar}
@@ -190,13 +189,15 @@ function SideBar() {
 
       <div className="flex justify-end mt-2">
         <Button
-          className="hover:bg-gray-100 px-4 py-1 rounded-full border border-gray-50"
+          className="hover:bg-gray-100 px-4 py-1 rounded-full border border-gray-100"
+          shadow
           type="iconText"
           icon="fas fa-filter fa-sm"
           name="Limpiar"
           onClick={() => { UiFunc.setResetFilters(true) }} />
         <Button
           className="ml-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded-full"
+          shadow
           type="iconText"
           icon="fas fa-filter fa-sm"
           name="Filtrar"

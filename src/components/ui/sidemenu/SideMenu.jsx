@@ -1,13 +1,10 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { UiContext } from '../../../context/UiContext'
 import { GraphContext } from '../../../context/GraphContext'
 import { useForm } from '../../../hooks/useForm'
 import { alertTimer } from '../../../helpers/alerts'
 import ButtonList from '../buttons/ButtonList'
-import Modal from "@material-tailwind/react/Modal"
-import ModalHeader from "@material-tailwind/react/ModalHeader"
-import ModalBody from "@material-tailwind/react/ModalBody"
-import ModalFooter from "@material-tailwind/react/ModalFooter"
+import Modal from "../modal/Modal"
 import Button from "../buttons/Button"
 import Input from "../inputs/Input"
 import { useWindowSize } from '../../../hooks/useWindowSize'
@@ -121,27 +118,23 @@ function SideMenu() {
 
       {/* modal create todo */}
 
-      <Modal size="sm" active={showModal} toggler={() => showModalFalse()}>
-        <ModalHeader toggler={() => showModalFalse()}>
-          Crear nueva lista
-        </ModalHeader>
-        <ModalBody>
-          <div className="w-430"></div>
-          <Input
-            field="Titulo"
-            type="text"
-            name="input"
-            value={input}
-            onChange={onChangeValues} />
-        </ModalBody>
-        <ModalFooter>
+      <Modal showModal={showModal} onClose={showModalFalse} className="md:w-96">
+        <h1 className="text-xl font-semibold mb-5">Crear nueva lista</h1>
+        <div className="w-430"></div>
+        <Input
+          field="Titulo"
+          type="text"
+          name="input"
+          value={input}
+          onChange={onChangeValues} />
+        <br />
+        <div className="flex justify-end">
           <Button
-            className="text-blue-500 hover:text-blue-600 hover:bg-blue-100 rounded-full"
-            shadow={false}
+            className="text-blue-500 hover:text-blue-700 hover:bg-blue-100 rounded-full"
             name="Crear"
             onClick={() => handleCreateTodoList()}
           />
-        </ModalFooter>
+        </div>
       </Modal>
     </>
   )

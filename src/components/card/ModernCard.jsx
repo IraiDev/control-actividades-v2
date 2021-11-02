@@ -1,28 +1,32 @@
 
 import React, { useContext, useEffect, useState } from 'react'
-import { UiContext } from '../../context/UiContext';
-import { ActivityContext } from '../../context/ActivityContext';
-import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
-import { useForm } from '../../hooks/useForm';
-import Tippy from '@tippyjs/react';
-import ListNote from '../ui/list/ListNote';
-import Ptext from '../ui/text/Ptext';
-import Modal from "@material-tailwind/react/Modal"
-import ModalHeader from "@material-tailwind/react/ModalHeader"
-import ModalBody from "@material-tailwind/react/ModalBody"
-import ModalFooter from "@material-tailwind/react/ModalFooter"
+import { UiContext } from '../../context/UiContext'
+import { ActivityContext } from '../../context/ActivityContext'
+import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu"
+import { useForm } from '../../hooks/useForm'
+import Tippy from '@tippyjs/react'
+import ListNote from '../ui/list/ListNote'
+import Ptext from '../ui/text/Ptext'
+import Modal from "../ui/modal/Modal"
 import Button from "../ui/buttons/Button"
 import TextArea from "../ui/inputs/TextArea"
-import PDefaultNotes from '../ui/text/PDefaultNotes';
-import moment from 'moment';
-import ModernListNote from '../ui/list/ModermListNote';
-import { alertTimer, normalAlert } from '../../helpers/alerts';
-import { checkForms, seekParam } from '../../helpers/auxFunctions';
+import PDefaultNotes from '../ui/text/PDefaultNotes'
+import moment from 'moment'
+import { alertTimer, normalAlert } from '../../helpers/alerts'
+import { checkForms, seekParam } from '../../helpers/auxFunctions'
 import "@material-tailwind/react/tailwind.css"
 
 let initialState = { inputEdit: '', inputAdd: '' }
 let today = new Date()
 today = moment(today).format('yyyy-MM-DD')
+const defaultNotes = [
+  { id: 11121, desc: "Inicializar actividad urgente" },
+  { id: 11122, desc: "esperando respuesta de cliente" },
+  { id: 11123, desc: "esperando actividad.." },
+  { id: 11124, desc: "trabajando..." },
+  { id: 11125, desc: "sin avance" },
+  { id: 11126, desc: "en cola" }
+]
 
 function ModernCard(props) {
   const {
@@ -55,35 +59,31 @@ function ModernCard(props) {
 
   let dateTo = moment(fechaCrea)
   let days = dateTo.diff(today, 'days') - (dateTo.diff(today, 'days') * 2)
-  let dateColor, textColor, lineColor, bgColor, actPriority, actPlay = '', isActPlay = false, actPlayList = 'border'
+  let textColor, lineColor, bgColor, actPriority, actPlay = '', isActPlay = false, actPlayList = 'border'
 
   switch (prioridad) {
     case 600:
       bgColor = ActState.userData.usuario.color_prioridad_baja
       textColor = 'text-white'
       lineColor = 'border-white'
-      dateColor = 'text-white'
       actPriority = 'Baja'
       break;
     case 400:
       bgColor = ActState.userData.usuario.color_prioridad_media
       textColor = 'text-white'
       lineColor = 'border-white'
-      dateColor = 'text-white'
       actPriority = 'Media'
       break;
     case 100:
       bgColor = ActState.userData.usuario.color_prioridad_alta
       textColor = 'text-white'
       lineColor = 'border-white'
-      dateColor = 'text-white'
       actPriority = 'Alta'
       break;
     default:
       bgColor = 'bg-white hover:bg-gray-50'
       textColor = 'text-gray-600'
       lineColor = 'border-gray-500'
-      dateColor = 'text-black'
       actPriority = 'S/P'
       break;
   }
@@ -231,12 +231,11 @@ function ModernCard(props) {
                     notas.map(obj => {
                       if (id === obj.id_det) {
                         return (
-                          <ModernListNote
+                          <ListNote
                             key={obj.id_nota}
                             desc={obj.desc_nota}
                             date={obj.fecha_hora_crea}
                             user={obj.user_crea}
-                            dateColor={dateColor}
                           />
                         )
                       } else {
@@ -255,8 +254,6 @@ function ModernCard(props) {
                 type="icon"
                 icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
                 className={` ml-3 ${isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'}`}
-                isTippy={true}
-                offset={10}
                 tippyText={isActPlay ? 'Detener tiempo' : 'Reanudar tiempo'} />
             </div>
             <div>
@@ -369,7 +366,11 @@ function ModernCard(props) {
             >
               <p className={!isExpand ? 'truncate' : 'salto'}>{seekParam(desc, '- PAUSA')}</p>
             </Tippy>
-            <Button type="icon" icon={isExpand ? 'fas fa-angle-up' : 'fas fa-angle-down'} className="ml-2" shadow={false} onClick={handleExpand} />
+            <Button
+              className="ml-2"
+              type="icon"
+              icon={isExpand ? 'fas fa-angle-up' : 'fas fa-angle-down'}
+              onClick={handleExpand} />
           </div>
           <div className="py-3 px-2 col-span-1 font-semibold text-base">
             <Tippy
@@ -382,15 +383,11 @@ function ModernCard(props) {
               <p className={isActPlay && 'bg-black bg-opacity-10 rounded-full w-max mx-auto px-2'}>{estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"}</p>
             </Tippy>
           </div>
-          <div className="py-3 px-2 col-span-1 flex mx-auto">
+          <div className="py-3 px-2 col-span-1 flex items-center mx-auto">
             <Button
-              type="icon"
               className={isActPlay ? 'hover:text-red-500 h-7 w-7' : 'hover:text-green-500 h-7 w-7'}
-              shadow={false}
+              type="icon"
               icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
-              isTippy={true}
-              offset={10}
-              delay={700}
               tippyText={isActPlay ? 'Detener tiempo' : 'Reanudar tiempo'} />
             <Menu
               direction="left"
@@ -467,49 +464,49 @@ function ModernCard(props) {
 
       {/* modal update todo */}
 
-      <Modal size="lg" active={showModal} toggler={() => showModalFalse()}>
-        <ModalHeader toggler={() => showModalFalse()}>
-          {
-            noteActive.idNote !== null ? 'Editar Nota' : 'Agregar nueva nota'
-          }
-        </ModalHeader>
-        <ModalBody>
+      <Modal showModal={showModal} onClose={showModalFalse} className="md:w-4/5 lg:w-4/6 xl:w-3/6">
+        <h1 className="text-xl font-semibold mb-5">{noteActive.idNote !== null ? 'Editar Nota' : 'Agregar nueva nota'}</h1>
+        <div className="w-full">
           {
             updateOrAdd ?
-              (<div className="w-600">
+              <>
                 <label className="text-xs">Mensajes predeterminados:</label>
                 <div className="py-3 pl-3 pr-1 mx-auto mt-1 mb-5 bg-gray-100 rounded-md">
-                  <PDefaultNotes idAct={id} noteText="Inicializar actividad urgente" onclick={showModalFalse} updatePriority={true} />
+                  {
+                    defaultNotes.map((note, index) => <ListNote key={note.id} type="listAction" idActivity={id} desc={note.desc} updatePriority={note.id === 11121} callBack={showModalFalse} />)
+
+                  }
+
+                  {/* <PDefaultNotes idAct={id} noteText="Inicializar actividad urgente" onclick={showModalFalse} updatePriority={true} />
                   <PDefaultNotes idAct={id} noteText="esperando respuesta de cliente" onclick={showModalFalse} />
                   <PDefaultNotes idAct={id} noteText="esperando actividad.." onclick={showModalFalse} />
                   <PDefaultNotes idAct={id} noteText="trabajando..." onclick={showModalFalse} />
                   <PDefaultNotes idAct={id} noteText="sin avance" onclick={showModalFalse} />
-                  <PDefaultNotes idAct={id} noteText="en cola" onclick={showModalFalse} isSeparator={false} />
+                  <PDefaultNotes idAct={id} noteText="en cola" onclick={showModalFalse} isSeparator={false} /> */}
                 </div>
                 <TextArea
                   field="Descripcion nota"
                   value={inputAdd}
                   name="inputAdd"
                   onChange={onChangeValues} />
-              </div>) :
-              (<div className="w-600">
-                <label className="mb-2 text-xs">Notas:</label>
-                <ul className="min-h-80 scroll-row">
+              </> :
+              <>
+                <label className="mb-2">Notas:</label>
+                <ul className="min-h-80 scroll-row bg-gray-100 rounded-md py-2 pl-2">
                   {
                     notas.length > 0 ?
                       notas.map(obj => {
                         if (id === obj.id_det) {
                           return (
                             <ListNote
-                              isModal={true}
+                              type='modal'
                               key={obj.id_nota}
                               idNote={obj.id_nota}
                               desc={obj.desc_nota}
                               date={obj.fecha_hora_crea}
                               user={obj.user_crea}
-                              dateColor={dateColor}
                               onclick={handleGetidNote}
-                              activeColor={noteActive.idNote === obj.id_nota ? 'text-green-600' : 'text-gray-500'}
+                              activeColor={noteActive.idNote === obj.id_nota ? 'text-green-500' : 'text-gray-500'}
                             />
                           )
                         } else {
@@ -524,18 +521,17 @@ function ModernCard(props) {
                   value={inputEdit}
                   name="inputEdit"
                   onChange={onChangeValues} />
-              </div>)
+              </>
           }
-        </ModalBody>
-        <ModalFooter>
+        </div>
+        <br />
+        <div className="flex justify-end">
           <Button
-            className="hover:bg-blue-100 text-blue-500 rounded-full"
+            className="hover:bg-blue-100 text-blue-500 hover:text-blue-700 rounded-full font-semibold"
             name={noteActive.idNote !== null ? (updateOrAdd ? 'Agregar' : 'Editar') : 'Agregar'}
-            shadow={false}
             onClick={updateOrAdd ? () => handleAddNewNote() : () => handleUpdateNote()}
-          >
-          </Button>
-        </ModalFooter>
+          />
+        </div>
       </Modal>
     </>
   )
