@@ -15,7 +15,6 @@ function SelectFilter(props) {
     options,
     label,
     orderPriority,
-    bgColor,
     orderAsc,
     orderDesc,
     active,
@@ -175,8 +174,8 @@ function SelectFilter(props) {
         </div>
       </div>
       <ButtonOrderFilter
+        className="bg-gray-100 rounded-full mt-4"
         orderPriority={orderPriority}
-        bgColor={bgColor}
         orderAsc={orderAsc}
         orderDesc={orderDesc}
         active={active}

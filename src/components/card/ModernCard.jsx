@@ -2,19 +2,18 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { UiContext } from '../../context/UiContext'
 import { ActivityContext } from '../../context/ActivityContext'
-import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu"
+import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu'
 import { useForm } from '../../hooks/useForm'
 import Tippy from '@tippyjs/react'
 import ListNote from '../ui/list/ListNote'
-import Ptext from '../ui/text/Ptext'
-import Modal from "../ui/modal/Modal"
-import Button from "../ui/buttons/Button"
-import TextArea from "../ui/inputs/TextArea"
-import PDefaultNotes from '../ui/text/PDefaultNotes'
+import Modal from '../ui/modal/Modal'
+import Button from '../ui/buttons/Button'
+import TextArea from '../ui/inputs/TextArea'
 import moment from 'moment'
 import { alertTimer, normalAlert } from '../../helpers/alerts'
 import { checkForms, seekParam } from '../../helpers/auxFunctions'
-import "@material-tailwind/react/tailwind.css"
+import '@material-tailwind/react/tailwind.css'
+import TextContent from '../ui/text/TextContent'
 
 let initialState = { inputEdit: '', inputAdd: '' }
 let today = new Date()
@@ -205,18 +204,18 @@ function ModernCard(props) {
             <h5 className="font-bold text-base mb-2">{numberCard} - <p className="inline capitalize">{actividad}</p></h5>
             <div className="grid grid-cols-2 mb-2">
               <div>
-                <Ptext tag="Encargado: " value={encargado} font="font-bold" />
-                <Ptext tag="Proyecto: " value={proyecto} font="font-bold" />
-                <Ptext tag="Sub proyecto: " value={subProyecto} />
-                <Ptext tag="Solicitante: " value={solicitante} />
-                <Ptext tag="Estado: " value={estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"} />
+                <TextContent bold tag="Encargado" value={encargado} />
+                <TextContent bold tag="Proyecto" value={proyecto} />
+                <TextContent bold tag="Sub proyecto" value={subProyecto} />
+                <TextContent bold tag="Solicitante" value={solicitante} />
+                <TextContent bold tag="Estado" value={estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"} />
               </div>
               <div>
-                <Ptext tag="ID: " value={id} />
-                <Ptext tag="Ticket: " value={ticket === 0 ? 'S/T' : ticket} />
-                <Ptext tag="Fecha: " value={moment(fechaCrea).format('DD-MM-YY')} />
-                <Ptext tag="Transcurridos: " value={`${days} Dias`} />
-                <Ptext tag="Prioridad: " value={`${actPriority} (${prioridadRA})`} />
+                <TextContent bold tag="ID" value={id} />
+                <TextContent bold tag="Ticket" value={ticket === 0 ? 'S/T' : ticket} />
+                <TextContent bold tag="Fecha" value={moment(fechaCrea).format('DD-MM-YY')} />
+                <TextContent bold tag="Transcurridos" value={`${days} Dias`} />
+                <TextContent bold tag="Prioridad" value={`${actPriority} (${prioridadRA})`} />
               </div>
             </div>
             <div className="mb-2">
@@ -224,7 +223,7 @@ function ModernCard(props) {
               <p className="scroll-row salto">{seekParam(desc, '- PAUSA')}</p>
             </div>
             <div>
-              <p className="text-opacity-75 font-bold">Notas</p>
+              <p className={`text-opacity-75 font-bold my-4 pb-1 ${notas.length > 0 && 'border-b'} ${lineColor}`}>Notas</p>
               <ul className="mt-1 font-normal scroll-row">
                 {
                   notas.length > 0 ?
@@ -473,16 +472,17 @@ function ModernCard(props) {
                 <label className="text-xs">Mensajes predeterminados:</label>
                 <div className="py-3 pl-3 pr-1 mx-auto mt-1 mb-5 bg-gray-100 rounded-md">
                   {
-                    defaultNotes.map((note, index) => <ListNote key={note.id} type="listAction" idActivity={id} desc={note.desc} updatePriority={note.id === 11121} callBack={showModalFalse} />)
-
+                    defaultNotes.map((note, index) => (
+                      <ListNote
+                        key={note.id}
+                        type="listAction"
+                        idActivity={id}
+                        desc={note.desc}
+                        updatePriority={note.id === 11121}
+                        callBack={showModalFalse}
+                        separator={defaultNotes.length !== index + 1} />
+                    ))
                   }
-
-                  {/* <PDefaultNotes idAct={id} noteText="Inicializar actividad urgente" onclick={showModalFalse} updatePriority={true} />
-                  <PDefaultNotes idAct={id} noteText="esperando respuesta de cliente" onclick={showModalFalse} />
-                  <PDefaultNotes idAct={id} noteText="esperando actividad.." onclick={showModalFalse} />
-                  <PDefaultNotes idAct={id} noteText="trabajando..." onclick={showModalFalse} />
-                  <PDefaultNotes idAct={id} noteText="sin avance" onclick={showModalFalse} />
-                  <PDefaultNotes idAct={id} noteText="en cola" onclick={showModalFalse} isSeparator={false} /> */}
                 </div>
                 <TextArea
                   field="Descripcion nota"
@@ -492,10 +492,10 @@ function ModernCard(props) {
               </> :
               <>
                 <label className="mb-2">Notas:</label>
-                <ul className="min-h-80 scroll-row bg-gray-100 rounded-md py-2 pl-2">
+                <ul className="min-h-80 scroll-row bg-gray-100 rounded-md py-3 pl-3">
                   {
                     notas.length > 0 ?
-                      notas.map(obj => {
+                      notas.map((obj, index) => {
                         if (id === obj.id_det) {
                           return (
                             <ListNote
@@ -507,6 +507,7 @@ function ModernCard(props) {
                               user={obj.user_crea}
                               onclick={handleGetidNote}
                               activeColor={noteActive.idNote === obj.id_nota ? 'text-green-500' : 'text-gray-500'}
+                              separator={notas.length !== index + 1}
                             />
                           )
                         } else {

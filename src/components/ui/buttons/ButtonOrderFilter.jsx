@@ -1,14 +1,13 @@
 import React from 'react'
-import Tippy from '@tippyjs/react';
+import Button from './Button';
 
 function ButtonOrderFilter(props) {
   const {
     orderPriority,
-    bgColor = 'bg-gray-100 rounded-full',
     orderAsc,
     orderDesc,
-    isOnclickeable = true,
-    active
+    active,
+    className = 'bg-gray-100 rounded-full'
   } = props
 
   let asc = `${orderPriority}=asc&`
@@ -23,37 +22,21 @@ function ButtonOrderFilter(props) {
   }
 
   return (
-    <div className={`mt-3 ${bgColor}`}>
-      <Tippy
-        offset={[0, 2]}
-        placement={"top"}
-        delay={[100, 0]}
-        content={<span>Ascendente</span>}
-      >
-        <button
-          onClick={() => {
-            isOnclickeable && handleOrderASC()
-          }}
-          className="px-2 py-1 rounded-full hover:bg-gray-200 focus:outline-none active:outline-none"
-        >
-          <i className={`fas fa-chevron-up ${active === asc ? 'text-blue-400' : 'text-black'}`}></i>
-        </button>
-      </Tippy>
-      <Tippy
-        offset={[0, 2]}
-        placement="top"
-        delay={[100, 0]}
-        content={<span>Descendente</span>}
-      >
-        <button
-          onClick={() => {
-            isOnclickeable && handleOrderDESC()
-          }}
-          className="px-2 py-1 ml-2 rounded-full hover:bg-gray-200 focus:outline-none active:outline-none"
-        >
-          <i className={`fas fa-chevron-down ${active === desc ? 'text-blue-400' : 'text-black'}`}></i>
-        </button>
-      </Tippy>
+    <div className={className}>
+      <Button
+        className="h-7 w-7 bg-gray-100 hover:bg-gray-200 rounded-full"
+        type="icon"
+        icon={`fas fa-chevron-up ${active === asc ? 'text-blue-400' : 'text-black'}`}
+        onClick={handleOrderASC}
+        tippyText="Ascendente"
+      />
+      <Button
+        className="h-7 w-7 bg-gray-100 hover:bg-gray-200 rounded-full ml-1"
+        type="icon"
+        icon={`fas fa-chevron-down ${active === desc ? 'text-blue-400' : 'text-black'}`}
+        onClick={handleOrderDESC}
+        tippyText="Descendente"
+      />
     </div>
   )
 }

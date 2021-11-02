@@ -6,6 +6,7 @@ import { alertQuest } from '../../helpers/alerts';
 import Button from '../ui/buttons/Button';
 import moment from 'moment';
 import { GraphContext } from '../../context/GraphContext';
+import TextContent from '../ui/text/TextContent';
 
 let state = ''
 
@@ -60,34 +61,24 @@ function PlannerCard({ idTask, idPlan, title, description, assignments, createdB
       <div className="flex items-center justify-between">
         <div>
           <h5 className="font-semibold text-sm capitalize mb-1">{title}</h5>
-          <h5 className="text-xs mb-2 capitalize"><p className="font-semibold inline">plan: </p>{plannerPlan}</h5>
-          <h5 className="text-xs mb-2 capitalize">
-            <p className="font-semibold inline">fecha: </p>
-            {
-              `${moment(createdDateTime).format('DD-MM-yyyy, HH:MM')}${dueDateTime ? ';' : ''}`
-            }
-            {
-              dueDateTime &&
-              <p className="font-semibold inline ml-1">fin:
-                <span className="font-normal inline"> {moment(dueDateTime).format('DD-MM-yyyy')}</span>
-              </p>
-            }
-          </h5>
-          <h5 className="text-xs mb-2 capitalize">
-            <p className="font-semibold inline">Estado: </p>
-            {state}
-          </h5>
+          <TextContent className="text-xs" tag="plan" value={plannerPlan} />
+          <TextContent
+            className="text-xs"
+            tag="Fecha"
+            value={`${moment(createdDateTime).format('DD - MM - yyyy')} ${dueDateTime ? '/' : ''} ${dueDateTime ? moment(dueDateTime).format('DD - MM - yyyy') : ''}`}
+          />
+          <TextContent className="text-xs mb-2" tag="Estado" value={state} />
         </div>
         <div className="flex text-gray-500">
           <div className="text-center mr-5">
-            <p className="text-xs mr-2 capitalize mb-2">{Object.keys(assignments).length > 1 ? 'encargados' : 'encargado'}</p>
+            <TextContent className="text-xs mb-2 capitalize" value={Object.keys(assignments).length > 1 ? 'encargados' : 'encargado'} />
             {Object.keys(assignments).map(obj => (
               obj.length > 0 &&
               <Person className="rounded-full p-0.5 shadow-md" key={obj} userId={obj} />
             ))}
           </div>
           <div className="text-center mr-2">
-            <p className="text-xs capitalize mb-2">solicita</p>
+            <TextContent className="text-xs mb-2 capitalize" value="solicita" />
             <Person className="rounded-full p-0.5 shadow-md" userId={createdBy.user.id} />
           </div>
         </div>

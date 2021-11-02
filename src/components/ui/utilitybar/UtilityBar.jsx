@@ -160,7 +160,7 @@ function UtilityBar() {
           <div>
             <Button
               disabled={UiState.disableBtnSideBar}
-              className="rounded-full px-4 py-1 hover:bg-gray-100 border border-gray-100"
+              className="rounded-full px-4 py-1 bg-gray-100  hover:bg-gray-50 hover:text-blue-500"
               shadow
               type="iconText"
               icon="fas fa-filter fa-sm"

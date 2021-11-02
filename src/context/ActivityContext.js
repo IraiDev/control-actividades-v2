@@ -321,7 +321,6 @@ function ActivityProvider({ children }) {
     UiFunc.setIsLoading(true)
     const resp = await fetchToken('task/create-note', data, 'POST')
     const body = await resp.json()
-    console.log(body)
     body.ok ? from ? getActivityDetail(idActivity) : getActivities() :
       normalAlert('warning', 'Error al crear la nota', 'Entiendo...')
   }

@@ -1,18 +1,17 @@
 import React from 'react'
-const styleDefault = 'w-full text-xs text-gray-900 border-gray-300 focus:border-blue-400'
+const styleDefault = 'w-full text-sm text-gray-800 border-gray-600 focus:border-blue-500'
 
-function Input({ type = 'text', id, name, value, onChange, placeholder = 'Escriba aqui', className = styleDefault, field = 'campo', autoFocus = false }) {
+function Input({ type = 'text', id, name, value, onChange, placeholder = 'Escriba aqui', className = styleDefault, field = 'campo' }) {
   return (
-    <div className="mx-2">
-      <p className="capitalize text-black left-0 -top-3.5 text-xs">{field}</p>
+    <div className="relative">
+      <label className="absolute z-20 -top-3 left-6 bg-white px-4 capitalize text-sm">{field}</label>
       <input
-        autoFocus={autoFocus}
         id={id}
         name={name}
         value={value}
         onChange={onChange}
         type={type}
-        className={`border-b-2 pl-1 pb-1 transition duration-500 focus:outline-none focus:shadow-lg ${className}`}
+        className={`border px-4 py-2 rounded-full placeholder-gray-400 transition duration-500 focus:outline-none focus:shadow-lg ${className}`}
         placeholder={placeholder}
         onKeyPress={(event) => {
           if (type !== 'number') return

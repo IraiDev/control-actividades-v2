@@ -1,17 +1,17 @@
 import React from 'react'
-const styleDefault = 'w-full text-gray-900 text-sm border-gray-300 focus:border-blue-400'
+const styleDefault = 'w-full text-sm text-gray-800 border-gray-600 focus:border-blue-500'
 
 function TextArea({ type = 'text', name, value, onChange, placeholder = 'Escriba aqui', className = styleDefault, field = 'campo' }) {
   return (
-    <div className="mx-2">
-      <p className="mb-1 capitalize left-0 -top-3.5 text-xs ">{field}</p>
+    <div className="relative">
+      <label className="absolute z-20 -top-3 left-6 bg-white px-4 capitalize text-sm">{field}</label>
       <textarea
         name={name}
         rows="10"
         value={value}
         onChange={onChange}
         type={type}
-        className={`scroll-row border-2 p-2 text-justify rounded-md resize-none transition duration-500 focus:outline-none focus:shadow-lg ${className}`}
+        className={`scroll-row border px-4 py-2 text-justify rounded-2xl resize-none transition duration-500 focus:outline-none focus:shadow-lg ${className}`}
         placeholder={placeholder}></textarea>
     </div>
   )

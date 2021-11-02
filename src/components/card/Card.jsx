@@ -5,7 +5,6 @@ import { ActivityContext } from '../../context/ActivityContext'
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu"
 import { useForm } from '../../hooks/useForm'
 import ListNote from '../ui/list/ListNote'
-import Ptext from '../ui/text/Ptext'
 import Modal from "../ui/modal/Modal"
 import Button from '../ui/buttons/Button'
 import TextArea from "../ui/inputs/TextArea"
@@ -14,6 +13,7 @@ import moment from 'moment'
 import { alertTimer, normalAlert } from '../../helpers/alerts'
 import { checkForms, seekParam } from '../../helpers/auxFunctions'
 import "@material-tailwind/react/tailwind.css"
+import TextContent from '../ui/text/TextContent'
 
 let initialState = { inputEdit: '', inputAdd: '' }
 let today = new Date()
@@ -177,7 +177,7 @@ function Card(props) {
         className={`rounded p-4 shadow-md text-sm transition duration-500 border-2 border-transparent hover:border-gray-600 ${bgColor} ${textColor} ${actPlay}`}
         onDoubleClick={handleOpenDetails} >
         <div className="flex items-center justify-between pb-2 text-base">
-          <Ptext tag="Actividad:" value={actividad} font="font-bold" />
+          <TextContent tag="Actividad:" value={actividad} font="font-bold" />
           <div className={`flex items-center justify-between px-3 ${prioridad === 1000 ? 'bg-opacity-10' : 'bg-opacity-25'}`}>
             <Button
               icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
@@ -193,51 +193,51 @@ function Card(props) {
         </div>
         <div className={`grid grid-cols-12 mb-2 h-52 border-b pb-3 gap-2 ${lineColor}`}>
           <div className="col-span-3 md:col-span-2 lg:col-span-3 2xl:col-span-2">
-            <Ptext
+            <TextContent
               tag="Encar:"
               value={encargado}
               font="font-bold"
               isTippy={true}
               textTippy="Encargado"
             />
-            <Ptext
+            <TextContent
               tag="Proy:"
               value={proyecto}
               font="font-bold"
               isTippy={true}
               textTippy="Proyecto"
             />
-            <Ptext
+            <TextContent
               tag="Sub Proy:"
               value={subProyecto}
               isTippy={true}
               textTippy="Sub Proyecto"
             />
-            <Ptext
+            <TextContent
               tag="Soli:"
               value={solicitante}
               isTippy={true}
               textTippy="Solicitante"
             />
-            <Ptext
+            <TextContent
               tag="Est:"
               value={estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"}
               isTippy={true}
               textTippy="Estado"
             />
-            <Ptext
+            <TextContent
               tag="ID:"
               value={id}
               isTippy={true}
               textTippy="ID Actividad" />
-            <Ptext tag="Ticket:" value={ticket} />
-            <Ptext
+            <TextContent tag="Ticket:" value={ticket} />
+            <TextContent
               tag="F. Crea:"
               value={moment(fechaCrea).format('DD-MM-YY')}
               isTippy={true}
               textTippy="Fecha de creacion"
             />
-            <Ptext
+            <TextContent
               tag="Transc:"
               value={`${days} Dias`}
               isTippy={true}
@@ -245,13 +245,13 @@ function Card(props) {
             />
           </div>
           <div className="col-span-4 md:col-span-5 lg:col-span-4 2xl:col-span-5">
-            <Ptext tag="Descripcion:" />
+            <TextContent tag="Descripcion:" />
             <div className="h-48 scroll-row">
               <p className="px-2 leading-tight text-2xs font-semibold salto">{seekParam(desc, '- PAUSA')}</p>
             </div>
           </div>
           <div className="col-span-5">
-            <Ptext tag="Informes Diarios (notas):" />
+            <TextContent tag="Informes Diarios (notas):" />
             <div className="scroll-row">
               <ul className="mt-1 text-2xs">
                 {
@@ -279,15 +279,15 @@ function Card(props) {
         </div>
         <div className="flex justify-between items-center mt-2 min-w-full">
           <div className="flex">
-            <Ptext
+            <TextContent
               tag="Prioridad:"
               font="font-bold mr-1" />
-            <Ptext
+            <TextContent
               tag={actPriority}
               font="font-bold mr-1"
               isTippy={true}
               textTippy="Prioridad ToDo" />
-            <Ptext
+            <TextContent
               tag={`(${prioridadRA})`}
               font="font-bold"
               isTippy={true}

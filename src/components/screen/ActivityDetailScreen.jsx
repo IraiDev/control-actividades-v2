@@ -1,15 +1,13 @@
 import moment from 'moment'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { UiContext } from '../../context/UiContext'
 import { ActivityContext } from '../../context/ActivityContext'
 import ListNote from '../ui/list/ListNote'
-import Ptext from '../ui/text/Ptext'
 import Input from '@material-tailwind/react/Input'
 import Button from '../ui/buttons/Button'
 import Select from 'react-select';
 import ButtonColor from '../ui/buttons/ButtonColor'
 import Modal from '../ui/modal/Modal'
-import PDefaultNotes from '../ui/text/PDefaultNotes'
 import TextArea from '../ui/inputs/TextArea'
 import TableTimes from '../ui/times/TableTimes'
 import ListDocs from '../ui/list/ListDocs'
@@ -17,9 +15,9 @@ import Tippy from '@tippyjs/react'
 import { useForm } from '../../hooks/useForm'
 import { checkForms, seekParam } from '../../helpers/auxFunctions'
 import { alertQuest, alertTimer, normalAlert } from '../../helpers/alerts'
+import TextContent from '../ui/text/TextContent'
 
-let today = new Date()
-today = moment(today).format('yyyy-MM-DD')
+let today = moment(new Date()).format('yyyy-MM-DD')
 const initialState = {
   inputEdit: '',
   inputAdd: ''
@@ -40,8 +38,16 @@ const files = [
   { id: 6, name: 'file_EJEMPLO5.png' }
 ]
 
-function ActivityDetailScreen() {
+const defaultNotes = [
+  { id: 11121, desc: "Inicializar actividad urgente" },
+  { id: 11122, desc: "esperando respuesta de cliente" },
+  { id: 11123, desc: "esperando actividad.." },
+  { id: 11124, desc: "trabajando..." },
+  { id: 11125, desc: "sin avance" },
+  { id: 11126, desc: "en cola" }
+]
 
+function ActivityDetailScreen() {
   let randomString = Math.random().toString(36)
   const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
   const { functions: UiFunc } = useContext(UiContext)
@@ -189,6 +195,10 @@ function ActivityDetailScreen() {
 
   useEffect(() => {
     if (ActState.activityDetails !== null) {
+      const validation1 = ActState.activityDetails.pausas.length > 0
+      const validation2 = ActState.activityDetails.estado === 2
+      validation1 && validation2 && setIsActPlay(true)
+
       setValues({
         ...values,
         inputTicket: ActState.activityDetails.num_ticket_edit,
@@ -203,14 +213,6 @@ function ActivityDetailScreen() {
 
       const tempUserE = ActState.arrayUsersE.filter(item => ActState.activityDetails.encargado_actividad === item.label)
       setUserE(tempUserE[0])
-    }
-  }, [ActState.activityDetails])
-
-  useEffect(() => {
-    if (ActState.activityDetails !== null) {
-      const validation1 = ActState.activityDetails.pausas.length > 0
-      const validation2 = ActState.activityDetails.estado === 2
-      validation1 && validation2 && setIsActPlay(true)
     }
   }, [ActState.activityDetails])
 
@@ -278,37 +280,37 @@ function ActivityDetailScreen() {
               </div>
               <div className="grid grid-cols-3 gap-1">
                 <div className="col-span-1">
-                  <Ptext tag="Encargado:" value={ActState.activityDetails.encargado_actividad}
+                  <TextContent tag="Encargado" value={ActState.activityDetails.encargado_actividad}
                   />
-                  <Ptext tag="Proyecto:" value={ActState.activityDetails.proyecto_tarea.proyecto}
+                  <TextContent tag="Proyecto" value={ActState.activityDetails.proyecto_tarea.proyecto}
                   />
-                  <Ptext tag="Sub Proyecto:" value={ActState.activityDetails.subproyectos_tareas !== null ? ActState.activityDetails.subproyectos_tareas.nombre_sub_proy !== '' ? ActState.activityDetails.subproyectos_tareas.nombre_sub_proy : 'Ninguno' : 'Ninguno'}
+                  <TextContent tag="Sub Proyecto" value={ActState.activityDetails.subproyectos_tareas !== null ? ActState.activityDetails.subproyectos_tareas.nombre_sub_proy !== '' ? ActState.activityDetails.subproyectos_tareas.nombre_sub_proy : 'Ninguno' : 'Ninguno'}
                   />
-                  <Ptext tag="Solicitante:" value={ActState.activityDetails.user_solicita}
+                  <TextContent tag="Solicitante" value={ActState.activityDetails.user_solicita}
                   />
-                  <Ptext tag="Estado:" value={ActState.activityDetails.estado === 1 ? "Pendiente" : ActState.activityDetails.estado === 2 && "En trabajo"}
+                  <TextContent tag="Estado" value={ActState.activityDetails.estado === 1 ? "Pendiente" : ActState.activityDetails.estado === 2 && "En trabajo"}
                   />
-                  <Ptext tag="ID actividad:" value={ActState.activityDetails.id_det}
+                  <TextContent tag="ID actividad" value={ActState.activityDetails.id_det}
                   />
-                  <Ptext tag="Ticket:" value={ActState.activityDetails.ticket === 0 ? 'Ninguno' : ActState.activityDetails.ticket} />
-                  <Ptext tag="Fecha de Creacion:" value={moment(ActState.activityDetails.fecha_tx).format('DD-MM-yyyy')}
+                  <TextContent tag="Ticket" value={ActState.activityDetails.ticket === 0 ? 'Ninguno' : ActState.activityDetails.ticket} />
+                  <TextContent tag="Fecha de Creacion" value={moment(ActState.activityDetails.fecha_tx).format('DD-MM-yyyy')}
                   />
-                  <Ptext tag="Transcurridos:" value={`${moment(ActState.activityDetails.fecha_tx).diff(today, 'days') - (moment(ActState.activityDetails.fecha_tx).diff(today, 'days') * 2)} Dias`}
+                  <TextContent tag="Transcurridos" value={`${moment(ActState.activityDetails.fecha_tx).diff(today, 'days') - (moment(ActState.activityDetails.fecha_tx).diff(today, 'days') * 2)} Dias`}
                   />
                   <div className="flex items-center">
-                    <Ptext
-                      tag="Prioridad:"
+                    <TextContent
+                      tag="Prioridad"
                       value={ActState.activityDetails.prioridad_etiqueta === 1000 ? 'S/P' : ActState.activityDetails.prioridad_etiqueta === 600 ? 'Baja' : ActState.activityDetails.prioridad_etiqueta === 400 ? 'Media' : ActState.activityDetails.prioridad_etiqueta === 100 && 'Alta'} />
                     <p className={`
                     ${ActState.activityDetails.prioridad_etiqueta === 1000 ? 'bg-gray-200' : ActState.activityDetails.prioridad_etiqueta === 600 ? ActState.userData.usuario.color_prioridad_baja : ActState.activityDetails.prioridad_etiqueta === 400 ? ActState.userData.usuario.color_prioridad_media : ActState.activityDetails.prioridad_etiqueta === 100 && ActState.userData.usuario.color_prioridad_alta} 
                     h-5 w-5 rounded-full ml-2`
                     }></p>
                   </div>
-                  <Ptext tag="Prioridad RA:" value={ActState.activityDetails.num_prioridad} />
+                  <TextContent tag="Prioridad RA" value={ActState.activityDetails.num_prioridad} />
                 </div>
                 <div className="col-span-2 bg-gray-100 py-2 px-4 rounded-md">
                   <div className="flex justify-between">
-                    <Ptext tag="Informes Diarios (notas):" />
+                    <TextContent tag="Informes Diarios (notas)" />
                     <div>
                       <Button
                         className="h-8 w-8 rounded-full hover:bg-gray-300"
@@ -344,7 +346,7 @@ function ActivityDetailScreen() {
               </div>
               <div className="grid grid-cols-1 mt-6 bg-gray-100 rounded-md py-2 px-4">
                 <div className="flex justify-between">
-                  <Ptext tag="Descripcion:" />
+                  <TextContent tag="Descripcion:" />
                   <Button
                     className="h-8 w-8 rounded-full hover:bg-gray-300"
                     type="icon"
@@ -359,7 +361,7 @@ function ActivityDetailScreen() {
               </div>
               <div className="grid grid-cols-1 mt-6">
                 <div className="flex justify-between items-center mb-6">
-                  <Ptext tag="Opciones Registro de Avance: (sin funcionalidades por ahora)" />
+                  <TextContent tag="Opciones Registro de Avance: (sin funcionalidades por ahora)" />
                   <div className="flex items-center justify-between px-3">
                     {
                       isActPlay &&
@@ -555,12 +557,18 @@ function ActivityDetailScreen() {
                   <>
                     <p className="text-xs">Mensajes predeterminados:</p>
                     <div className="py-3 pl-3 pr-1 mx-auto mt-1 mb-5 bg-gray-100 rounded-md">
-                      <PDefaultNotes from={true} idAct={ActState.activityDetails.id_det} noteText="Inicializar actividad urgente" onclick={showModalFalse} updatePriority={true} />
-                      <PDefaultNotes from={true} idAct={ActState.activityDetails.id_det} noteText="esperando respuesta de cliente" onclick={showModalFalse} />
-                      <PDefaultNotes from={true} idAct={ActState.activityDetails.id_det} noteText="esperando actividad.." onclick={showModalFalse} />
-                      <PDefaultNotes from={true} idAct={ActState.activityDetails.id_det} noteText="trabajando..." onclick={showModalFalse} />
-                      <PDefaultNotes from={true} idAct={ActState.activityDetails.id_det} noteText="sin avance" onclick={showModalFalse} />
-                      <PDefaultNotes from={true} idAct={ActState.activityDetails.id_det} noteText="en cola" onclick={showModalFalse} isSeparator={false} />
+                      {
+                        defaultNotes.map((note, index) => (
+                          <ListNote
+                            key={note.id}
+                            type="listAction"
+                            idActivity={ActState.activityDetails.id_det}
+                            desc={note.desc}
+                            updatePriority={note.id === 11121}
+                            callBack={showModalFalse}
+                            separator={defaultNotes.length !== index + 1} />
+                        ))
+                      }
                     </div>
                     <TextArea
                       field="Descripcion nota"
@@ -570,10 +578,10 @@ function ActivityDetailScreen() {
                   </> :
                   <>
                     <label className="mb-2 text-xs">Notas:</label>
-                    <ul className="min-h-80 scroll-row bg-gray-100 rounded-md py-2 pl-2">
+                    <ul className="min-h-80 scroll-row bg-gray-100 rounded-md py-3 pl-3">
                       {
                         ActState.activityDetails.notas.length > 0 ?
-                          ActState.activityDetails.notas.map(obj => {
+                          ActState.activityDetails.notas.map((obj, index) => {
                             if (ActState.activityDetails.id_det === obj.id_det) {
                               return (
                                 <ListNote
@@ -586,6 +594,7 @@ function ActivityDetailScreen() {
                                   idActivity={ActState.activityDetails.id_det}
                                   onclick={handleGetIdNote}
                                   activeColor={idNote === obj.id_nota ? 'text-green-600' : 'text-gray-500'}
+                                  separator={ActState.activityDetails.notas.length !== index + 1}
                                 />
                               )
                             } else {

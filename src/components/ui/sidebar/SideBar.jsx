@@ -89,7 +89,8 @@ function SideBar() {
           name="inputId"
           value={inputId}
           onchange={onChangeValues}
-          label="ID (Solo numeros)"
+          placeholder="ID"
+          tippyText="ID Actividad"
           orderPriority="orden_id"
           orderAsc={handleOrderAsc}
           orderDesc={handleOrderDesc}
@@ -100,7 +101,8 @@ function SideBar() {
           name="inputAct"
           value={inputAct}
           onchange={onChangeValues}
-          label="Actividad"
+          placeholder="Actividad"
+          tippyText="Nombre Actividad"
           orderPriority="orden_actividad"
           orderAsc={handleOrderAsc}
           orderDesc={handleOrderDesc}
@@ -112,7 +114,8 @@ function SideBar() {
           name="inputPriority"
           value={inputPriority}
           onchange={onChangeValues}
-          label="Prioridad RA (Solo numeros)"
+          placeholder="Prioridad RA"
+          tippyText="Prioridad RA"
           orderPriority="orden_prioridad_ra"
           orderAsc={handleOrderAsc}
           orderDesc={handleOrderDesc}
@@ -189,7 +192,7 @@ function SideBar() {
 
       <div className="flex justify-end mt-2">
         <Button
-          className="hover:bg-gray-100 px-4 py-1 rounded-full border border-gray-100"
+          className="bg-gray-100 hover:bg-gray-50 hover:text-blue-500 px-4 py-1 rounded-full"
           shadow
           type="iconText"
           icon="fas fa-filter fa-sm"
