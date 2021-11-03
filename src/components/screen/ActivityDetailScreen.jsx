@@ -223,16 +223,16 @@ function ActivityDetailScreen() {
         <>
           <div className="container mx-auto text-gray-700">
             <div className="bg-white p-10 rounded-lg shadow-lg my-10">
-              <div className="grid grid-cols-1 lg:grid-cols-3 mb-10">
-                <div className="text-xl font-bold text-gray-700 capitalize col-span-2">
+              <div className="md:flex justify-between items-center mb-10">
+                <div className="text-lg md:text-xl font-bold text-gray-700 capitalize mt-2">
                   <Button
-                    className="mr-3 hover:text-blue-500 pr-2"
+                    className="md:mr-2 hover:text-blue-500 pr-2"
                     type="icon"
                     icon="fas fa-chevron-left"
                     onClick={handleBack} />
                   Detalle actividad: {ActState.activityDetails.id_det}, {ActState.activityDetails.actividad}
                 </div>
-                <div className="rounded-full p-1 bg-gray-100 place-self-end col-span-1 mt-4 lg:mt-0">
+                <div className="rounded-full p-1 bg-gray-100 mt-4 lg:mt-0 w-max">
                   <ButtonColor
                     color="bg-gray-300"
                     isUpdate={true}
@@ -278,37 +278,37 @@ function ActivityDetailScreen() {
                     hwBtn="5" />
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-1">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
                 <div className="col-span-1">
-                  <TextContent tag="Encargado" value={ActState.activityDetails.encargado_actividad}
+                  <TextContent bold tag="Encargado" value={ActState.activityDetails.encargado_actividad}
                   />
-                  <TextContent tag="Proyecto" value={ActState.activityDetails.proyecto_tarea.proyecto}
+                  <TextContent bold tag="Proyecto" value={ActState.activityDetails.proyecto_tarea.proyecto}
                   />
-                  <TextContent tag="Sub Proyecto" value={ActState.activityDetails.subproyectos_tareas !== null ? ActState.activityDetails.subproyectos_tareas.nombre_sub_proy !== '' ? ActState.activityDetails.subproyectos_tareas.nombre_sub_proy : 'Ninguno' : 'Ninguno'}
+                  <TextContent bold tag="Sub Proyecto" value={ActState.activityDetails.subproyectos_tareas !== null ? ActState.activityDetails.subproyectos_tareas.nombre_sub_proy !== '' ? ActState.activityDetails.subproyectos_tareas.nombre_sub_proy : 'Ninguno' : 'Ninguno'}
                   />
-                  <TextContent tag="Solicitante" value={ActState.activityDetails.user_solicita}
+                  <TextContent bold tag="Solicitante" value={ActState.activityDetails.user_solicita}
                   />
-                  <TextContent tag="Estado" value={ActState.activityDetails.estado === 1 ? "Pendiente" : ActState.activityDetails.estado === 2 && "En trabajo"}
+                  <TextContent bold tag="Estado" value={ActState.activityDetails.estado === 1 ? "Pendiente" : ActState.activityDetails.estado === 2 && "En trabajo"}
                   />
-                  <TextContent tag="ID actividad" value={ActState.activityDetails.id_det}
+                  <TextContent bold tag="ID actividad" value={ActState.activityDetails.id_det}
                   />
-                  <TextContent tag="Ticket" value={ActState.activityDetails.ticket === 0 ? 'Ninguno' : ActState.activityDetails.ticket} />
-                  <TextContent tag="Fecha de Creacion" value={moment(ActState.activityDetails.fecha_tx).format('DD-MM-yyyy')}
+                  <TextContent bold tag="Ticket" value={ActState.activityDetails.ticket === 0 ? 'Ninguno' : ActState.activityDetails.ticket} />
+                  <TextContent bold tag="Fecha de Creacion" value={moment(ActState.activityDetails.fecha_tx).format('DD-MM-yyyy')}
                   />
-                  <TextContent tag="Transcurridos" value={`${moment(ActState.activityDetails.fecha_tx).diff(today, 'days') - (moment(ActState.activityDetails.fecha_tx).diff(today, 'days') * 2)} Dias`}
+                  <TextContent bold tag="Transcurridos" value={`${moment(ActState.activityDetails.fecha_tx).diff(today, 'days') - (moment(ActState.activityDetails.fecha_tx).diff(today, 'days') * 2)} Dias`}
                   />
                   <div className="flex items-center">
                     <TextContent
-                      tag="Prioridad"
+                      bold tag="Prioridad"
                       value={ActState.activityDetails.prioridad_etiqueta === 1000 ? 'S/P' : ActState.activityDetails.prioridad_etiqueta === 600 ? 'Baja' : ActState.activityDetails.prioridad_etiqueta === 400 ? 'Media' : ActState.activityDetails.prioridad_etiqueta === 100 && 'Alta'} />
                     <p className={`
                     ${ActState.activityDetails.prioridad_etiqueta === 1000 ? 'bg-gray-200' : ActState.activityDetails.prioridad_etiqueta === 600 ? ActState.userData.usuario.color_prioridad_baja : ActState.activityDetails.prioridad_etiqueta === 400 ? ActState.userData.usuario.color_prioridad_media : ActState.activityDetails.prioridad_etiqueta === 100 && ActState.userData.usuario.color_prioridad_alta} 
                     h-5 w-5 rounded-full ml-2`
                     }></p>
                   </div>
-                  <TextContent tag="Prioridad RA" value={ActState.activityDetails.num_prioridad} />
+                  <TextContent bold tag="Prioridad RA" value={ActState.activityDetails.num_prioridad} />
                 </div>
-                <div className="col-span-2 bg-gray-100 py-2 px-4 rounded-md">
+                <div className="col-span-2 bg-gray-100 py-2 px-4 rounded-md mt-4 md:mt-0">
                   <div className="flex justify-between">
                     <TextContent tag="Informes Diarios (notas)" />
                     <div>
@@ -346,7 +346,7 @@ function ActivityDetailScreen() {
               </div>
               <div className="grid grid-cols-1 mt-6 bg-gray-100 rounded-md py-2 px-4">
                 <div className="flex justify-between">
-                  <TextContent tag="Descripcion:" />
+                  <TextContent tag="Descripcion" />
                   <Button
                     className="h-8 w-8 rounded-full hover:bg-gray-300"
                     type="icon"
@@ -432,7 +432,7 @@ function ActivityDetailScreen() {
                   <div className="col-span-4 lg:col-span-3">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-10 gap-4">
                       <Input
-                        className="text-sm text-gray-800 border-gray-600 focus:border-blue-500"
+                        className="text-sm text-gray-800 border-gray-300 focus:border-blue-500"
                         name="inputPriority"
                         value={inputPriority}
                         field="Nᵒ prioridad"
@@ -441,7 +441,7 @@ function ActivityDetailScreen() {
                           inputPriority: parseInt(e.target.value)
                         })} />
                       <Input
-                        className="text-sm text-gray-800 border-gray-600 focus:border-blue-500"
+                        className="text-sm text-gray-800 border-gray-300 focus:border-blue-500"
                         name="inputTicket"
                         value={inputTicket}
                         field="Ticket"
@@ -450,7 +450,7 @@ function ActivityDetailScreen() {
                           inputTicket: parseInt(e.target.value)
                         })} />
                       <Input
-                        className="text-sm text-gray-800 border-gray-600 focus:border-blue-500"
+                        className="text-sm text-gray-800 border-gray-300 focus:border-blue-500"
                         name="inputTime"
                         value={inputTime}
                         field="Tiempo estimado"
@@ -480,10 +480,10 @@ function ActivityDetailScreen() {
                   </div>
                 </div>
               </div>
-              <div className="mt-16 flex justify-between">
-                <div className="flex items-center">
+              <div className="mt-16 md:flex justify-between">
+                <div className="md:flex items-center">
                   <Button
-                    className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-100 py-1 px-4"
+                    className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-100 py-1 px-4 mb-2 md:mb-0 block w-full md:w-max md:inline"
                     type="iconText"
                     icon="fas fa-trash-alt fa-lg"
                     iconFirst
@@ -492,7 +492,7 @@ function ActivityDetailScreen() {
                   />
                   <label
                     htmlFor="archivoForm"
-                    className="transition duration-500 cursor-pointer hover:bg-blue-100 text-blue-600 text-xs font-semibold capitalize py-2.5 px-6 rounded-full"
+                    className="transition duration-500 text-center cursor-pointer hover:bg-blue-100 text-blue-600 text-xs font-semibold capitalize py-2.5 px-6 rounded-full mb-2 md:mb-0 block md:inline"
                   >
                     <input
                       key={resetFile || ''}
@@ -506,15 +506,16 @@ function ActivityDetailScreen() {
                     archivo
                   </label>
                 </div>
-                <div className="flex items-center">
+                <div className="md:flex items-center">
                   <Button
-                    className="bg-red-500 text-white rounded-full hover:bg-red-600"
+                    className="bg-red-500 text-white rounded-full hover:bg-red-600 mb-2 md:mb-0 md:mr-2 block w-full md:w-max md:inline"
+                    shadow
                     name="Cancelar"
                     onClick={handleBack}
                   />
-                  <span className="mr-2"></span>
                   <Button
-                    className="bg-green-500 text-white rounded-full hover:bg-green-600"
+                    className="bg-green-500 text-white rounded-full hover:bg-green-600 mb-2 md:mb-0 block w-full md:w-max md:inline"
+                    shadow
                     name="Guardar cambios"
                   />
                 </div>
@@ -536,6 +537,7 @@ function ActivityDetailScreen() {
                         defaultNotes.map((note, index) => (
                           <ListNote
                             key={note.id}
+                            from
                             type="listAction"
                             idActivity={ActState.activityDetails.id_det}
                             desc={note.desc}

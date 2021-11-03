@@ -17,9 +17,9 @@ function ButtonList(props) {
     title,
     icon = 'fas fa-bars',
     actions = true,
-    onclick,
-    isOnclickeable = true,
-    active = ''
+    onClick,
+    active = '',
+    noSelect = false
   } = props
 
   const [{ input }, onChangeValues, reset] = useForm({ input: title })
@@ -33,7 +33,8 @@ function ButtonList(props) {
       title,
       icon
     }
-    onclick(idList)
+    onClick(idList)
+    if (noSelect) return
     UiFunc.setDisplayNameTodoList(data)
   }
 
@@ -76,7 +77,7 @@ function ButtonList(props) {
           <button
             className={`focus:outline-none flex items-center text-white ${size.width < 1024 ? 'w-full py-2' : 'w-44 py-3'}`}
             onClick={() => {
-              isOnclickeable && handleClick();
+              handleClick()
             }}
           >
             <span>

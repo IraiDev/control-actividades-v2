@@ -1,10 +1,10 @@
 import React from 'react'
-const styleDefault = 'w-full text-sm text-gray-800 border-gray-600 focus:border-blue-500'
+const styleDefault = 'w-full text-sm text-gray-800 border-gray-300 focus:border-blue-500'
 
 function TextArea({ type = 'text', name, value, onChange, placeholder = 'Escriba aqui', className = styleDefault, field = 'campo' }) {
   return (
     <div className="relative">
-      <label className="absolute z-20 -top-3 left-6 bg-white px-4 capitalize text-sm">{field}</label>
+      <label className="absolute z-20 -top-3 left-6 bg-white px-4 capitalize text-xs">{field}</label>
       <textarea
         name={name}
         rows="10"

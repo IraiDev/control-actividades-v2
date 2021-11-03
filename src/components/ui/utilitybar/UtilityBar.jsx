@@ -6,14 +6,14 @@ import { Menu, MenuButton, MenuDivider, MenuGroup, MenuItem } from '@szhsin/reac
 import { alertTimer } from '../../../helpers/alerts'
 import Select from 'react-select'
 import UserTimer from './UserTimer'
+import TextContent from '../text/TextContent'
 import Tippy from '@tippyjs/react'
 import Modal from '../modal/Modal'
 import ButtonColor from '../buttons/ButtonColor'
 import Button from '../buttons/Button'
 import '@szhsin/react-menu/dist/index.css'
-import moment from 'moment';
 import { types } from '../../../types/types'
-import TextContent from '../text/TextContent'
+import moment from 'moment'
 
 const { plannerView, activitiesView, timesView, detailsView } = types
 
@@ -42,7 +42,7 @@ const initialState = {
 
 function UtilityBar() {
   const { states: UiState, functions: UiFunc } = useContext(UiContext)
-  const { functions: GraphFunc } = useContext(GraphContext)
+  const { functions: GraphFunc, states: GraphState } = useContext(GraphContext)
   const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
   const [priority, setPriority] = useState(initialState)
   const [colorSelected, setColorSelected] = useState(null)
@@ -94,9 +94,13 @@ function UtilityBar() {
   }
 
   const updatePlannerComponents = () => {
-    UiFunc.setViewPlanner()
+    if (UiState.isTodoOrPlanner) {
+      GraphFunc.getTodoTask(GraphState.idListSelected)
+    }
+    else {
+      GraphFunc.getPlannerTask()
+    }
     UiFunc.setIsLoading(true)
-    GraphFunc.getPlannerTask()
     ActFunc.getTimes()
     ActFunc.getNotify()
   }
@@ -173,16 +177,16 @@ function UtilityBar() {
                 overflow="auto"
                 position="anchor"
                 menuButton={
-                  <Tippy
-                    offset={[0, 10]}
-                    delay={[700, 0]}
-                    placement={"bottom"}
-                    content={<span>Mostrar tiempo de usuarios</span>}
-                  >
-                    <MenuButton className="transition duration-500 relative focus:outline-none active:outline-none h-8 w-8 text-gray-700 rounded-full hover:bg-gray-300">
+                  <MenuButton className="transition duration-500 relative focus:outline-none active:outline-none h-8 w-8 text-gray-700 rounded-full hover:bg-gray-300">
+                    <Tippy
+                      offset={[0, 20]}
+                      delay={[700, 0]}
+                      placement={"bottom"}
+                      content={<span>Mostrar tiempo de usuarios</span>}
+                    >
                       <i className="fas fa-clock"></i>
-                    </MenuButton>
-                  </Tippy>
+                    </Tippy>
+                  </MenuButton>
                 }
               >
                 <MenuGroup takeOverflow>
@@ -221,56 +225,58 @@ function UtilityBar() {
               className="h-8 w-8 hover:bg-gray-200 rounded-full"
               type="icon"
               icon="fas fa-sync-alt"
-              tippyText={UiState.tabs === plannerView ? "Actualizar Planner" : UiState.tabs === activitiesView ? "Actualizar Actividades" : UiState.tabs === timesView && "Actualizar Informe de tiempos"}
+              tippyText={UiState.tabs === plannerView ? "Actualizar Planner o to-do" : UiState.tabs === activitiesView ? "Actualizar Actividades" : UiState.tabs === timesView && "Actualizar Informe de tiempos"}
               onClick={UiState.tabs === plannerView ? updatePlannerComponents : UiState.tabs === activitiesView ? updateActivityComponents : UiState.tabs === timesView && updateTimesComponents} />
             <Menu
               direction="bottom"
               overflow="auto"
               position="anchor"
               menuButton={
-                <Tippy
-                  offset={[0, 10]}
-                  delay={[700, 0]}
-                  placement={"bottom"}
-                  content={<span>Notificaciones</span>}
-                >
-                  <MenuButton className="transition duration-500 relative focus:outline-none active:outline-none h-8 w-8 text-gray-700 rounded-full hover:bg-gray-300 ">
-                    {
-                      ActState.userNotify.length > 0 &&
-                      <label
-                        className="absolute -right-1 px-1.5 text-xs text-white bg-red-500 rounded-full h-min w-min -top-0">
-                        {ActState.userNotify.length}
-                      </label>
-                    }
+                <MenuButton
+                  className="transition duration-500 relative focus:outline-none active:outline-none h-8 w-8 text-gray-700 rounded-full hover:bg-gray-300">
+                  {
+                    ActState.userNotify.length > 0 &&
+                    <label
+                      className="absolute -right-1 px-1.5 text-xs text-white bg-red-500 rounded-full h-min w-min -top-0">
+                      {ActState.userNotify.length}
+                    </label>
+                  }
+                  <Tippy
+                    offset={[0, 20]}
+                    delay={[700, 0]}
+                    placement={"bottom"}
+                    content={<span>Notificaciones</span>}
+                  >
                     <i className="fas fa-bell"></i>
-                  </MenuButton>
-                </Tippy>
+                  </Tippy>
+                </MenuButton>
               }
             >
               <MenuGroup takeOverflow>
-                {ActState.userNotify.length > 0 ?
-                  ActState.userNotify.map((obj, index) => {
-                    return (
-                      <MenuItem
-                        onClick={() => handleGoActivity(obj.id_det)}
-                        key={index}>
-                        <p className="pb-3 text-sm border-b text-transparent hover:text-gray-400">
-                          <strong className="text-black">{obj.user_crea_nota.abrev_user}</strong><i className="text-black">, ha
-                            creado una nota en la Actividad:</i> <strong className="text-black">{obj.id_det}</strong><i className="text-black">,
-                              con fecha</i> <strong className="text-black">{moment(obj.fecha_hora_crea).format('DD-MM-yyyy')}</strong>
-                          <button
-                            className="outline-none focus:outline-none"
-                            onClick={() => handleMarkNotifications(obj.id_nota)}>
-                            <i className="ml-2 fas fa-eye-slash hover:text-red-500"></i>
-                          </button>
-                        </p>
-                      </MenuItem>
-                    );
-                  })
-                  :
-                  <MenuItem>
-                    <p>no hay notificaciones</p>
-                  </MenuItem>
+                {
+                  ActState.userNotify.length > 0 ?
+                    ActState.userNotify.map((obj, index) => {
+                      return (
+                        <MenuItem
+                          onClick={() => handleGoActivity(obj.id_det)}
+                          key={index}>
+                          <p className="pb-3 text-sm border-b text-transparent hover:text-gray-400">
+                            <strong className="text-black">{obj.user_crea_nota.abrev_user}</strong><i className="text-black">, ha
+                              creado una nota en la Actividad:</i> <strong className="text-black">{obj.id_det}</strong><i className="text-black">,
+                                con fecha</i> <strong className="text-black">{moment(obj.fecha_hora_crea).format('DD-MM-yyyy')}</strong>
+                            <button
+                              className="outline-none focus:outline-none"
+                              onClick={() => handleMarkNotifications(obj.id_nota)}>
+                              <i className="ml-2 fas fa-eye-slash hover:text-red-500"></i>
+                            </button>
+                          </p>
+                        </MenuItem>
+                      );
+                    })
+                    :
+                    <MenuItem>
+                      <p>no hay notificaciones</p>
+                    </MenuItem>
                 }
               </MenuGroup>
               <MenuDivider />
@@ -312,18 +318,18 @@ function UtilityBar() {
       <Modal showModal={showModal} onClose={showModalFalse} className="md:w-3/5 lg:w-3/6 xl:w-2/6">
         <h1 className="text-xl font-semibold mb-5">Colores prioridades ToDo</h1>
         <div className="w-full">
-          <label className="text-sm text-gray-500">Colores actuales:</label>
+          <label className="text-2xs">Colores actuales:</label>
           {
             ActState.userData.usuario !== undefined && (
               <div className="flex justify-between mt-2 mb-5 w-full">
-                <TextContent type="color" value={ActState.userData.usuario.color_prioridad_baja} tag="Prioridad baja" />
-                <TextContent type="color" value={ActState.userData.usuario.color_prioridad_media} tag="Prioridad media" />
-                <TextContent type="color" value={ActState.userData.usuario.color_prioridad_alta} tag="Prioridad alta" />
+                <TextContent className="text-2xs text-gray-400" type="color" value={ActState.userData.usuario.color_prioridad_baja} tag="Prioridad baja" />
+                <TextContent className="text-2xs text-gray-400" type="color" value={ActState.userData.usuario.color_prioridad_media} tag="Prioridad media" />
+                <TextContent className="text-2xs text-gray-400" type="color" value={ActState.userData.usuario.color_prioridad_alta} tag="Prioridad alta" />
               </div>
             )
           }
           <div className="mb-5">
-            <label className="text-sm text-gray-500">
+            <label className="text-2xs">
               Prioridad:
             </label>
             <Select
@@ -335,7 +341,7 @@ function UtilityBar() {
             />
           </div>
           <div className="mb-5">
-            <label className="text-sm text-gray-500">
+            <label className="text-2xs">
               Seleccione un color:
             </label>
             <div className="mt-2">

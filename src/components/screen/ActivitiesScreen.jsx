@@ -33,7 +33,6 @@ function ActivitiesScreen() {
 
   return (
     <>
-
       {UiState.allOrDetails ?
         <div className={`my-3 ${cardView ? 'px-5' : 'container mx-auto'}`}>
           <div className="flex justify-between items-center border-b-2 border-gray-300 mb-5 container mx-auto">
@@ -59,17 +58,17 @@ function ActivitiesScreen() {
             cardView ?
               <div className="overflow-x-auto overflow-y-hidden text-center text-sm h-table scroll-row">
                 <div className="grid grid-cols-12 shadow-md rounded-md font-semibold text-white min-w-fake-table sticky top-0">
-                  <div className="bg-gray-500 hover:bg-gray-700 rounded-l-md px-2 py-4 transition duration-500 col-span-1">ID</div>
-                  <div className="bg-gray-600 hover:bg-gray-800 px-2 py-4 transition duration-500 col-span-1">Ticket</div>
-                  <div className="bg-gray-500 hover:bg-gray-700 px-2 py-4 transition duration-500 col-span-1">Proyecto</div>
-                  <div className="bg-gray-600 hover:bg-gray-800 px-2 py-4 transition duration-500 col-span-1">SubProy.</div>
+                  <div className="bg-gray-500 hover:bg-gray-700 rounded-l-md px-2 py-5 transition duration-500 col-span-1">ID</div>
+                  <div className="bg-gray-600 hover:bg-gray-800 px-2 py-5 transition duration-500 col-span-1">Ticket</div>
+                  <div className="bg-gray-500 hover:bg-gray-700 px-2 py-5 transition duration-500 col-span-1">Proyecto</div>
+                  <div className="bg-gray-600 hover:bg-gray-800 px-2 py-5 transition duration-500 col-span-1">SubProy.</div>
                   <div className="bg-gray-500 hover:bg-gray-700 px-2 py-2 transition duration-500 col-span-1">
                     Solicitante
                     <span className="block text-xs font-normal">(Fecha)</span>
                   </div>
-                  <div className="bg-gray-600 hover:bg-gray-800 px-2 py-4 transition duration-500 col-span-1">Encargado</div>
-                  <div className="bg-gray-500 hover:bg-gray-700 px-2 py-4 transition duration-500 col-span-1">Actividad</div>
-                  <div className="bg-gray-600 hover:bg-gray-800 px-2 py-4 transition duration-500 col-span-3">
+                  <div className="bg-gray-600 hover:bg-gray-800 px-2 py-5 transition duration-500 col-span-1">Encargado</div>
+                  <div className="bg-gray-500 hover:bg-gray-700 px-2 py-5 transition duration-500 col-span-1">Actividad</div>
+                  <div className="bg-gray-600 hover:bg-gray-800 px-2 py-3 transition duration-500 col-span-3">
                     Descripcion
                     <Button
                       className="ml-2"
@@ -78,8 +77,8 @@ function ActivitiesScreen() {
                       tippyText={isExpand ? 'Ocultar' : 'Mostrar'}
                       onClick={handleExpand} />
                   </div>
-                  <div className="bg-gray-500 hover:bg-gray-700 px-2 py-4 transition duration-500 col-span-1">Estado</div>
-                  <div className="bg-gray-600 hover:bg-gray-800 rounded-r-md px-2 py-4 transition duration-500 col-span-1">Acciones</div>
+                  <div className="bg-gray-500 hover:bg-gray-700 px-2 py-5 transition duration-500 col-span-1">Estado</div>
+                  <div className="bg-gray-600 hover:bg-gray-800 rounded-r-md px-2 py-5 transition duration-500 col-span-1">Acciones</div>
                 </div>
                 {ActState.activitiesRA.length > 0 ?
                   ActState.activitiesRA.map((obj, index) => {

@@ -62,16 +62,17 @@ function SideMenu() {
       <div className={`sticky z-40 h-full px-3 ml-3 mt-5 text-white bg-gray-700 border-r rounded-md shadow-md top-52 lg:top-40 ${size.width > 1024 ? 'py-10' : 'py-3'}`}>
         <div className="relative">
           <ButtonList
-            title={"Crear Lista"}
+            title={"Nueva lista"}
             icon="fas fa-plus"
             actions={false}
-            onclick={showModalTrue}
+            onClick={showModalTrue}
+            noSelect
           />
           <ButtonList
             title={"Asignados a ti"}
             icon="far fa-user"
             actions={false}
-            onclick={handleClickPlanner}
+            onClick={handleClickPlanner}
             active={plannerActive && 'bg-gray-800'}
           />
           {
@@ -84,7 +85,7 @@ function SideMenu() {
                     title={obj.displayName}
                     icon={`fas ${!obj.isOwner ? 'fa-user-friends' : 'fa-home'}`}
                     actions={false}
-                    onclick={handleClickTodo}
+                    onClick={handleClickTodo}
                     active={obj.id === idTodoList && 'bg-gray-800'}
                   />
                 )
@@ -103,7 +104,7 @@ function SideMenu() {
                     idList={obj.id}
                     title={obj.displayName}
                     icon="fas fa-list-ul"
-                    onclick={handleClickTodo}
+                    onClick={handleClickTodo}
                     active={obj.id === idTodoList && 'bg-gray-800'}
                   />
                 )

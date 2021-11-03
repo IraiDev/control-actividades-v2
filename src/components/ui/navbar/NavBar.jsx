@@ -36,7 +36,7 @@ function NavBar() {
     <nav className="sticky w-full top-0 z-40 flex items-center justify-between bg-white shadow-md h-14">
       <div className="pl-4 hidden md:flex">
         <img className="w-6 h-6 mr-3 hidden sm:inline" src={logo25x25} alt="logo" />
-        <h1 className="font-semibold capitalize hidden md:inline">control de actividades</h1>
+        <h1 className="font-semibold capitalize hidden md:inline">ZionIT</h1>
       </div>
       <div className="md:flex hidden items-center">
         <button

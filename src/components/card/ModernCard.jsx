@@ -217,7 +217,7 @@ function ModernCard(props) {
                 <TextContent bold tag="Prioridad" value={`${actPriority} (${prioridadRA})`} />
               </div>
             </div>
-            <div className="mb-2">
+            <div className={`mb-2 bg-black rounded-md p-1 ${prioridad === 1000 ? 'bg-opacity-5' : 'bg-opacity-10'}`}>
               <p className="text-opacity-75 font-bold ">Descripcion</p>
               <p className="scroll-row salto">{seekParam(desc, '- PAUSA')}</p>
             </div>
@@ -351,7 +351,7 @@ function ModernCard(props) {
               delay={[700, 0]}
               content={<span>{actividad}</span>}
             >
-              <p className={!isExpand && 'truncate'}>{actividad}</p>
+              <p className={!isExpand ? 'truncate' : ''}>{actividad}</p>
             </Tippy>
           </div>
           <div className="py-3 px-2 col-span-3 text-justify flex items-start justify-between">
@@ -378,7 +378,7 @@ function ModernCard(props) {
               delay={[700, 0]}
               content={<span>Actividad en play</span>}
             >
-              <p className={isActPlay && 'bg-black bg-opacity-10 rounded-full w-max mx-auto px-2'}>{estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"}</p>
+              <p className={isActPlay ? 'bg-black bg-opacity-10 rounded-full w-max mx-auto px-2' : ''}>{estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"}</p>
             </Tippy>
           </div>
           <div className="py-3 px-2 col-span-1 flex items-center mx-auto">
