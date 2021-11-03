@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react'
 import { UiContext } from '../../context/UiContext'
 import { ActivityContext } from '../../context/ActivityContext'
-import PResp from '../ui/text/PResp';
 import ActivityDetailScreen from './ActivityDetailScreen'
 import ModernCard from '../card/ModernCard'
 import Button from '../ui/buttons/Button'
+import TextContent from '../ui/text/TextContent'
 
 function ActivitiesScreen() {
   const { states: ActState } = useContext(ActivityContext)
@@ -108,7 +108,7 @@ function ActivitiesScreen() {
                         numberCard={index + 1}
                       />
                     );
-                  }) : <PResp />
+                  }) : <TextContent className="text-center" type="response" value="No hay actividades" />
                 }
               </div>
               :
@@ -138,7 +138,7 @@ function ActivitiesScreen() {
                         numberCard={index + 1}
                       />
                     )
-                  }) : <PResp />
+                  }) : <TextContent className="text-center xl:col-span-4 lg:col-span-3 md:col-span-2 col-span-1" type="response" value="No hay actividades" />
                 }
               </div>
           }

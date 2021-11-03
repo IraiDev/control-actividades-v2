@@ -1,12 +1,11 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { GraphContext } from '../../context/GraphContext'
 import { alertQuest, alertTimer } from '../../helpers/alerts'
 import { useForm } from '../../hooks/useForm'
 import Button from '../ui/buttons/Button'
-import Modal from "../ui/modal/Modal"
+import Modal from '../ui/modal/Modal'
 import Input from '../ui/inputs/Input'
 import TextArea from '../ui/inputs/TextArea'
-import "@material-tailwind/react/tailwind.css"
 
 function TodoCard({ idTodo, title, desc }) {
   const [{ input, textArea }, onChangeValues, reset] = useForm({ input: title, textArea: desc })

@@ -14,7 +14,7 @@ function ListDocs({ id, name }) {
   return (
     <li
       key={id}
-      className="flex-auto w-full bg-gray-100 p-3 hover:shadow-md hover:text-blue-500 rounded-md pl-2 text-transparent transition duration-500 mx-auto flex justify-between items-center leading-5 col-span-1"
+      className="flex-auto w-full bg-gray-100 p-3 hover:shadow-md hover:text-blue-500 border border-transparent hover:border-gray-400 rounded-md pl-2 text-transparent transition duration-500 mx-auto flex justify-between items-center leading-5 col-span-1"
     >
       <a className="text-gray-500 hover:text-blue-500 truncate" href="/" rel="noreferrer" target="_blank"><i className="fas fa-file mx-2"></i>{name}</a>
       <Button

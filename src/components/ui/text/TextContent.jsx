@@ -8,9 +8,9 @@ function TextContent({ tag = '', value = '', type, className, bold = false }) {
 
   if (type === 'color') {
     return (
-      <div className="text-center">
+      <div className="text-center mx-auto">
         <p className={className}>{tag}</p>
-        <p className={`h-7 w-7 rounded-full ${value}`}></p>
+        <p className={`h-7 w-7 rounded-full mx-auto mt-2 transition duration-500 ${value}`}></p>
       </div>
     )
   }

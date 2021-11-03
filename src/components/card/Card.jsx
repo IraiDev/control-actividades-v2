@@ -5,14 +5,12 @@ import { ActivityContext } from '../../context/ActivityContext'
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu"
 import { useForm } from '../../hooks/useForm'
 import ListNote from '../ui/list/ListNote'
-import Modal from "../ui/modal/Modal"
+import Modal from '../ui/modal/Modal'
 import Button from '../ui/buttons/Button'
-import TextArea from "../ui/inputs/TextArea"
-import PDefaultNotes from '../ui/text/PDefaultNotes'
+import TextArea from '../ui/inputs/TextArea'
 import moment from 'moment'
 import { alertTimer, normalAlert } from '../../helpers/alerts'
 import { checkForms, seekParam } from '../../helpers/auxFunctions'
-import "@material-tailwind/react/tailwind.css"
 import TextContent from '../ui/text/TextContent'
 
 let initialState = { inputEdit: '', inputAdd: '' }
@@ -377,12 +375,12 @@ function Card(props) {
               <>
                 <label className="text-xs">Mensajes predeterminados:</label>
                 <div className="py-3 pl-3 pr-1 mx-auto mt-1 mb-5 bg-gray-100 rounded-md">
-                  <PDefaultNotes idAct={id} noteText="Inicializar actividad urgente" onclick={showModalFalse} updatePriority={true} />
-                  <PDefaultNotes idAct={id} noteText="esperando respuesta de cliente" onclick={showModalFalse} />
-                  <PDefaultNotes idAct={id} noteText="esperando actividad.." onclick={showModalFalse} />
-                  <PDefaultNotes idAct={id} noteText="trabajando..." onclick={showModalFalse} />
-                  <PDefaultNotes idAct={id} noteText="sin avance" onclick={showModalFalse} />
-                  <PDefaultNotes idAct={id} noteText="en cola" onclick={showModalFalse} isSeparator={false} />
+                  <ListNote type="listAction" idAct={id} noteText="Inicializar actividad urgente" onclick={showModalFalse} updatePriority={true} />
+                  <ListNote type="listAction" idAct={id} noteText="esperando respuesta de cliente" onclick={showModalFalse} />
+                  <ListNote type="listAction" idAct={id} noteText="esperando actividad.." onclick={showModalFalse} />
+                  <ListNote type="listAction" idAct={id} noteText="trabajando..." onclick={showModalFalse} />
+                  <ListNote type="listAction" idAct={id} noteText="sin avance" onclick={showModalFalse} />
+                  <ListNote type="listAction" idAct={id} noteText="en cola" onclick={showModalFalse} isSeparator={false} />
                 </div>
                 <TextArea
                   field="Descripcion nota"

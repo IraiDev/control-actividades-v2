@@ -3,7 +3,6 @@ import { ActivityContext } from '../../../context/ActivityContext'
 import ColTable from './ColTable'
 
 function THead() {
-
   const { states: ActState } = useContext(ActivityContext)
 
   return (

@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { ActivityContext } from '../../context/ActivityContext';
-import { getFetch } from '../../helpers/fetchingGraph';
-import { Person } from '@microsoft/mgt-react';
-import { alertQuest } from '../../helpers/alerts';
-import Button from '../ui/buttons/Button';
-import moment from 'moment';
-import { GraphContext } from '../../context/GraphContext';
-import TextContent from '../ui/text/TextContent';
+import { ActivityContext } from '../../context/ActivityContext'
+import { getFetch } from '../../helpers/fetchingGraph'
+import { Person } from '@microsoft/mgt-react'
+import { alertQuest } from '../../helpers/alerts'
+import Button from '../ui/buttons/Button'
+import moment from 'moment'
+import { GraphContext } from '../../context/GraphContext'
+import TextContent from '../ui/text/TextContent'
 
 let state = ''
 

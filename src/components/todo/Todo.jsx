@@ -1,15 +1,14 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { UiContext } from '../../context/UiContext'
 import { GraphContext } from '../../context/GraphContext'
 import { useForm } from '../../hooks/useForm'
 import { alertTimer } from '../../helpers/alerts'
 import TodoCard from './TodoCard'
-import Modal from "../ui/modal/Modal"
-import Input from "../ui/inputs/Input"
+import Modal from '../ui/modal/Modal'
+import Input from '../ui/inputs/Input'
 import Button from '../ui/buttons/Button'
-import PResp from '../ui/text/PResp'
 import TextArea from '../ui/inputs/TextArea'
-import "@material-tailwind/react/tailwind.css"
+import TextContent from '../ui/text/TextContent'
 
 function Todo() {
   const [{ input, textArea }, onChangeValues, reset] = useForm({ input: '', textArea: '' })
@@ -66,7 +65,7 @@ function Todo() {
                   />
                 )
               })
-            ) : (<PResp />)
+            ) : (<TextContent className="text-center col-span-12" type="response" value="No hay to-dos" />)
         }
       </div>
 

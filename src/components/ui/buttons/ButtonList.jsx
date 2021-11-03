@@ -1,14 +1,13 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { UiContext } from '../../../context/UiContext'
 import { GraphContext } from '../../../context/GraphContext'
 import { alertTimer, alertQuest } from '../../../helpers/alerts'
 import { useForm } from '../../../hooks/useForm'
-import Modal from "../modal/Modal"
-import Button from "../buttons/Button"
-import Input from "../inputs/Input"
+import Modal from '../modal/Modal'
+import Button from '../buttons/Button'
+import Input from '../inputs/Input'
 import Tippy from '@tippyjs/react'
 import { useWindowSize } from '../../../hooks/useWindowSize'
-import "@material-tailwind/react/tailwind.css"
 
 let baseStyle = 'hover:bg-gray-800 px-4 rounded-md hover:shadow-inner mb-1 flex justify-between items-center text-transparent'
 

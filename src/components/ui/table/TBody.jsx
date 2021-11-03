@@ -1,10 +1,6 @@
 import React from 'react'
-// import { ActivityContext } from '../../../context/ActivityContext'
 
 function TBody(props) {
-
-  // const { states: ActState } = useContext(ActivityContext)
-
   const {
     project,
     user,

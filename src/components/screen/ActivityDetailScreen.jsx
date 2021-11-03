@@ -1,9 +1,9 @@
-import moment from 'moment'
 import React, { useContext, useEffect, useState } from 'react'
 import { UiContext } from '../../context/UiContext'
 import { ActivityContext } from '../../context/ActivityContext'
+import TextContent from '../ui/text/TextContent'
 import ListNote from '../ui/list/ListNote'
-import Input from '@material-tailwind/react/Input'
+import Input from '../ui/inputs/Input'
 import Button from '../ui/buttons/Button'
 import Select from 'react-select';
 import ButtonColor from '../ui/buttons/ButtonColor'
@@ -15,7 +15,7 @@ import Tippy from '@tippyjs/react'
 import { useForm } from '../../hooks/useForm'
 import { checkForms, seekParam } from '../../helpers/auxFunctions'
 import { alertQuest, alertTimer, normalAlert } from '../../helpers/alerts'
-import TextContent from '../ui/text/TextContent'
+import moment from 'moment'
 
 let today = moment(new Date()).format('yyyy-MM-DD')
 const initialState = {
@@ -224,7 +224,7 @@ function ActivityDetailScreen() {
           <div className="container mx-auto text-gray-700">
             <div className="bg-white p-10 rounded-lg shadow-lg my-10">
               <div className="grid grid-cols-1 lg:grid-cols-3 mb-10">
-                <div className="text-2xl font-bold text-gray-700 capitalize col-span-2">
+                <div className="text-xl font-bold text-gray-700 capitalize col-span-2">
                   <Button
                     className="mr-3 hover:text-blue-500 pr-2"
                     type="icon"
@@ -430,59 +430,34 @@ function ActivityDetailScreen() {
                     </div>
                   </div>
                   <div className="col-span-4 lg:col-span-3">
-                    <div className="flex flex-wrap lg:flex-nowrap mb-10 gap-5 justify-center">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-10 gap-4">
                       <Input
-                        type="text"
+                        className="text-sm text-gray-800 border-gray-600 focus:border-blue-500"
                         name="inputPriority"
                         value={inputPriority}
+                        field="Nᵒ prioridad"
                         onChange={(e) => setValues({
                           ...values,
                           inputPriority: parseInt(e.target.value)
-                        })}
-                        color="blue"
-                        size="regular"
-                        outline={true}
-                        placeholder="Nᵒ prioridad"
-                        onKeyPress={(event) => {
-                          if (!/[0-9]/.test(event.key)) {
-                            event.preventDefault();
-                          }
-                        }} />
+                        })} />
                       <Input
-                        type="text"
+                        className="text-sm text-gray-800 border-gray-600 focus:border-blue-500"
                         name="inputTicket"
                         value={inputTicket}
+                        field="Ticket"
                         onChange={(e) => setValues({
                           ...values,
                           inputTicket: parseInt(e.target.value)
-                        })}
-                        color="blue"
-                        size="regular"
-                        outline={true}
-                        placeholder="Ticket"
-                        onKeyPress={(event) => {
-                          if (!/[0-9]/.test(event.key)) {
-                            event.preventDefault();
-                          }
-                        }} />
+                        })} />
                       <Input
-                        type="text"
+                        className="text-sm text-gray-800 border-gray-600 focus:border-blue-500"
                         name="inputTime"
                         value={inputTime}
+                        field="Tiempo estimado"
                         onChange={(e) => setValues({
                           ...values,
                           inputTime: parseInt(e.target.value)
-                        })}
-                        color="blue"
-                        size="regular"
-                        outline={true}
-                        placeholder="Tiempo estimado"
-                        onKeyPress={(event) => {
-                          if (!/[0-9]/.test(event.key)) {
-                            event.preventDefault();
-                          }
-                        }}
-                      />
+                        })} />
                     </div>
                     <hr />
                     <div className="my-10">
@@ -517,7 +492,7 @@ function ActivityDetailScreen() {
                   />
                   <label
                     htmlFor="archivoForm"
-                    className="transition duration-500 cursor-pointer hover:bg-blue-100 text-blue-600 text-xs font-bold uppercase py-2.5 px-6 rounded-full"
+                    className="transition duration-500 cursor-pointer hover:bg-blue-100 text-blue-600 text-xs font-semibold capitalize py-2.5 px-6 rounded-full"
                   >
                     <input
                       key={resetFile || ''}

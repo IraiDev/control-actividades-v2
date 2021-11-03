@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { UiContext } from '../../../context/UiContext'
 import { GraphContext } from '../../../context/GraphContext'
 import { useForm } from '../../../hooks/useForm'
@@ -8,7 +8,6 @@ import Modal from "../modal/Modal"
 import Button from "../buttons/Button"
 import Input from "../inputs/Input"
 import { useWindowSize } from '../../../hooks/useWindowSize'
-import "@material-tailwind/react/tailwind.css"
 
 function SideMenu() {
   const [{ input }, onChangeValues, reset] = useForm({ input: '' })

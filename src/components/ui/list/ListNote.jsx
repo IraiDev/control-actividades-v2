@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 import { ActivityContext } from '../../../context/ActivityContext'
 import { alertQuest } from '../../../helpers/alerts'
-import moment from "moment"
 import Button from '../buttons/Button'
+import moment from 'moment'
 
-let name = "NN"
+let name = 'NN'
 
 function ListNote(props) {
   const {

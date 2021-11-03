@@ -12,7 +12,6 @@ import TextArea from '../ui/inputs/TextArea'
 import moment from 'moment'
 import { alertTimer, normalAlert } from '../../helpers/alerts'
 import { checkForms, seekParam } from '../../helpers/auxFunctions'
-import '@material-tailwind/react/tailwind.css'
 import TextContent from '../ui/text/TextContent'
 
 let initialState = { inputEdit: '', inputAdd: '' }

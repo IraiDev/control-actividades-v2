@@ -1,20 +1,19 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import { UiContext } from '../../../context/UiContext';
-import { ActivityContext } from '../../../context/ActivityContext';
-import { GraphContext } from '../../../context/GraphContext';
-import { Menu, MenuButton, MenuDivider, MenuGroup, MenuItem } from '@szhsin/react-menu';
-import { alertTimer } from '../../../helpers/alerts';
-import Select from "react-select";
-import UserTimer from './UserTimer';
-import Tippy from '@tippyjs/react';
-import Modal from "../modal/Modal"
-import ButtonColor from '../buttons/ButtonColor';
-import Button from "../buttons/Button"
-import PColor from '../text/PColor';
-import "@szhsin/react-menu/dist/index.css";
-import "@material-tailwind/react/tailwind.css"
+import React, { useContext, useEffect, useState } from 'react'
+import { UiContext } from '../../../context/UiContext'
+import { ActivityContext } from '../../../context/ActivityContext'
+import { GraphContext } from '../../../context/GraphContext'
+import { Menu, MenuButton, MenuDivider, MenuGroup, MenuItem } from '@szhsin/react-menu'
+import { alertTimer } from '../../../helpers/alerts'
+import Select from 'react-select'
+import UserTimer from './UserTimer'
+import Tippy from '@tippyjs/react'
+import Modal from '../modal/Modal'
+import ButtonColor from '../buttons/ButtonColor'
+import Button from '../buttons/Button'
+import '@szhsin/react-menu/dist/index.css'
 import moment from 'moment';
 import { types } from '../../../types/types'
+import TextContent from '../text/TextContent'
 
 const { plannerView, activitiesView, timesView, detailsView } = types
 
@@ -317,9 +316,9 @@ function UtilityBar() {
           {
             ActState.userData.usuario !== undefined && (
               <div className="flex justify-between mt-2 mb-5 w-full">
-                <PColor userColor={ActState.userData.usuario.color_prioridad_baja} text="Prioridad baja" />
-                <PColor userColor={ActState.userData.usuario.color_prioridad_media} text="Prioridad media" />
-                <PColor userColor={ActState.userData.usuario.color_prioridad_alta} text="Prioridad alta" />
+                <TextContent type="color" value={ActState.userData.usuario.color_prioridad_baja} tag="Prioridad baja" />
+                <TextContent type="color" value={ActState.userData.usuario.color_prioridad_media} tag="Prioridad media" />
+                <TextContent type="color" value={ActState.userData.usuario.color_prioridad_alta} tag="Prioridad alta" />
               </div>
             )
           }

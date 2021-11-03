@@ -1,5 +1,5 @@
 import React from 'react'
-const styleDefault = 'w-full text-sm text-gray-800 border-gray-600 focus:border-blue-500'
+const styleDefault = 'text-sm text-gray-800 border-gray-600 focus:border-blue-500'
 
 function Input({ type = 'text', id, name, value, onChange, placeholder = 'Escriba aqui', className = styleDefault, field = 'campo' }) {
   return (
@@ -11,7 +11,7 @@ function Input({ type = 'text', id, name, value, onChange, placeholder = 'Escrib
         value={value}
         onChange={onChange}
         type={type}
-        className={`border px-4 py-2 rounded-full placeholder-gray-400 transition duration-500 focus:outline-none focus:shadow-lg ${className}`}
+        className={`border px-4 py-2 rounded-full placeholder-gray-400 w-full transition duration-500 focus:outline-none focus:shadow-lg ${className}`}
         placeholder={placeholder}
         onKeyPress={(event) => {
           if (type !== 'number') return
