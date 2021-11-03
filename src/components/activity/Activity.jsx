@@ -15,8 +15,7 @@ import { checkForms, seekParam } from '../../helpers/auxFunctions'
 import TextContent from '../ui/text/TextContent'
 
 let initialState = { inputEdit: '', inputAdd: '' }
-let today = new Date()
-today = moment(today).format('yyyy-MM-DD')
+let today = moment(new Date()).format('yyyy-MM-DD')
 const defaultNotes = [
   { id: 11121, desc: "Inicializar actividad urgente" },
   { id: 11122, desc: "esperando respuesta de cliente" },
@@ -26,7 +25,7 @@ const defaultNotes = [
   { id: 11126, desc: "en cola" }
 ]
 
-function ModernCard(props) {
+function Activity(props) {
   const {
     actividad,
     encargado,
@@ -212,7 +211,7 @@ function ModernCard(props) {
               <div>
                 <TextContent bold tag="ID" value={id} />
                 <TextContent bold tag="Ticket" value={ticket === 0 ? 'S/T' : ticket} />
-                <TextContent bold tag="Fecha" value={moment(fechaCrea).format('DD-MM-YY')} />
+                <TextContent bold tag="Fecha" value={moment(fechaCrea).format('DD - MM - YY')} />
                 <TextContent bold tag="Transcurridos" value={`${days} Dias`} />
                 <TextContent bold tag="Prioridad" value={`${actPriority} (${prioridadRA})`} />
               </div>
@@ -340,7 +339,7 @@ function ModernCard(props) {
           <div className="py-3 px-2 col-span-1">{subProyecto === '' ? '--' : subProyecto}</div>
           <div className="py-2 px-2 col-span-1 font-semibold">
             {solicitante}
-            <span className="block text-xs font-normal">({moment(fechaCrea).format('DD-MM-yyyy')})</span>
+            <span className="block text-xs font-normal">({moment(fechaCrea).format('DD - MM - yyyy')})</span>
           </div>
           <div className="py-3 px-2 col-span-1 font-semibold text-base">{encargado}</div>
           <div className="py-3 px-2 col-span-1 font-semibold text-left">
@@ -395,22 +394,6 @@ function ModernCard(props) {
                 </MenuButton>
               }
             >
-              {/* <MenuItem
-                className="font-medium text-left"
-                onClick={() => {
-                  showModalAddNote();
-                }}
-              >
-                Agregar Nota
-              </MenuItem>
-              <MenuItem
-                className="font-medium text-left"
-                onClick={() => {
-                  showModalUpdateNote();
-                }}
-              >
-                Agregar/Editar Nota
-              </MenuItem> */}
               <MenuItem
                 className="flex justify-between"
                 onClick={() => {
@@ -537,4 +520,4 @@ function ModernCard(props) {
   )
 }
 
-export default ModernCard
+export default Activity
