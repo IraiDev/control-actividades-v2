@@ -62,15 +62,14 @@ function TodoCard({ idTodo, title, desc }) {
         <hr />
         <div className="flex justify-end pt-2 text-gray-700">
           <Button
-            className="h-8 w-8 hover:bg-gray-200 rounded-full hover:text-green-500 mr-2"
+            className="h-8 w-8 hover:bg-gray-200 rounded-full hover:text-green-500"
             type="icon"
             icon="fas fa-pen"
             onClick={showModalTrue} />
-
           <Button
             className="h-8 w-8 hover:bg-gray-200 rounded-full hover:text-red-500"
             type="icon"
-            icon="fas fa-trash"
+            icon="fas fa-trash-alt"
             onClick={handleDelete} />
         </div>
       </div>
@@ -93,6 +92,7 @@ function TodoCard({ idTodo, title, desc }) {
             name="textArea"
             onChange={onChangeValues} />
         </div>
+        <br />
         <div className="flex justify-end">
           <Button
             className="text-blue-500 hover:text-blue-600 hover:bg-blue-100 rounded-full"
