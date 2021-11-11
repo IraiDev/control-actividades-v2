@@ -7,12 +7,13 @@ function TextArea({ type = 'text', name, value, onChange, placeholder = 'Escriba
       <label className="absolute z-20 -top-3 left-6 bg-white px-4 capitalize text-xs">{field}</label>
       <textarea
         name={name}
-        rows="10"
         value={value}
         onChange={onChange}
+        rows="7"
         type={type}
-        className={`scroll-row border px-4 py-2 text-justify rounded-2xl resize-none transition duration-500 focus:outline-none focus:shadow-lg ${className}`}
-        placeholder={placeholder}></textarea>
+        className={`border px-4 py-2 text-justify rounded-2xl resize-none transition duration-500 focus:outline-none focus:shadow-lg ${className}`}
+        placeholder={placeholder}>
+      </textarea>
     </div>
   )
 }

@@ -56,7 +56,7 @@ function TodoCard({ idTodo, title, desc }) {
           <h5 className="capitalize">{title}</h5>
         </div>
         <hr />
-        <div className="pr-2 my-2 text-xs h-52 scroll-row salto">
+        <div className="pr-2 my-2 text-xs h-44 overflow-custom whitespace-pre-wrap">
           <p>{desc}</p>
         </div>
         <hr />
@@ -76,7 +76,7 @@ function TodoCard({ idTodo, title, desc }) {
 
       {/* modal update todo */}
 
-      <Modal showModal={showModal} onClose={showModalFalse} className="md:w-4/5 lg:w-4/6 xl:w-3/6">
+      <Modal showModal={showModal} onClose={showModalFalse} className="max-w-xl">
         <h1 className="text-xl font-semibold mb-5">Editar ToDo</h1>
         <div className="w-full">
           <Input
@@ -87,6 +87,7 @@ function TodoCard({ idTodo, title, desc }) {
             onChange={onChangeValues} />
           <br />
           <TextArea
+            className="w-full text-sm text-gray-800 border-gray-300 focus:border-blue-500 h-44 overflow-custom whitespace-pre-wrap"
             field="descripcion"
             value={textArea}
             name="textArea"

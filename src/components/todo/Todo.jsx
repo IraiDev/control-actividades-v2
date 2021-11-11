@@ -71,7 +71,7 @@ function Todo() {
 
       {/* modal create todo */}
 
-      <Modal showModal={showModal} onClose={showModalFalse} className="md:w-4/5 lg:w-4/6 xl:w-3/6">
+      <Modal showModal={showModal} onClose={showModalFalse} className="max-w-xl">
         <h1 className="text-xl font-semibold mb-5">Crear ToDo</h1>
         <div className="w-full">
           <Input

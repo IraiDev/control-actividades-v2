@@ -19,7 +19,8 @@ function ListNote(props) {
     separator = true,
     updatePriority,
     callBack,
-    from = false
+    from = false,
+    className
   } = props
 
   const { functions: ActFunc } = useContext(ActivityContext)
@@ -94,7 +95,7 @@ function ListNote(props) {
       <>
         <li className="flex justify-between items-center">
           <button
-            className={`text-left my-2 focus:outline-none hover:text-blue-500 ${activeColor}`}
+            className={`text-left my-2 focus:outline-none hover:text-blue-500 ${activeColor} ${className}`}
             onClick={() => {
               handleGetidNote()
             }}>

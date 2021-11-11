@@ -83,20 +83,24 @@ function PlannerCard({ idTask, idPlan, title, description, assignments, createdB
           </div>
         </div>
       </div>
-      <p className="capitalize text-xs text-gray-600">descripcion</p>
-      <p className={`text-xs px-2 mt-1 mb-2 text-justify ${description === '' && 'text-gray-400'}`}>
-        {description === '' ? 'No hay descripcion...' : description}
-      </p>
-      <p className="capitalize text-xs text-gray-600 mb-1">Lista de comprobacion</p>
-      <ul className="mb-3">
-        {
-          Object.entries(checklist).length > 0 ?
-            Object.entries(checklist).map((list) => (
-              <li key={list[0]} className="text-xs text-gray-600 capitalize pl-2">{list[1].title}</li>
-            ))
-            : <p className="text-xs text-gray-400 mb-1 pl-2">No hay notas...</p>
-        }
-      </ul>
+      <div className="bg-black bg-opacity-5 p-2 my-2 rounded-md">
+        <p className="capitalize text-xs text-gray-600">descripcion</p>
+        <p className={`text-xs px-2 mt-1 text-justify max-h-32 overflow-custom ${description === '' && 'text-gray-400'}`}>
+          {description === '' ? 'No hay descripcion...' : description}
+        </p>
+      </div>
+      <div className="my-3">
+        <p className="capitalize text-xs text-gray-600 mb-1">Lista de comprobacion</p>
+        <ul className="mb-3">
+          {
+            Object.entries(checklist).length > 0 ?
+              Object.entries(checklist).map((list) => (
+                <li key={list[0]} className="text-xs text-gray-600 capitalize pl-2">{list[1].title}</li>
+              ))
+              : <p className="text-xs text-gray-400 mb-1 pl-2">No hay notas...</p>
+          }
+        </ul>
+      </div>
       <ul className="w-full">
         <p className="text-xs capitalize text-gray-600 mb-1">archivos</p>
         {

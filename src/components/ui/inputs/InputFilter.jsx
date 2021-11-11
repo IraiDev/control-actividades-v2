@@ -27,7 +27,7 @@ function InputFilter(props) {
         content={<span>{tippyText}</span>}
       >
         <input
-          className="w-3/4 p-2 ml-2 text-sm bg-gray-100 border-b placeholder-gray-500 border-gray-300 transitions duration-500 focus:border-blue-400 outline-none "
+          className="w-4/6 p-2 ml-2 text-sm bg-gray-100 border-b placeholder-gray-500 border-gray-300 transitions duration-500 focus:border-blue-400 outline-none "
           placeholder={placeholder}
           name={name}
           value={value}

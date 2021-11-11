@@ -63,7 +63,7 @@ function TimeScreen() {
           </div>
         </div>
       </div>
-      <div className="overflow-x-auto overflow-y-hidden">
+      <div className="overflow-custom mx-2 md:mx-10">
         <Table toggleValue={isChecked} />
       </div>
     </>

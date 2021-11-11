@@ -3,13 +3,17 @@ import ReactDOM from 'react-dom'
 
 const portal = document.getElementById('modal-root')
 
-const Modal = ({ children, showModal, onClose, className = 'md:w-3/5' }) => {
+const Modal = ({ children, showModal, onClose, isBlur = true, className = 'max-w-7xl' }) => {
+
+  const onBlur = () => {
+    !isBlur && onClose()
+  }
 
   if (showModal) {
     return ReactDOM.createPortal(
       <div className="fixed top-0 bottom-0 left-0 right-0 z-100 animate__animated animate__fadeIn animate__faster">
         <div
-          onClick={onClose}
+          onClick={onBlur}
           className="fixed top-0 bottom-0 left-0 right-0 z-1000 bg-black bg-opacity-25" />
         <div className={`relative top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-md p-5 z-1100 shadow-xl h-auto w-11/12 ${className}`}>
           <button

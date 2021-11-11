@@ -315,7 +315,7 @@ function UtilityBar() {
 
       {/* modal update todo */}
 
-      <Modal showModal={showModal} onClose={showModalFalse} className="md:w-3/5 lg:w-3/6 xl:w-2/6">
+      <Modal showModal={showModal} onClose={showModalFalse} className="max-w-xl">
         <h1 className="text-xl font-semibold mb-5">Colores prioridades ToDo</h1>
         <div className="w-full">
           <label className="text-2xs">Colores actuales:</label>

@@ -114,7 +114,7 @@ function ButtonList(props) {
 
       {/* modal create list */}
 
-      <Modal showModal={showModal} onClose={showModalFalse} className="md:w-96">
+      <Modal showModal={showModal} onClose={showModalFalse} className="max-w-lg">
         <h1 className="text-xl font-semibold mb-5">Editar lista</h1>
         <div className="w-full">
           <Input

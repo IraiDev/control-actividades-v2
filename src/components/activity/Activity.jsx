@@ -218,11 +218,11 @@ function Activity(props) {
             </div>
             <div className={`mb-2 bg-black rounded-md p-1 ${prioridad === 1000 ? 'bg-opacity-5' : 'bg-opacity-10'}`}>
               <p className="text-opacity-75 font-bold ">Descripcion</p>
-              <p className="scroll-row salto">{seekParam(desc, '- PAUSA')}</p>
+              <p className="max-h-32 overflow-custom whitespace-pre-wrap">{seekParam(desc, '- PAUSA')}</p>
             </div>
             <div>
               <p className={`text-opacity-75 font-bold my-4 pb-1 ${notas.length > 0 && 'border-b'} ${lineColor}`}>Notas</p>
-              <ul className="mt-1 font-normal scroll-row">
+              <ul className="mt-1 font-normal max-h-32 overflow-custom mix-blend-luminosity">
                 {
                   notas.length > 0 ?
                     notas.map(obj => {
@@ -330,7 +330,7 @@ function Activity(props) {
       {
         type === 'list' &&
         <div
-          className={`grid grid-cols-12 my-2 shadow-md rounded-md min-w-fake-table border-transparent hover:border-gray-700 transition duration-500 ${bgColor} ${textColor} ${actPlayList}`}
+          className={`grid grid-cols-12 my-2 shadow-md rounded-md min-w-table border-transparent hover:border-gray-700 transition duration-500 ${bgColor} ${textColor} ${actPlayList}`}
           onDoubleClick={handleOpenDetails}
         >
           <div className="py-3 px-2 col-span-1 font-semibold text-base">{id}</div>
@@ -361,7 +361,7 @@ function Activity(props) {
               delay={[700, 0]}
               content={<span>{desc}</span>}
             >
-              <p className={!isExpand ? 'truncate' : 'salto'}>{seekParam(desc, '- PAUSA')}</p>
+              <p className={!isExpand ? 'truncate' : 'whitespace-pre-wrap'}>{seekParam(desc, '- PAUSA')}</p>
             </Tippy>
             <Button
               className="ml-2"
@@ -445,7 +445,7 @@ function Activity(props) {
 
       {/* modal update todo */}
 
-      <Modal showModal={showModal} onClose={showModalFalse} className="md:w-4/5 lg:w-4/6 xl:w-3/6">
+      <Modal showModal={showModal} onClose={showModalFalse} className="max-w-3xl">
         <h1 className="text-xl font-semibold mb-5">{noteActive.idNote !== null ? 'Editar Nota' : 'Agregar nueva nota'}</h1>
         <div className="w-full">
           {
@@ -474,7 +474,7 @@ function Activity(props) {
               </> :
               <>
                 <label className="mb-2">Notas:</label>
-                <ul className="min-h-80 scroll-row bg-gray-100 rounded-md py-3 pl-3">
+                <ul className="max-h-44 overflow-custom bg-gray-100 rounded-md py-3 pl-3">
                   {
                     notas.length > 0 ?
                       notas.map((obj, index) => {

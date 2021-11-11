@@ -118,7 +118,7 @@ function SideMenu() {
 
       {/* modal create todo */}
 
-      <Modal showModal={showModal} onClose={showModalFalse} className="md:w-96">
+      <Modal showModal={showModal} onClose={showModalFalse} className="max-w-lg">
         <h1 className="text-xl font-semibold mb-5">Crear nueva lista</h1>
         <div className="w-430"></div>
         <Input

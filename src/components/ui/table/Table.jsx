@@ -7,9 +7,9 @@ function Table({ toggleValue }) {
   const { states: ActState } = useContext(ActivityContext)
 
   return (
-    <div className="sm:mx-5 xl:mx-16 2xl:mx-30 min-w-tiempos" >
+    <div className="min-w-table">
       <THead />
-      <div className="h-table scroll-row">
+      <div className="max-h-3/4 overflow-custom">
         {
           ActState.infoTimes.length > 0 ?
             ActState.infoTimes.map((item, index) => {

@@ -11,7 +11,6 @@ function SelectFilter(props) {
   const {
     isControllerBy = false,
     isController = false,
-    width = 'w-60',
     options,
     label,
     orderPriority,
@@ -159,22 +158,21 @@ function SelectFilter(props) {
   }, [UiState.isResetFilters])
 
   return (
-    <div className="flex items-center justify-between px-2">
-      <div>
+    <div className="flex items-center justify-between gap-2">
+      <div className="w-3/4">
         <label className="text-xs">{label}:</label>
-        <div>
-          <Select
-            isMulti={isMulti}
-            placeholder={isMulti ? "Seleccione opciones" : "Seleccione una opcion"}
-            className={`mb-2 ${width}`}
-            options={isControllerBy ? flag ? newSubProjectArray : ActState.arraySubProject : options}
-            onChange={isMulti ? isController ? onChangeSelectController : onChangeMultiSelect : onChangeSelect}
-            value={isMulti ? isControllerBy ? UiState.subProject : multiSelectValue : selectValue}
-          />
-        </div>
+        <Select
+          maxMenuHeight={170}
+          isMulti={isMulti}
+          placeholder={isMulti ? "Seleccione opciones" : "Seleccione una opcion"}
+          className="w-full"
+          options={isControllerBy ? flag ? newSubProjectArray : ActState.arraySubProject : options}
+          onChange={isMulti ? isController ? onChangeSelectController : onChangeMultiSelect : onChangeSelect}
+          value={isMulti ? isControllerBy ? UiState.subProject : multiSelectValue : selectValue}
+        />
       </div>
       <ButtonOrderFilter
-        className="bg-gray-100 rounded-full mt-4"
+        className="bg-gray-100 rounded-full mt-6"
         orderPriority={orderPriority}
         orderAsc={orderAsc}
         orderDesc={orderDesc}

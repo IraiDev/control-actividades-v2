@@ -221,8 +221,8 @@ function ActivityDetailScreen() {
       {
         ActState.activityDetails !== null &&
         <>
-          <div className="container mx-auto text-gray-700">
-            <div className="bg-white p-10 rounded-lg shadow-lg my-10">
+          <div className="md:container mx-1 sm:mx-3 md:mx-auto text-gray-700">
+            <div className="bg-white mobile:p-3 sm:p-6 md:p-8 rounded-lg shadow-lg my-10">
               <div className="md:flex justify-between items-center mb-10">
                 <div className="text-lg md:text-xl font-bold text-gray-700 capitalize mt-2">
                   <Button
@@ -279,7 +279,7 @@ function ActivityDetailScreen() {
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
-                <div className="col-span-1">
+                <div className="col-span-1 px-4 sm:p-0">
                   <TextContent bold tag="Encargado" value={ActState.activityDetails.encargado_actividad}
                   />
                   <TextContent bold tag="Proyecto" value={ActState.activityDetails.proyecto_tarea.proyecto}
@@ -324,7 +324,7 @@ function ActivityDetailScreen() {
                         onClick={showModalUpdateNote} />
                     </div>
                   </div>
-                  <div className="scroll-row-detail h-card-details">
+                  <div className="max-h-56 overflow-custom">
                     <ul className="mt-1 text-sm">
                       {ActState.activityDetails.notas.length > 0 ?
                         ActState.activityDetails.notas.map(obj => {
@@ -353,7 +353,7 @@ function ActivityDetailScreen() {
                     icon="fas fa-pen"
                     onClick={() => setShowModalDesc(true)} />
                 </div>
-                <div className="h-desc scroll-row-detail">
+                <div className="max-h-96 overflow-custom">
                   <p className="p-2 leading-tight text-justify salto text-sm">
                     {seekParam(ActState.activityDetails.func_objeto, '- PAUSA')}
                   </p>
@@ -555,7 +555,7 @@ function ActivityDetailScreen() {
                   </> :
                   <>
                     <label className="mb-2 text-xs">Notas:</label>
-                    <ul className="min-h-80 scroll-row bg-gray-100 rounded-md py-3 pl-3">
+                    <ul className="max-h-56 overflow-custom bg-gray-100 rounded-md py-3 pl-3">
                       {
                         ActState.activityDetails.notas.length > 0 ?
                           ActState.activityDetails.notas.map((obj, index) => {

@@ -37,7 +37,7 @@ function ActivitiesScreen() {
         <ToggleView onChangeGrid={handleGrid} onChangeList={handleList} active={view} />
         {
           view ?
-            <div className="overflow-x-auto overflow-y-hidden text-center text-sm h-table scroll-row">
+            <div className="overflow-custom text-center text-sm max-h-3/4">
               <ActivityHeader onClick={handleExpand} active={isExpand} />
               <ActivityContainer array={ActState.activitiesRA} type="list" onExpand={isExpand} />
             </div>
