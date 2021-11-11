@@ -218,7 +218,7 @@ function Activity(props) {
             </div>
             <div className={`mb-2 bg-black rounded-md p-1 ${prioridad === 1000 ? 'bg-opacity-5' : 'bg-opacity-10'}`}>
               <p className="text-opacity-75 font-bold ">Descripcion</p>
-              <p className="max-h-32 overflow-custom whitespace-pre-wrap">{seekParam(desc, '- PAUSA')}</p>
+              <p className="max-h-32 overflow-custom mix-blend-luminosity whitespace-pre-wrap">{seekParam(desc, '- PAUSA')}</p>
             </div>
             <div>
               <p className={`text-opacity-75 font-bold my-4 pb-1 ${notas.length > 0 && 'border-b'} ${lineColor}`}>Notas</p>
@@ -452,7 +452,7 @@ function Activity(props) {
             updateOrAdd ?
               <>
                 <label className="text-xs">Mensajes predeterminados:</label>
-                <div className="py-3 pl-3 pr-1 mx-auto mt-1 mb-5 bg-gray-100 rounded-md">
+                <div className="py-3 pl-3 pr-1 mx-auto overflow-custom h-44 mt-1 mb-5 bg-gray-100 rounded-md">
                   {
                     defaultNotes.map((note, index) => (
                       <ListNote

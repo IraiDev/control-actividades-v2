@@ -6,6 +6,7 @@ import { useForm } from '../../../hooks/useForm'
 import Modal from '../modal/Modal'
 import Button from '../buttons/Button'
 import Input from '../inputs/Input'
+import { useWindowSize } from '../../../hooks/useWindowSize'
 
 let baseStyle = 'hover:bg-gray-800 px-4 rounded-md hover:shadow-inner mb-1 flex justify-between items-center text-transparent'
 
@@ -24,6 +25,7 @@ function ButtonList(props) {
   const { functions: GraphFunc } = useContext(GraphContext)
   const { functions: UiFunc } = useContext(UiContext)
   const [showModal, setShowModal] = useState(false)
+  const size = useWindowSize()
 
   const handleClick = () => {
     const data = {
@@ -33,7 +35,7 @@ function ButtonList(props) {
     onClick(idList)
     if (noSelect) return
     UiFunc.setDisplayNameTodoList(data)
-    UiFunc.setToggleSideMenu(false)
+    size.width < 1024 && UiFunc.setToggleSideMenu(false)
   }
 
   const handleUpdateList = () => {

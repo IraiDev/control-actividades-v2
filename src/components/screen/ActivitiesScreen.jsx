@@ -33,11 +33,11 @@ function ActivitiesScreen() {
 
   if (UiState.allOrDetails) {
     return (
-      <div className={`my-3 ${view ? 'px-5' : 'container mx-auto'}`}>
+      <div className={`my-3 ${view ? 'px-5' : 'sm:container mx-2 sm:mx-auto'}`}>
         <ToggleView onChangeGrid={handleGrid} onChangeList={handleList} active={view} />
         {
           view ?
-            <div className="overflow-custom text-center text-sm max-h-3/4">
+            <div className="overflow-custom text-center text-sm max-h-3/4 pb-5">
               <ActivityHeader onClick={handleExpand} active={isExpand} />
               <ActivityContainer array={ActState.activitiesRA} type="list" onExpand={isExpand} />
             </div>

@@ -222,7 +222,7 @@ function ActivityDetailScreen() {
         ActState.activityDetails !== null &&
         <>
           <div className="md:container mx-1 sm:mx-3 md:mx-auto text-gray-700">
-            <div className="bg-white mobile:p-3 sm:p-6 md:p-8 rounded-lg shadow-lg my-10">
+            <div className="bg-white p-3 sm:p-6 md:p-8 rounded-lg shadow-lg my-10">
               <div className="md:flex justify-between items-center mb-10">
                 <div className="text-lg md:text-xl font-bold text-gray-700 capitalize mt-2">
                   <Button
@@ -492,7 +492,7 @@ function ActivityDetailScreen() {
                   />
                   <label
                     htmlFor="archivoForm"
-                    className="transition duration-500 text-center cursor-pointer hover:bg-blue-100 text-blue-600 text-xs font-semibold capitalize py-2.5 px-6 rounded-full mb-2 md:mb-0 block md:inline"
+                    className="transition duration-500 text-center cursor-pointer hover:bg-blue-100 text-blue-600 font-semibold capitalize py-2.5 px-6 rounded-full mb-2 md:mb-0 block md:inline"
                   >
                     <input
                       key={resetFile || ''}

@@ -160,7 +160,7 @@ function UtilityBar() {
   return (
     <>
       <div
-        className="flex flex-col lg:flex-row items-center bg-white shadow min-w-full sticky top-14 z-20 pt-5 px-10">
+        className="flex flex-col lg:flex-row items-center bg-white shadow min-w-full sticky top-14 z-20 pt-5 px-3 sm:px-5 md:px-10">
         <div className={`flex order-last w-full pb-5 lg:order-first justify-between`}>
           <div>
             <Button
