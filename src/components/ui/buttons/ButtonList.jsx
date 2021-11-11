@@ -6,8 +6,6 @@ import { useForm } from '../../../hooks/useForm'
 import Modal from '../modal/Modal'
 import Button from '../buttons/Button'
 import Input from '../inputs/Input'
-import Tippy from '@tippyjs/react'
-import { useWindowSize } from '../../../hooks/useWindowSize'
 
 let baseStyle = 'hover:bg-gray-800 px-4 rounded-md hover:shadow-inner mb-1 flex justify-between items-center text-transparent'
 
@@ -26,7 +24,6 @@ function ButtonList(props) {
   const { functions: GraphFunc } = useContext(GraphContext)
   const { functions: UiFunc } = useContext(UiContext)
   const [showModal, setShowModal] = useState(false)
-  const size = useWindowSize();
 
   const handleClick = () => {
     const data = {
@@ -36,6 +33,7 @@ function ButtonList(props) {
     onClick(idList)
     if (noSelect) return
     UiFunc.setDisplayNameTodoList(data)
+    UiFunc.setToggleSideMenu(false)
   }
 
   const handleUpdateList = () => {
@@ -66,39 +64,28 @@ function ButtonList(props) {
 
   return (
     <>
-      <div className={`${baseStyle} ${active} ${size.width > 1024 && 'hover:text-blue-400'}`}>
-        <Tippy
-          disabled={size.width > 1024}
-          offset={[0, 30]}
-          delay={[200, 0]}
-          placement={"left"}
-          content={<span>{title}</span>}
+      <div className={`${baseStyle} ${active} hover:text-blue-400 transition duration-500`}>
+        <button
+          className={`focus:outline-none flex items-center text-white w-full py-2`}
+          onClick={() => {
+            handleClick()
+          }}
         >
-          <button
-            className={`focus:outline-none flex items-center text-white ${size.width < 1024 ? 'w-full py-2' : 'w-44 py-3'}`}
-            onClick={() => {
-              handleClick()
-            }}
-          >
-            <span>
-              <i className={icon}></i>
-            </span>
-            {
-              size.width > 1024 &&
-              <p className="font-semibold ml-4">{title}</p>
-            }
-          </button>
-        </Tippy>
+          <span>
+            <i className={icon}></i>
+          </span>
+          <p className="font-semibold mx-4">{title}</p>
+        </button>
         {
           actions &&
-          <div className={`flex justify-between left-12 hover:text-blue-400 ${size.width < 1024 && 'absolute hover:bg-gray-800 py-2 pr-4 pl-10 -m-3 rounded-r'}`}>
+          <div className={`flex justify-between hover:text-blue-400 `}>
             <button
               className="active:outline-none focus:outline-none"
               onClick={() => {
                 setShowModal(true);
               }}
             >
-              <i className={`transition duration-500 fas fa-pen hover:text-green-400 ${size.width < 1024 && 'fa-sm'}`}></i>
+              <i className={`transition duration-500 fas fa-pen hover:text-green-400 `}></i>
             </button>
             <button
               className="active:outline-none focus:outline-none"
@@ -106,7 +93,7 @@ function ButtonList(props) {
                 handleDeleteList();
               }}
             >
-              <i className={`transition duration-500 ml-3 fas fa-trash hover:text-red-400 ${size.width < 1024 && 'fa-sm'}`}></i>
+              <i className={`transition duration-500 ml-3 fas fa-trash hover:text-red-400 `}></i>
             </button>
           </div>
         }

@@ -27,6 +27,7 @@ function UiProvider({ children }) {
   const [isViewChanged, setViewActivities, setViewPLannerTask] = useTab()
   const [isTodoOrPlanner, setViewTodo, setViewPlanner] = useTab()
   const [toggleSideBar, setToggleSideBar] = useToggle(false);
+  const [toggleSideMenu, setToggleSideMenu] = useState(false);
   const [disableBtnSideBar, setDisableBtnSideBar] = useState(true)
   const [isResetFilters, setResetFilters] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -139,7 +140,8 @@ function UiProvider({ children }) {
       multiSolicitantes,
       tabs,
       allOrDetails,
-      displayNameTodoList
+      displayNameTodoList,
+      toggleSideMenu
     },
     functions: {
       activityView,
@@ -164,7 +166,8 @@ function UiProvider({ children }) {
       setAllOrDetails,
       detailsView,
       setNavTab,
-      setDisplayNameTodoList
+      setDisplayNameTodoList,
+      setToggleSideMenu
     }
   }
   return (

@@ -26,22 +26,26 @@ function PlannerContainer({ array = [], percentComplete }) {
       {
         array.length > 0 ?
           array.map(obj => {
-            return (
-              <PlannerCard
-                key={obj.id}
-                idTask={obj.id}
-                title={obj.title}
-                description={obj.details.description}
-                assignments={obj.assignments}
-                idPlan={obj.planId}
-                createdBy={obj.createdBy}
-                createdDateTime={obj.createdDateTime}
-                references={obj.details.references}
-                percentComplete={obj.percentComplete}
-                checklist={obj.details.checklist}
-                dueDateTime={obj.dueDateTime}
-                etag={obj} />
-            )
+            if (obj.percentComplete === percentComplete) {
+              return (
+                <PlannerCard
+                  key={obj.id}
+                  idTask={obj.id}
+                  title={obj.title}
+                  description={obj.details.description}
+                  assignments={obj.assignments}
+                  idPlan={obj.planId}
+                  createdBy={obj.createdBy}
+                  createdDateTime={obj.createdDateTime}
+                  references={obj.details.references}
+                  percentComplete={obj.percentComplete}
+                  checklist={obj.details.checklist}
+                  dueDateTime={obj.dueDateTime}
+                  etag={obj} />
+              )
+            } else {
+              return null
+            }
           })
           : <TextContent
             className="text-center col-span-2"

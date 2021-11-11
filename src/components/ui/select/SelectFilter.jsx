@@ -159,12 +159,12 @@ function SelectFilter(props) {
 
   return (
     <div className="flex items-center justify-between gap-2">
-      <div className="w-3/4">
+      <div className="w-4/6">
         <label className="text-xs">{label}:</label>
         <Select
           maxMenuHeight={170}
           isMulti={isMulti}
-          placeholder={isMulti ? "Seleccione opciones" : "Seleccione una opcion"}
+          placeholder="Seleccione"
           className="w-full"
           options={isControllerBy ? flag ? newSubProjectArray : ActState.arraySubProject : options}
           onChange={isMulti ? isController ? onChangeSelectController : onChangeMultiSelect : onChangeSelect}

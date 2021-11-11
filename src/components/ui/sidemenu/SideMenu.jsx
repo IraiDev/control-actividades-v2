@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { UiContext } from '../../../context/UiContext'
 import { GraphContext } from '../../../context/GraphContext'
 import { useForm } from '../../../hooks/useForm'
@@ -9,14 +9,16 @@ import Button from "../buttons/Button"
 import Input from "../inputs/Input"
 import { useWindowSize } from '../../../hooks/useWindowSize'
 
+const style = 'min-w-max z-40 px-3 py-10 ml-3 mt-5 text-white bg-gray-700 border-r rounded-md shadow-md top-52 lg:top-40 animate__animated animate__faster'
+
 function SideMenu() {
   const [{ input }, onChangeValues, reset] = useForm({ input: '' })
   const { functions: GraphFunc, states: GraphState } = useContext(GraphContext)
-  const { functions: UiFunc } = useContext(UiContext)
+  const { functions: UiFunc, states: UiState } = useContext(UiContext)
   const [showModal, setShowModal] = useState(false)
   const [plannerActive, setPlannerActive] = useState(false)
   const [idTodoList, setIdTodoList] = useState(null)
-  const size = useWindowSize();
+  const size = useWindowSize()
 
   const handleClickTodo = (idList) => {
     setIdTodoList(idList)
@@ -57,9 +59,18 @@ function SideMenu() {
     setShowModal(true)
   }
 
+  useEffect(() => {
+    if (size.width > 1024) {
+      UiFunc.setToggleSideMenu(true)
+    }
+    else {
+      UiFunc.setToggleSideMenu(false)
+    }
+  }, [size])
+
   return (
     <>
-      <div className={`sticky z-40 h-full px-3 ml-3 mt-5 text-white bg-gray-700 border-r rounded-md shadow-md top-52 lg:top-40 ${size.width > 1024 ? 'py-10' : 'py-3'}`}>
+      <div className={`${style} ${UiState.toggleSideMenu ? 'animate__slideInLeft' : 'animate__slideOutLeft'} ${size.width > 1024 ? 'sticky h-full' : 'fixed'}`}>
         <div className="relative">
           <ButtonList
             title={"Nueva lista"}
@@ -120,7 +131,6 @@ function SideMenu() {
 
       <Modal showModal={showModal} onClose={showModalFalse} className="max-w-lg">
         <h1 className="text-xl font-semibold mb-5">Crear nueva lista</h1>
-        <div className="w-430"></div>
         <Input
           field="Titulo"
           type="text"

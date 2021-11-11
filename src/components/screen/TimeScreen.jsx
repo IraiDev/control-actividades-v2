@@ -35,8 +35,8 @@ function TimeScreen() {
 
   return (
     <>
-      <div className="flex justify-center items-center">
-        <div className="p-4 bg-white rounded-full shadow mr-4">
+      <div className="flex justify-center items-center gap-1 my-4">
+        <div className="p-4 bg-white rounded-full shadow">
           <label htmlFor="floatcheck123" className="flex items-center">
             <input
               className="mr-2"
@@ -47,16 +47,16 @@ function TimeScreen() {
             <p className={!isChecked ? 'line-through' : ''}>Cobrables</p>
           </label>
         </div>
-        <div className="rounded-full bg-white shadow p-2 my-4 flex justify-between items-center">
+        <div className="rounded-full bg-white shadow p-2 flex justify-between items-center">
           <input
-            className="bg-gray-100 p-2 rounded-full w-full mr-4"
+            className="bg-gray-100 p-1.5 rounded-full w-full mr-1"
             type="date"
             name="input"
             value={input}
             onChange={onChangeInput} />
           <div>
             <Button
-              className="hover:bg-blue-100 text-blue-500 rounded-full h-8 w-8"
+              className="hover:bg-blue-200 bg-blue-50 text-blue-500 rounded-full h-8 w-8"
               type="icon"
               icon="fas fa-check"
               onClick={handleNewDate} />

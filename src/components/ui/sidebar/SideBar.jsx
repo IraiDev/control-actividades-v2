@@ -6,7 +6,7 @@ import Button from '../buttons/Button'
 import InputFilter from '../inputs/InputFilter'
 import SelectFilter from '../select/SelectFilter'
 
-let style = 'bg-white shadow-xl min-w-sd-br pt-4 h-screen animate__animated animate__faster z-30 fixed'
+let style = 'bg-white shadow-xl min-w-sd-br-mobile sm:min-w-sd-br pt-4 h-screen animate__animated animate__faster z-30 fixed'
 const initialState = { inputId: '', inputAct: '', inputPriority: '' }
 
 function SideBar() {
@@ -72,8 +72,8 @@ function SideBar() {
 
   return (
     <div
-      className={UiState.toggleSideBar ? `${style} animate__slideInLeft` : `${style} animate__slideOutLeft`}>
-      <div className="mobile:h-5/6 sm:h-auto overflow-custom pb-20 w-full px-6">
+      className={`${style} ${UiState.toggleSideBar ? 'animate__slideInLeft' : 'animate__slideOutLeft'}`}>
+      <div className="h-5/6 sm:h-auto overflow-custom pb-20 w-full px-6">
         <div className="flex justify-between mb-4">
           <h1 className="pt-2 mb-4 text-xl">Filtros:</h1>
           <Button

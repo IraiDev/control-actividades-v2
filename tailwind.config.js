@@ -17,6 +17,7 @@ module.exports = {
         'full': '100%',
         'table': '1536px',
         'sd-br': '370px',
+        'sd-br-mobile': '320px',
       }
     },
     fontSize: {

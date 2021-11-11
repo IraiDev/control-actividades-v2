@@ -14,6 +14,7 @@ import Button from '../buttons/Button'
 import '@szhsin/react-menu/dist/index.css'
 import { types } from '../../../types/types'
 import moment from 'moment'
+import { useWindowSize } from '../../../hooks/useWindowSize'
 
 const { plannerView, activitiesView, timesView, detailsView } = types
 
@@ -48,6 +49,7 @@ function UtilityBar() {
   const [colorSelected, setColorSelected] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [isWorking, toggleIsWorking] = useState(false)
+  const size = useWindowSize();
 
   const handleSideBar = () => {
     UiFunc.setToggleSideBar()
@@ -159,7 +161,7 @@ function UtilityBar() {
     <>
       <div
         className="flex flex-col lg:flex-row items-center bg-white shadow min-w-full sticky top-14 z-20 pt-5 px-10">
-        <div className={`flex order-last w-full pb-5 lg:order-first ${UiState.disableBtnSideBar ? 'justify-center lg:justify-end' : 'justify-between'}`}>
+        <div className={`flex order-last w-full pb-5 lg:order-first justify-between`}>
           <div>
             <Button
               disabled={UiState.disableBtnSideBar}
@@ -169,6 +171,14 @@ function UtilityBar() {
               icon="fas fa-filter fa-sm"
               name="Filtrar"
               onClick={handleSideBar} />
+            <Button
+              disabled={UiState.tabs !== plannerView || size.width > 1024}
+              className="rounded-full px-4 py-1 bg-gray-100  hover:bg-gray-50 hover:text-blue-500"
+              shadow
+              type="iconText"
+              icon="fas fa-list-ul fa-sm"
+              name="menu"
+              onClick={() => UiFunc.setToggleSideMenu(!UiState.toggleSideMenu)} />
           </div>
           <div className="flex">
             <div className="md:hidden">

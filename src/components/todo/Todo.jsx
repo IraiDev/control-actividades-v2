@@ -43,7 +43,7 @@ function Todo() {
 
   return (
     <>
-      <div className="bg-white mb-5 p-4 rounded-md shadow-md mt-1 flex justify-end sm:justify-between items-center text-sm">
+      <div className="bg-white mb-5 p-4 rounded-md shadow-md mt-1 flex justify-end sm:justify-between items-center text-sm w-full">
         <p className="font-semibold text-lg text-gray-600 hidden sm:inline"><i className={`${UiState.displayNameTodoList.icon} mr-2`}></i>{UiState.displayNameTodoList.title}</p>
         <Button
           className="text-blue-500 font-semibold border-2 border-blue-500 rounded-full hover:text-white hover:bg-blue-500"
