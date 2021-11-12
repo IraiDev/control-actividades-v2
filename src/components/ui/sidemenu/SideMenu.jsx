@@ -9,7 +9,7 @@ import Button from "../buttons/Button"
 import Input from "../inputs/Input"
 import { useWindowSize } from '../../../hooks/useWindowSize'
 
-const style = 'min-w-max z-40 px-3 py-10 mx-auto ml-3 text-white bg-gray-700 border-r rounded-md shadow-md top-40 animate__animated animate__faster'
+const style = 'min-w-max z-40 px-3 py-10 ml-3 text-white bg-gray-700 border-r rounded-md shadow-md top-40 animate__animated animate__faster'
 
 function SideMenu() {
   const [{ input }, onChangeValues, reset] = useForm({ input: '' })

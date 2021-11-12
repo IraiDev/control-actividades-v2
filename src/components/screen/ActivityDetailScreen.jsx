@@ -432,7 +432,7 @@ function ActivityDetailScreen() {
                   <div className="col-span-4 lg:col-span-3">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-10 gap-4">
                       <Input
-                        className="text-sm text-gray-800 border-gray-300 focus:border-blue-500"
+                        className="text-sm"
                         name="inputPriority"
                         value={inputPriority}
                         field="Nᵒ prioridad"
@@ -441,7 +441,7 @@ function ActivityDetailScreen() {
                           inputPriority: parseInt(e.target.value)
                         })} />
                       <Input
-                        className="text-sm text-gray-800 border-gray-300 focus:border-blue-500"
+                        className="text-sm"
                         name="inputTicket"
                         value={inputTicket}
                         field="Ticket"
@@ -450,7 +450,7 @@ function ActivityDetailScreen() {
                           inputTicket: parseInt(e.target.value)
                         })} />
                       <Input
-                        className="text-sm text-gray-800 border-gray-300 focus:border-blue-500"
+                        className="text-sm"
                         name="inputTime"
                         value={inputTime}
                         field="Tiempo estimado"

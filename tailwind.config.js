@@ -7,7 +7,8 @@ module.exports = {
         '0': '0',
         '1/4': '25%',
         '1/2': '50%',
-        '3/4': '75vh'
+        '3/4': '75vh',
+        'card': '176px'
       },
       minWidth: {
         '0': '0',
@@ -18,6 +19,9 @@ module.exports = {
         'table': '1536px',
         'sd-br': '370px',
         'sd-br-mobile': '320px',
+      },
+      screens: {
+        '3xl': '1800px'
       }
     },
     fontSize: {

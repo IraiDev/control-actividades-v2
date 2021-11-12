@@ -51,7 +51,7 @@ function Todo() {
           onClick={showModalTrue}
         />
       </div>
-      <div className="grid grid-cols-12 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-5 gap-3">
         {
           GraphState.todoTask.length > 0 ?
             (
@@ -62,6 +62,7 @@ function Todo() {
                     title={obj.title}
                     desc={obj.body.content}
                     idTodo={obj.id}
+                    importance={obj.importance}
                   />
                 )
               })

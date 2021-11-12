@@ -253,7 +253,7 @@ function Activity(props) {
                 className={` ml-3 ${isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'}`}
                 tippyText={isActPlay ? 'Detener tiempo' : 'Reanudar tiempo'} />
             </div>
-            <div>
+            <div className="font-normal">
               <Menu
                 direction="left"
                 menuButton={
@@ -263,7 +263,7 @@ function Activity(props) {
                 }
               >
                 <MenuItem
-                  className="font-medium text-left"
+                  className="text-left"
                   onClick={() => {
                     showModalAddNote();
                   }}
@@ -271,7 +271,7 @@ function Activity(props) {
                   Agregar Nota
                 </MenuItem>
                 <MenuItem
-                  className="font-medium text-left"
+                  className="text-left"
                   onClick={() => {
                     showModalUpdateNote();
                   }}

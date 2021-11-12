@@ -57,7 +57,7 @@ function PlannerCard({ idTask, idPlan, title, description, assignments, createdB
   }, [])
 
   return (
-    <div className="relative transition duration-500 w-full gap-2 p-4 bg-white border-2 rounded-md shadow-lg border-transparent hover:border-gray-500">
+    <div className="relative transition duration-500 w-full gap-2 p-4 bg-white border-2 rounded-md shadow-lg border-transparent hover:border-gray-600">
       <div className="flex items-center justify-between">
         <div>
           <h5 className="font-semibold text-sm capitalize mb-1">{title}</h5>

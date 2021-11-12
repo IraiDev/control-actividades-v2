@@ -66,7 +66,7 @@ function ButtonList(props) {
 
   return (
     <>
-      <div className={`${baseStyle} ${active} hover:text-blue-400 transition duration-500`}>
+      <div className={`${baseStyle} ${active} hover:text-blue-400 transition duration-300`}>
         <button
           className={`focus:outline-none flex items-center text-white w-full py-2`}
           onClick={() => {

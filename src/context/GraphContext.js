@@ -31,7 +31,10 @@ function GraphProvider({ children }) {
   const getTodoTask = async (idList) => {
     const endPoint = `/me/todo/lists/${idList}/tasks`
     await getFetch(endPoint)
-      .then(resp => setTodoTask(resp.value))
+      .then(resp => {
+        console.log(resp)
+        setTodoTask(resp.value)
+      })
     UiFunc.setIsLoading(false)
   }
 
