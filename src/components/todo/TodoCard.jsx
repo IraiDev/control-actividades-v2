@@ -71,6 +71,7 @@ function TodoCard({ idTodo, title, desc, importance }) {
               </Tippy>
             }
             <Menu
+              className={importance === 'high' ? 'bg-gray-700 text-white' : 'bg-white text-black'}
               direction="left"
               menuButton={
                 <MenuButton className="focus:outline-none active:outline-none h-7 w-7 rounded-full transition duration-500 hover:bg-black hover:bg-opacity-10">
@@ -78,13 +79,13 @@ function TodoCard({ idTodo, title, desc, importance }) {
                 </MenuButton>
               }>
               <MenuItem
-                className="hover:text-green-500"
+                className="hover:text-white hover:bg-blue-500"
                 onClick={showModalTrue}>
                 Editar
                 <i className="fas fa-pen ml-2"></i>
               </MenuItem>
               <MenuItem
-                className="hover:text-red-500"
+                className="hover:text-white hover:bg-blue-500"
                 onClick={handleDelete}>
                 Eliminar
                 <i className="fas fa-trash-alt ml-2"></i>

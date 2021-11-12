@@ -255,6 +255,7 @@ function Activity(props) {
             </div>
             <div className="font-normal">
               <Menu
+                className={`${bgColor} ${textColor}`}
                 direction="left"
                 menuButton={
                   <MenuButton className="focus:outline-none active:outline-none h-7 w-7 rounded-full transition duration-500 hover:bg-black hover:bg-opacity-25 mt-1">
@@ -263,7 +264,7 @@ function Activity(props) {
                 }
               >
                 <MenuItem
-                  className="text-left"
+                  className="text-left hover:text-white hover:bg-blue-500"
                   onClick={() => {
                     showModalAddNote();
                   }}
@@ -271,7 +272,7 @@ function Activity(props) {
                   Agregar Nota
                 </MenuItem>
                 <MenuItem
-                  className="text-left"
+                  className="text-left hover:text-white hover:bg-blue-500"
                   onClick={() => {
                     showModalUpdateNote();
                   }}
@@ -279,7 +280,7 @@ function Activity(props) {
                   Agregar/Editar Nota
                 </MenuItem>
                 <MenuItem
-                  className="flex justify-between"
+                  className="flex justify-between hover:text-white hover:bg-blue-500"
                   onClick={() => {
                     handleUpdatePriority(id, 100);
                   }}
@@ -290,7 +291,7 @@ function Activity(props) {
                   ></p>
                 </MenuItem>
                 <MenuItem
-                  className="flex justify-between"
+                  className="flex justify-between hover:text-white hover:bg-blue-500"
                   onClick={() => {
                     handleUpdatePriority(id, 400);
                   }}
@@ -301,7 +302,7 @@ function Activity(props) {
                   ></p>
                 </MenuItem>
                 <MenuItem
-                  className="flex justify-between"
+                  className="flex justify-between hover:text-white hover:bg-blue-500"
                   onClick={() => {
                     handleUpdatePriority(id, 600);
                   }}
@@ -312,7 +313,7 @@ function Activity(props) {
                   ></p>
                 </MenuItem>
                 <MenuItem
-                  className="flex justify-between"
+                  className="flex justify-between hover:text-white hover:bg-blue-500"
                   onClick={() => {
                     handleUpdatePriority(id, 1000);
                   }}
