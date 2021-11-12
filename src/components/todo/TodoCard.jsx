@@ -45,6 +45,7 @@ function TodoCard({ idTodo, title, desc, importance }) {
 
   const showModalFalse = () => {
     setShowModal(false)
+    setCheck(importance === 'high')
     reset()
   }
 
@@ -55,10 +56,20 @@ function TodoCard({ idTodo, title, desc, importance }) {
 
   return (
     <>
-      <div className="p-4 bg-white rounded-md shadow-md hover:bg-gray-50 border-2 border-transparent hover:border-gray-600 transition duration-500">
-        <div className="mb-1 font-semibold text-gray-800 flex justify-between items-center">
+      <div className={`p-4 rounded-md shadow-md border-2 border-transparent  transition duration-500 ${importance === 'high' ? 'bg-gray-700 text-white hover:bg-gray-600 hover:border-black' : 'bg-white hover:bg-gray-50 hover:border-gray-600'}`}>
+        <div className="mb-1 font-semibold flex justify-between items-start">
           <h5 className="capitalize">{title}</h5>
-          <div className="font-normal text-left text-sm">
+          <div className="font-normal text-left text-sm flex items-center">
+            {importance === 'high' &&
+              <Tippy
+                offset={[0, 10]}
+                delay={[700, 0]}
+                placement="bottom"
+                content={<span>Importante</span>}
+              >
+                <i className="fas fa-star text-yellow-400"></i>
+              </Tippy>
+            }
             <Menu
               direction="left"
               menuButton={
@@ -91,10 +102,7 @@ function TodoCard({ idTodo, title, desc, importance }) {
 
       <Modal showModal={showModal} onClose={showModalFalse} className="max-w-xl">
         <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-xl font-semibold mb-5">Editar ToDo</h1>
-            {check && <i className="fas fa-star text-blue-500"></i>}
-          </div>
+          <h1 className="text-xl font-semibold mb-5">Editar ToDo</h1>
           <Tippy
             offset={[0, 10]}
             delay={[700, 0]}
