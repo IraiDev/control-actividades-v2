@@ -117,7 +117,7 @@ function TodoCard({ idTodo, title, desc, importance }) {
                 id="important"
                 checked={check}
                 onChange={() => setCheck(!check)} />
-              <i className={`transition duration-500 fa-lg ${check ? 'fas fa-star text-blue-500' : 'far fa-star'}`}></i>
+              <i className={`transition duration-500 cursor-pointer hover:text-blue-400 fa-lg ${check ? 'fas fa-star text-blue-500' : 'far fa-star'}`}></i>
             </label>
           </Tippy>
         </div>
