@@ -59,7 +59,7 @@ function Todo() {
 
   return (
     <>
-      <div className="bg-white mb-5 p-4 rounded-md shadow-md mt-1 flex justify-end sm:justify-between items-center text-sm w-full">
+      <div className="bg-white mb-5 p-4 rounded-md shadow-md mt-1 flex justify-between items-center text-sm w-full">
         <div className="flex items-center gap-2">
           <p className="font-semibold text-lg text-gray-600 hidden sm:inline"><i className={`${UiState.displayNameTodoList.icon} mr-2`}></i>{UiState.displayNameTodoList.title}</p>
           <Tippy
