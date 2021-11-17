@@ -56,7 +56,8 @@ function TodoCard({ idTodo, title, desc, importance }) {
 
   return (
     <>
-      <div className={`p-4 rounded-md shadow-md border-2 border-transparent  transition duration-500 ${importance === 'high' ? 'bg-gray-700 text-white hover:bg-gray-600 hover:border-black' : 'bg-white hover:bg-gray-50 hover:border-gray-600'}`}>
+      <div onDoubleClick={showModalTrue}
+        className={`p-4 rounded-md shadow-md border-2 border-transparent  transition duration-500 ${importance === 'high' ? 'bg-gray-700 text-white hover:bg-gray-600 hover:border-black' : 'bg-white hover:bg-gray-50 hover:border-gray-600'}`}>
         <div className="mb-1 font-semibold flex justify-between items-start">
           <h5 className="capitalize">{title}</h5>
           <div className="font-normal text-left text-sm flex items-center">

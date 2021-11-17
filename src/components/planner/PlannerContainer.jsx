@@ -1,13 +1,30 @@
 import React from 'react'
+import TextContent from '../ui/text/TextContent'
 import PlannerCard from './PlannerCard'
 
 function PlannerContainer({ array = [], percentComplete }) {
 
+  let text, count = 0
+
+  switch (percentComplete) {
+    case 0:
+      text = 'Pendientes'
+      break
+    case 50:
+      text = 'En trabajo'
+      break
+    case 100:
+      text = 'Completadas'
+      break
+    default:
+      text = 'NN'
+      break
+  }
+
   return (
     <>
       {
-        array.length > 0 &&
-        array.map(obj => {
+        array.map((obj) => {
           if (obj.percentComplete === percentComplete) {
             return (
               <PlannerCard
@@ -25,7 +42,21 @@ function PlannerContainer({ array = [], percentComplete }) {
                 dueDateTime={obj.dueDateTime}
                 etag={obj} />
             )
-          } else { return null }
+          } else {
+            count++
+            if (count === array.length) {
+              return (
+                <TextContent
+                  key={count}
+                  className="text-center col-span-12"
+                  type="response"
+                  value={`No hay tareas ${text}`} />
+              )
+            }
+            else {
+              return null
+            }
+          }
         })
       }
     </>
