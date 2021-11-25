@@ -139,7 +139,7 @@ function ActivityProvider({ children }) {
     }
   }
 
-  const getActivities = async (filtersParam = '') => {
+  const getActivities = async (filtersParam = '', isDetails = false) => {
 
     let data = {}
 
@@ -162,7 +162,7 @@ function ActivityProvider({ children }) {
 
     try {
       let filters = filtersParam === '' ? UiState.filters : filtersParam
-      const resp = await fetchToken(`task/get-task-ra?${filters}`, data, 'POST')
+      const resp = await fetchToken(`task/get-task-ra?${filters}&es_detalle=${isDetails}`, data, 'POST')
       const body = await resp.json()
 
       if (body.ok) {
@@ -176,9 +176,7 @@ function ActivityProvider({ children }) {
     }
   }
 
-  const getActivityDetail = async (idActivity) => {
-
-    const filters = `id_actividad=${idActivity}`
+  const getActivityDetail = async (idActivity, isDetails = true) => {
 
     const data = {
       encargado: [],
@@ -187,16 +185,20 @@ function ActivityProvider({ children }) {
       subProy: []
     }
 
-    const resp = await fetchToken(`task/get-task-ra?${filters}`, data, 'POST')
+    const resp = await fetchToken(`task/get-task-ra?id_actividad=${idActivity}&es_detalle=${isDetails}`, data, 'POST')
     const body = await resp.json()
+    const { ok } = body
+
+    UiFunc.setIsLoading(false)
 
     if (body.ok) {
       setActivityDetails(body.tareas[0])
+      return { ok, res: body.tareas[0] }
     }
     else {
       normalAlert('info', 'Error al obtener detalle de actividad', 'Entiendo...')
+      return { ok }
     }
-    UiFunc.setIsLoading(false)
   }
 
   const getInfoTimes = async (param) => {
@@ -370,6 +372,25 @@ function ActivityProvider({ children }) {
 
   }
 
+  const playActivity = async (data, isDetail = true) => {
+    const resp = await fetchToken('task/play-pause', data, 'POST')
+    const body = await resp.json()
+    const { ok } = body
+
+    UiFunc.setIsLoading(false)
+
+    if (ok) {
+      isDetail ? getActivityDetail(data.id_actividad) : getActivities()
+      getTimes()
+      getNotify()
+      return ok
+    }
+    else {
+      console.log('fallo consulta (playActivity)', body)
+      return ok
+    }
+  }
+
   const value = {
     states: {
       userData,
@@ -402,6 +423,7 @@ function ActivityProvider({ children }) {
       getFilters,
       getInfoTimes,
       markNotifications,
+      playActivity
     }
   }
   return (

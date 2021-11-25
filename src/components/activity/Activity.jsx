@@ -10,7 +10,7 @@ import Modal from '../ui/modal/Modal'
 import Button from '../ui/buttons/Button'
 import TextArea from '../ui/inputs/TextArea'
 import moment from 'moment'
-import { alertTimer, normalAlert } from '../../helpers/alerts'
+import { alertTimer, normalAlert, respAlert } from '../../helpers/alerts'
 import { checkForms, seekParam } from '../../helpers/auxFunctions'
 import TextContent from '../ui/text/TextContent'
 
@@ -46,6 +46,8 @@ function Activity(props) {
     expand
   } = props;
 
+  const isPending = estado === 1
+  const pause = pausas.length > 0 && pausas[pausas.length - 1].boton === 2
   const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
   const { functions: UiFunc } = useContext(UiContext)
   const [{ inputEdit, inputAdd }, onChangeValues, reset] = useForm(initialState)
@@ -56,7 +58,7 @@ function Activity(props) {
 
   let dateTo = moment(fechaCrea)
   let days = dateTo.diff(today, 'days') - (dateTo.diff(today, 'days') * 2)
-  let textColor, lineColor, bgColor, actPriority, actPlay = '', isActPlay = false, actPlayList = 'border'
+  let textColor, lineColor, bgColor, actPriority, actPlay = '', actPlayList = 'border'
 
   switch (prioridad) {
     case 600:
@@ -85,17 +87,14 @@ function Activity(props) {
       break;
   }
 
-  if (pausas.length > 0 && estado === 2) {
-    if (pausas[pausas.length - 1].boton === 2) {
-      isActPlay = true
-      actPlay = 'border-4 border-black border-opacity-25'
-      actPlayList = 'border-3 border-black border-opacity-25'
-    }
-    else {
-      isActPlay = false
-      actPlay = ''
-      actPlayList = 'border'
-    }
+  if (pause && !isPending) {
+    console.log(pause, isPending);
+    actPlay = 'border-4 border-black border-opacity-25'
+    actPlayList = 'border-3 border-black border-opacity-25'
+  }
+  else {
+    actPlay = ''
+    actPlayList = ''
   }
 
   // funciones controladoras de eventos
@@ -182,6 +181,28 @@ function Activity(props) {
     setIsExpand(!isExpand)
   }
 
+  const handlePlayActivity = async () => {
+
+    if (pause) { // se pusara
+      const html = '<p>Ingrese el detalle de la detancia (obligatorio):</p>'
+      const resp = await respAlert({ html })
+
+      UiFunc.setIsLoading(true)
+
+      if (resp) {
+        const data = {
+          mensaje: resp,
+          id_actividad: id
+        }
+        ActFunc.playActivity(data, false)
+      }
+    }
+    else { // se pondra play
+      UiFunc.setIsLoading(true)
+      ActFunc.playActivity({ id_actividad: id }, false)
+    }
+  }
+
   useEffect(() => {
     if (expand) {
       setIsExpand(true)
@@ -206,7 +227,7 @@ function Activity(props) {
                 <TextContent bold tag="Proyecto" value={proyecto} />
                 <TextContent bold tag="Sub proyecto" value={subProyecto} />
                 <TextContent bold tag="Solicitante" value={solicitante} />
-                <TextContent bold tag="Estado" value={estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"} />
+                <TextContent bold tag="Estado" value={isPending ? "Pendiente" : "En trabajo"} />
               </div>
               <div>
                 <TextContent bold tag="ID" value={id} />
@@ -246,12 +267,17 @@ function Activity(props) {
           </div>
           <div className={`flex justify-between items-center place-self-end w-full border-t mt-2 ${lineColor}`}>
             <div className="flex items-center justify-between pt-1">
-              {isActPlay && <i className="ml-2 fas fa-user-clock fa-sm"></i>}
-              <Button
-                type="icon"
-                icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
-                className={` ml-3 ${isActPlay ? 'hover:text-red-500' : 'hover:text-green-500'}`}
-                tippyText={isActPlay ? 'Detener tiempo' : 'Reanudar tiempo'} />
+              {!isPending &&
+                <>
+                  <i className="ml-2 fas fa-user-clock fa-sm"></i>
+                  <Button
+                    type="icon"
+                    icon={pause ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
+                    className={` ml-3 ${pause ? 'hover:text-red-500' : 'hover:text-green-500'}`}
+                    tippyText={pause ? 'Detener tiempo' : 'Reanudar tiempo'}
+                    onClick={handlePlayActivity} />
+                </>
+              }
             </div>
             <div className="font-normal">
               <Menu
@@ -372,21 +398,21 @@ function Activity(props) {
           </div>
           <div className="py-3 px-2 col-span-1 font-semibold text-base">
             <Tippy
-              disabled={!isActPlay}
+              disabled={!pause}
               offset={[0, 8]}
               placement="bottom"
               delay={[700, 0]}
               content={<span>Actividad en play</span>}
             >
-              <p className={isActPlay ? 'bg-black bg-opacity-10 rounded-full w-max mx-auto px-2' : ''}>{estado === 1 ? "Pendiente" : estado === 2 && "En trabajo"}</p>
+              <p className={pause ? 'bg-black bg-opacity-10 rounded-full w-max mx-auto px-2' : ''}>{isPending ? "Pendiente" : "En trabajo"}</p>
             </Tippy>
           </div>
           <div className="py-3 px-2 col-span-1 flex items-center mx-auto">
             <Button
-              className={isActPlay ? 'hover:text-red-500 h-7 w-7' : 'hover:text-green-500 h-7 w-7'}
+              className={pause ? 'hover:text-red-500 h-7 w-7' : 'hover:text-green-500 h-7 w-7'}
               type="icon"
-              icon={isActPlay ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
-              tippyText={isActPlay ? 'Detener tiempo' : 'Reanudar tiempo'} />
+              icon={pause ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
+              tippyText={pause ? 'Detener tiempo' : 'Reanudar tiempo'} />
             <Menu
               direction="left"
               menuButton={
