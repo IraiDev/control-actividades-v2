@@ -4,7 +4,7 @@ import Button from '../ui/buttons/Button'
 function ActivityHeader({ onClick, active }) {
   return (
     <div className="grid grid-cols-12 shadow-md rounded-md font-semibold text-white min-w-table sticky top-0">
-      <div className="bg-gray-500 hover:bg-gray-700 rounded-l-md px-2 py-5 transition duration-500 col-span-1">ID</div>
+      <div title="ID actividad | Nᵒ Prioridad" className="bg-gray-500 hover:bg-gray-700 rounded-l-md px-2 py-5 transition duration-500 col-span-1">ID | Nᵒ</div>
       <div className="bg-gray-600 hover:bg-gray-800 px-2 py-5 transition duration-500 col-span-1">Ticket</div>
       <div className="bg-gray-500 hover:bg-gray-700 px-2 py-5 transition duration-500 col-span-1">Proyecto</div>
       <div className="bg-gray-600 hover:bg-gray-800 px-2 py-5 transition duration-500 col-span-1">SubProy.</div>

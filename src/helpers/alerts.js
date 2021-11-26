@@ -100,10 +100,21 @@ export const respAlert = async ({ cancelText = 'Cancelar', confirmText = 'Acepta
     buttonsStyling: false,
     input: 'textarea',
     html,
+    title: `<h5 class="text-xl font-semibold capitalize">Pausar actividad</h5>`,
     inputPlaceholder: 'Escriba aqui...',
     showCancelButton: true,
     confirmButtonText: confirmText,
-    cancelButtonText: cancelText
+    cancelButtonText: cancelText,
+    inputValidator: (text) => {
+      if (!text) {
+        return 'No puedes guardar una pausa con una descripcion vacia.'
+      }
+    }
   })
-  return text
+  if (text) {
+    return { ok: true, text }
+  }
+  else {
+    return { ok: false }
+  }
 }

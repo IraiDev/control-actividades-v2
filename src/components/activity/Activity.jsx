@@ -58,43 +58,42 @@ function Activity(props) {
 
   let dateTo = moment(fechaCrea)
   let days = dateTo.diff(today, 'days') - (dateTo.diff(today, 'days') * 2)
-  let textColor, lineColor, bgColor, actPriority, actPlay = '', actPlayList = 'border'
+  let color, line, background, priority, border = '', border_list = 'border'
 
   switch (prioridad) {
     case 600:
-      bgColor = ActState.userData.usuario.color_prioridad_baja
-      textColor = 'text-white'
-      lineColor = 'border-white'
-      actPriority = 'Baja'
+      background = ActState.userData.usuario.color_prioridad_baja
+      color = 'text-white'
+      line = 'border-white'
+      priority = 'Baja'
       break;
     case 400:
-      bgColor = ActState.userData.usuario.color_prioridad_media
-      textColor = 'text-white'
-      lineColor = 'border-white'
-      actPriority = 'Media'
+      background = ActState.userData.usuario.color_prioridad_media
+      color = 'text-white'
+      line = 'border-white'
+      priority = 'Media'
       break;
     case 100:
-      bgColor = ActState.userData.usuario.color_prioridad_alta
-      textColor = 'text-white'
-      lineColor = 'border-white'
-      actPriority = 'Alta'
+      background = ActState.userData.usuario.color_prioridad_alta
+      color = 'text-white'
+      line = 'border-white'
+      priority = 'Alta'
       break;
     default:
-      bgColor = 'bg-white hover:bg-gray-50'
-      textColor = 'text-gray-600'
-      lineColor = 'border-gray-500'
-      actPriority = 'S/P'
+      background = 'bg-white hover:bg-gray-50'
+      color = 'text-gray-600'
+      line = 'border-gray-500'
+      priority = 'S/P'
       break;
   }
 
   if (pause && !isPending) {
-    console.log(pause, isPending);
-    actPlay = 'border-4 border-black border-opacity-25'
-    actPlayList = 'border-3 border-black border-opacity-25'
+    border = 'border-4 border-black border-opacity-25'
+    border_list = 'border-3 border-black border-opacity-25'
   }
   else {
-    actPlay = ''
-    actPlayList = ''
+    border = ''
+    border_list = 'border'
   }
 
   // funciones controladoras de eventos
@@ -184,20 +183,24 @@ function Activity(props) {
   const handlePlayActivity = async () => {
 
     if (pause) { // se pusara
-      const html = '<p>Ingrese el detalle de la detancia (obligatorio):</p>'
-      const resp = await respAlert({ html })
+      const html =
+        `
+          <p class="text-sm">Se pausara la actividad: <b>${id}</b>, <b>${actividad}</b></p>
+          <p class="text-sm">Ingrese el detalle de la detencia <b>(obligatorio):</b></p>
+        `
+      const resp = await respAlert({ html, name: actividad, id })
+      const { ok, text } = resp
 
-      UiFunc.setIsLoading(true)
+      if (ok) {
+        UiFunc.setIsLoading(true)
 
-      if (resp) {
         const data = {
-          mensaje: resp,
+          mensaje: text,
           id_actividad: id
         }
         ActFunc.playActivity(data, false)
       }
-    }
-    else { // se pondra play
+    } else { // se pondra play
       UiFunc.setIsLoading(true)
       ActFunc.playActivity({ id_actividad: id }, false)
     }
@@ -217,7 +220,7 @@ function Activity(props) {
       {
         type === 'card' &&
         <div
-          className={`grid grid-cols-1 p-3 bg-white rounded-md shadow-xl text-xs font-semibold transition duration-500 border-2 border-transparent hover:border-gray-600 ${bgColor} ${textColor} ${actPlay}`}
+          className={`grid grid-cols-1 p-3 bg-white rounded-md shadow-xl text-xs font-semibold transition duration-500 border-2 border-transparent hover:border-gray-600 ${background} ${color} ${border}`}
           onDoubleClick={handleOpenDetails}>
           <div>
             <h5 className="font-bold text-base mb-2">{numberCard} - <p className="inline capitalize">{actividad}</p></h5>
@@ -234,7 +237,7 @@ function Activity(props) {
                 <TextContent bold tag="Ticket" value={ticket === 0 ? 'S/T' : ticket} />
                 <TextContent bold tag="Fecha" value={moment(fechaCrea).format('DD - MM - YY')} />
                 <TextContent bold tag="Transcurridos" value={`${days} Dias`} />
-                <TextContent bold tag="Prioridad" value={`${actPriority} (${prioridadRA})`} />
+                <TextContent bold tag="Prioridad" value={`${priority} (${prioridadRA})`} />
               </div>
             </div>
             <div className={`mb-2 bg-black rounded-md p-1 ${prioridad === 1000 ? 'bg-opacity-5' : 'bg-opacity-10'}`}>
@@ -242,7 +245,7 @@ function Activity(props) {
               <p className="max-h-32 overflow-custom mix-blend-luminosity whitespace-pre-wrap">{seekParam(desc, '- PAUSA')}</p>
             </div>
             <div>
-              <p className={`text-opacity-75 font-bold my-4 pb-1 ${notas.length > 0 && 'border-b'} ${lineColor}`}>Notas</p>
+              <p className={`text-opacity-75 font-bold my-4 pb-1 ${notas.length > 0 && 'border-b'} ${line}`}>Notas</p>
               <ul className="mt-1 font-normal max-h-32 overflow-custom mix-blend-luminosity">
                 {
                   notas.length > 0 ?
@@ -265,26 +268,60 @@ function Activity(props) {
               </ul>
             </div>
           </div>
-          <div className={`flex justify-between items-center place-self-end w-full border-t mt-2 ${lineColor}`}>
+          <div className={`flex justify-between items-center place-self-end w-full border-t mt-2 ${line}`}>
             <div className="flex items-center justify-between pt-1">
+              <Menu
+                className={`${background} ${color}`}
+                direction="bottom"
+                menuButton={
+                  <MenuButton
+                    disabled={!isPending}
+                    className="focus:outline-none active:outline-none py-1 px-3 rounded-full font-bold transition duration-500 hover:bg-black hover:bg-opacity-10">
+                    {isPending ? 'Pendiente' : 'En Trabajo'} <i className="fas fa-chevron-down ml-2"></i>
+                  </MenuButton>
+                }
+              >
+                <MenuItem
+                  className="text-left hover:text-white hover:bg-blue-500 font-bold"
+                >
+                  Pendiente
+                </MenuItem>
+                <MenuItem
+                  className="text-left hover:text-white hover:bg-blue-500 font-bold"
+                >
+                  En Trabajo
+                </MenuItem>
+              </Menu>
               {!isPending &&
                 <>
-                  <i className="ml-2 fas fa-user-clock fa-sm"></i>
                   <Button
                     type="icon"
                     icon={pause ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
-                    className={` ml-3 ${pause ? 'hover:text-red-500' : 'hover:text-green-500'}`}
-                    tippyText={pause ? 'Detener tiempo' : 'Reanudar tiempo'}
+                    className="rounded-md hover:bg-opacity-10 hover:bg-black"
                     onClick={handlePlayActivity} />
+                  <i className="ml-2 fas fa-user-clock fa-sm"></i>
                 </>
               }
+              {/* <select className={`${background} transition duration-500 rounded-md p-1 focus:outline-none font-bold lowercase`} name="" id="">
+                {
+                  ActState.arrayState.map(est => {
+                    if (est.label !== 'Todas') {
+                      return (
+                        <option selected={estado === est.value} key={est.value} value={est.value}>
+                          {est.label}
+                        </option>
+                      )
+                    } else return null
+                  })
+                }
+              </select> */}
             </div>
             <div className="font-normal">
               <Menu
-                className={`${bgColor} ${textColor}`}
+                className={`${background} transition duration-500 ${color}`}
                 direction="left"
                 menuButton={
-                  <MenuButton className="focus:outline-none active:outline-none h-7 w-7 rounded-full transition duration-500 hover:bg-black hover:bg-opacity-25 mt-1">
+                  <MenuButton className="focus:outline-none active:outline-none h-7 w-7 rounded-md transition duration-500 hover:bg-black hover:bg-opacity-10 mt-1">
                     <i className="fas fa-ellipsis-v"></i>
                   </MenuButton>
                 }
@@ -357,10 +394,10 @@ function Activity(props) {
       {
         type === 'list' &&
         <div
-          className={`grid grid-cols-12 my-2 shadow-md rounded-md min-w-table border-transparent hover:border-gray-700 transition duration-500 ${bgColor} ${textColor} ${actPlayList}`}
+          className={`grid grid-cols-12 my-2 shadow-md rounded-md min-w-table border-transparent hover:border-gray-700 transition duration-500 ${background} ${color} ${border_list}`}
           onDoubleClick={handleOpenDetails}
         >
-          <div className="py-3 px-2 col-span-1 font-semibold text-base">{id}</div>
+          <div className="py-3 px-2 col-span-1 font-semibold text-base">{id} | {prioridadRA}</div>
           <div className="py-3 px-2 col-span-1">{ticket === 0 ? '--' : ticket}</div>
           <div className="py-3 px-2 col-span-1 font-semibold text-base">{proyecto}</div>
           <div className="py-3 px-2 col-span-1">{subProyecto === '' ? '--' : subProyecto}</div>
@@ -396,76 +433,100 @@ function Activity(props) {
               icon={isExpand ? 'fas fa-angle-up' : 'fas fa-angle-down'}
               onClick={handleExpand} />
           </div>
-          <div className="py-3 px-2 col-span-1 font-semibold text-base">
-            <Tippy
-              disabled={!pause}
-              offset={[0, 8]}
-              placement="bottom"
-              delay={[700, 0]}
-              content={<span>Actividad en play</span>}
-            >
-              <p className={pause ? 'bg-black bg-opacity-10 rounded-full w-max mx-auto px-2' : ''}>{isPending ? "Pendiente" : "En trabajo"}</p>
-            </Tippy>
-          </div>
-          <div className="py-3 px-2 col-span-1 flex items-center mx-auto">
-            <Button
-              className={pause ? 'hover:text-red-500 h-7 w-7' : 'hover:text-green-500 h-7 w-7'}
-              type="icon"
-              icon={pause ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
-              tippyText={pause ? 'Detener tiempo' : 'Reanudar tiempo'} />
+          <div className="py-2.5 mx-auto col-span-1 font-semibold text-base">
             <Menu
-              direction="left"
+              className={`${background} transition duration-500 ${color}`}
+              direction="bottom"
               menuButton={
-                <MenuButton className="focus:outline-none active:outline-none h-7 w-7 rounded-full transition duration-500 hover:bg-black hover:bg-opacity-25 ml-5">
-                  <i className="fas fa-bars"></i>
+                <MenuButton
+                  disabled={!isPending}
+                  className={`
+                  text-sm focus:outline-none active:outline-none 
+                  py-1 px-3 rounded-full font-bold transition duration-500 
+                  hover:bg-black hover:bg-opacity-10
+                  border-2 border-transparent
+                  ${pause ? prioridad !== 1000 ? 'border-white' : 'border-gray-400' : ''}
+                  `}
+                >
+                  {isPending ? 'Pendiente' : 'En Trabajo'} <i className="fas fa-chevron-down fa-sm"></i>
                 </MenuButton>
               }
             >
               <MenuItem
-                className="flex justify-between"
-                onClick={() => {
-                  handleUpdatePriority(id, 100);
-                }}
+                className="text-left text-sm hover:text-white hover:bg-blue-500 font-semibold"
               >
-                <p className="font-medium">Prioridad Alta</p>
-                <p
-                  className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_alta} rounded-full focus:outline-none active:outline-none`}
-                ></p>
+                Pendiente
               </MenuItem>
               <MenuItem
-                className="flex justify-between"
-                onClick={() => {
-                  handleUpdatePriority(id, 400);
-                }}
+                className="text-left text-sm hover:text-white hover:bg-blue-500 font-semibold"
               >
-                <p className="font-medium">Prioridad Media</p>
-                <p
-                  className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_media} rounded-full focus:outline-none active:outline-none`}
-                ></p>
-              </MenuItem>
-              <MenuItem
-                className="flex justify-between"
-                onClick={() => {
-                  handleUpdatePriority(id, 600);
-                }}
-              >
-                <p className="font-medium">Prioridad Baja</p>
-                <p
-                  className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_baja} rounded-full focus:outline-none active:outline-none`}
-                ></p>
-              </MenuItem>
-              <MenuItem
-                className="flex justify-between"
-                onClick={() => {
-                  handleUpdatePriority(id, 1000);
-                }}
-              >
-                <p className="font-medium">Sin Prioridad</p>
-                <p
-                  className={`p-2 ml-3 bg-gray-200 rounded-full focus:outline-none active:outline-none`}
-                ></p>
+                En Trabajo
               </MenuItem>
             </Menu>
+          </div>
+          <div className="col-span-1 py-2.5">
+            <div className="flex items-center justify-center">
+              {!isPending &&
+                <Button
+                  className="hover:bg-black hover:bg-opacity-10 rounded-md"
+                  type="icon"
+                  icon={pause ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
+                  onClick={handlePlayActivity} />
+              }
+              <Menu
+                direction="left"
+                menuButton={
+                  <MenuButton className="focus:outline-none active:outline-none h-7 w-7 rounded-md transition duration-500 hover:bg-black hover:bg-opacity-10">
+                    <i className="fas fa-bars"></i>
+                  </MenuButton>
+                }
+              >
+                <MenuItem
+                  className="flex justify-between"
+                  onClick={() => {
+                    handleUpdatePriority(id, 100);
+                  }}
+                >
+                  <p className="font-medium">Prioridad Alta</p>
+                  <p
+                    className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_alta} rounded-full focus:outline-none active:outline-none`}
+                  ></p>
+                </MenuItem>
+                <MenuItem
+                  className="flex justify-between"
+                  onClick={() => {
+                    handleUpdatePriority(id, 400);
+                  }}
+                >
+                  <p className="font-medium">Prioridad Media</p>
+                  <p
+                    className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_media} rounded-full focus:outline-none active:outline-none`}
+                  ></p>
+                </MenuItem>
+                <MenuItem
+                  className="flex justify-between"
+                  onClick={() => {
+                    handleUpdatePriority(id, 600);
+                  }}
+                >
+                  <p className="font-medium">Prioridad Baja</p>
+                  <p
+                    className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_baja} rounded-full focus:outline-none active:outline-none`}
+                  ></p>
+                </MenuItem>
+                <MenuItem
+                  className="flex justify-between"
+                  onClick={() => {
+                    handleUpdatePriority(id, 1000);
+                  }}
+                >
+                  <p className="font-medium">Sin Prioridad</p>
+                  <p
+                    className={`p-2 ml-3 bg-gray-200 rounded-full focus:outline-none active:outline-none`}
+                  ></p>
+                </MenuItem>
+              </Menu>
+            </div>
           </div>
         </div>
       }

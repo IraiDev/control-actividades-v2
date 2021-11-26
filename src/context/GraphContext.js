@@ -12,8 +12,6 @@ function GraphProvider({ children }) {
   const [idListSelected, setIdListSelected] = useState(null)
   const { functions: UiFunc, states: UiState } = useContext(UiContext)
 
-  //funciones api microsoft graph
-
   const getUserData = async () => {
     await getFetch('/me/').then(resp => {
       setUserEmail(resp.mail)

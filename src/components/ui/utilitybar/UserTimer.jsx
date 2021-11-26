@@ -6,8 +6,10 @@ function UserTimer({ user, time, isPause }) {
   let userTime = 0, clockColor
 
   useEffect(() => {
-    timeRef.current && clearInterval(timeRef.current)
-    timeRef.current = setInterval(() => setSec(s => s + 1), 1000)
+    if (isPause) {
+      timeRef.current && clearInterval(timeRef.current)
+      timeRef.current = setInterval(() => setSec(s => s + 1), 1000)
+    }
   }, [])
 
   if (isPause) {

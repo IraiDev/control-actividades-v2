@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from 'react'
 import { UiContext } from './UiContext'
-import { alertTimer, normalAlert } from '../helpers/alerts'
 import { fetchToken } from '../helpers/fetch'
+import { Alert } from '../helpers/alert'
 
 export const ActivityContext = createContext()
 
@@ -20,7 +20,6 @@ function ActivityProvider({ children }) {
   const [activitiesRA, setActivitiesRA] = useState([])
   const [activityDetails, setActivityDetails] = useState(null)
   const [infoTimes, setInfoTimes] = useState([])
-  // const [totals, setTotals] = useState([])
 
   const login = async (email) => {
     try {
@@ -31,7 +30,7 @@ function ActivityProvider({ children }) {
         localStorage.setItem('tokenBackend', body.token)
         setUserData(body)
       } else {
-        normalAlert('warning', `<p><b>Atencion: </b>${body.msg}</p>`, 'Entiendo')
+        Alert({ icon: 'error', content: body.msg, title: 'Error inicio de sesion', timer: 3000, showCancelButton: false })
       }
       UiFunc.setIsLoading(false)
     } catch (error) {
@@ -45,11 +44,11 @@ function ActivityProvider({ children }) {
 
   const getTimes = async () => {
     try {
-
       const resp = await fetchToken('task/get-times')
       const body = await resp.json()
 
-      body.ok ? setUsersTimes(body.tiempos) : normalAlert('warning', 'error tiempos', 'Entiendo')
+      if (body.ok) setUsersTimes(body.tiempos)
+      else Alert({ icon: 'error', title: 'Error', content: 'Error al obtener los tiempos de los usuarios', timer: 3000, showCancelButton: false })
 
     } catch (error) {
       console.log("getTimes error: ", error)
@@ -62,8 +61,8 @@ function ActivityProvider({ children }) {
       const resp = await fetchToken('task/get-notifications')
       const body = await resp.json()
 
-      body.ok ? setUserNotify(body.notificaciones) :
-        normalAlert('warning', 'Error al obtener las notificaciones', 'Entiendo')
+      if (body.ok) setUserNotify(body.notificaciones)
+      else Alert({ icon: 'error', title: 'Error', content: 'Error al obtener notificaciones', timer: 3000, showCancelButton: false })
 
     } catch (error) {
       console.log(error)
@@ -135,11 +134,11 @@ function ActivityProvider({ children }) {
         }
       })
     } else {
-      normalAlert('warning', 'Error al obtener los filtros', 'Entiendo...')
+      Alert({ icon: 'error', title: 'Error', content: 'Error al obtener los filtros', timer: 3000, showCancelButton: false })
     }
   }
 
-  const getActivities = async (filtersParam = '', isDetails = false) => {
+  const getActivities = async (filtersParam = '') => {
 
     let data = {}
 
@@ -162,13 +161,13 @@ function ActivityProvider({ children }) {
 
     try {
       let filters = filtersParam === '' ? UiState.filters : filtersParam
-      const resp = await fetchToken(`task/get-task-ra?${filters}&es_detalle=${isDetails}`, data, 'POST')
+      const resp = await fetchToken(`task/get-task-ra?${filters}`, data, 'POST')
       const body = await resp.json()
 
       if (body.ok) {
         setActivitiesRA(body.tareas)
       } else {
-        normalAlert('warning', 'Error al cargar las activiades del RA', 'Entiendo...')
+        Alert({ icon: 'error', title: 'Error', content: 'Error al obtener las actividades', timer: 3000, showCancelButton: false })
       }
       UiFunc.setIsLoading(false)
     } catch (error) {
@@ -196,7 +195,7 @@ function ActivityProvider({ children }) {
       return { ok, res: body.tareas[0] }
     }
     else {
-      normalAlert('info', 'Error al obtener detalle de actividad', 'Entiendo...')
+      Alert({ icon: 'error', title: 'Error', content: 'Error al obtener el detalle de actividad', timer: 3000 })
       return { ok }
     }
   }
@@ -297,7 +296,7 @@ function ActivityProvider({ children }) {
       setInfoTimes(arrayNewTimes)
     }
     else {
-      normalAlert('warning', 'Error al obtener informe de tiempos', 'Entiendo...')
+      Alert({ icon: 'error', title: 'Error', content: 'Error al obtener informe de tiempos', timer: 3000, showCancelButton: false })
     }
     UiFunc.setIsLoading(false)
   }
@@ -306,54 +305,65 @@ function ActivityProvider({ children }) {
     UiFunc.setIsLoading(true)
     const resp = await fetchToken('task/update-priority', data, 'POST')
     const body = await resp.json()
-    body.ok ? from ? getActivityDetail(idActivity) : getActivities() :
-      normalAlert('warning', 'Error al actualizar la prioridad de la actividad', 'Entiendo...')
+    if (body.ok) {
+      if (from) getActivityDetail(idActivity)
+      else getActivities()
+    }
+    else Alert({ icon: 'error', title: 'Error', content: 'Error al actualizar prioridad de actividad', timer: 3000, showCancelButton: false })
   }
 
   const updateUserColors = async (data) => {
     UiFunc.setIsLoading(true)
-    const userEmail = userData.usuario.email
     const resp = await fetchToken('user/update-priority', data, 'PUT')
     const body = await resp.json()
-    body.ok ? login(userEmail) :
-      normalAlert('warning', 'Error al actualizar color de prioridad ToDO', 'Entiendo...')
+    if (body.ok) login(userData.usuario.email)
+    else Alert({ icon: 'error', title: 'Error', content: 'Error al actualizar colores de prioridad de usaurio', timer: 3000, showCancelButton: false })
   }
 
   const addNewNote = async (data, from = false, idActivity) => {
     UiFunc.setIsLoading(true)
     const resp = await fetchToken('task/create-note', data, 'POST')
     const body = await resp.json()
-    body.ok ? from ? getActivityDetail(idActivity) : getActivities() :
-      normalAlert('warning', 'Error al crear la nota', 'Entiendo...')
+    if (body.ok) {
+      if (from) getActivityDetail(idActivity)
+      else getActivities()
+    }
+    else Alert({ icon: 'error', title: 'Error', content: 'Error al crear nota', timer: 3000, showCancelButton: false })
   }
 
   const updateNote = async (data, from = false, idActivity) => {
     UiFunc.setIsLoading(true)
     const resp = await fetchToken('task/update-note', data, 'PUT')
     const body = await resp.json()
-    body.ok ? from ? getActivityDetail(idActivity) : getActivities() :
-      normalAlert('warning', 'Error al actualizar la nota', 'Entiendo...')
+    if (body.ok) {
+      if (from) getActivityDetail(idActivity)
+      else getActivities()
+    }
+    else Alert({ icon: 'error', title: 'Error', content: 'Error al actualizar nota', timer: 3000, showCancelButton: false })
   }
 
   const deleteNote = async (data, from = false, idActivity) => {
     UiFunc.setIsLoading(true)
     const resp = await fetchToken('task/delete-note', data, 'DELETE')
     const body = await resp.json()
-    body.ok ? from ? getActivityDetail(idActivity) : getActivities() :
-      normalAlert('warning', 'Error al eliminar la nota', 'Entiendo...')
+    if (body.ok) {
+      if (from) getActivityDetail(idActivity)
+      else getActivities()
+    }
+    else Alert({ icon: 'error', title: 'Error', content: 'Error al eliminar nota', timer: 3000, showCancelButton: false })
   }
 
   const addTaskToRA = async (data) => {
     const resp = await fetchToken('task/add-task-todo', data, 'POST')
     const body = await resp.json()
     if (body.ok) {
-      alertTimer(false, 'info', 1500, 'Tarea agregada correctamente al RA')
+      Alert({ icon: 'info', title: 'Actividad creada', content: 'Se ha creado esta tarea como actividad correctamente', timer: 3000, showCancelButton: false })
       return true
     } else {
       if (data.description === '') {
-        normalAlert('warning', 'La tarea debe tener una descripcion para ser agregada al RA', 'Entiendo...')
+        Alert({ icon: 'warn', title: 'Atencion', content: 'La tarea debe tener una descripcion para ser creada como como actividad', timer: 3000, showCancelButton: false })
       } else {
-        normalAlert('warning', 'El ID de la tarea ya exsite en el RA', 'Entiendo...')
+        Alert({ icon: 'wern', title: 'Error', content: 'El ID de esta tarea ya existe en las actividades', timer: 3000, showCancelButton: false })
       }
       return false
     }
@@ -367,7 +377,7 @@ function ActivityProvider({ children }) {
       getNotify()
     }
     else {
-      normalAlert('warning', 'Error al marcar las notificaciones', 'Entiendo...')
+      Alert({ icon: 'error', title: 'Error', content: 'Error al marcar las notificaciones', timer: 3000, showCancelButton: false })
     }
 
   }
@@ -377,8 +387,6 @@ function ActivityProvider({ children }) {
     const body = await resp.json()
     const { ok } = body
 
-    UiFunc.setIsLoading(false)
-
     if (ok) {
       isDetail ? getActivityDetail(data.id_actividad) : getActivities()
       getTimes()
@@ -386,6 +394,8 @@ function ActivityProvider({ children }) {
       return ok
     }
     else {
+      UiFunc.setIsLoading(false)
+      Alert({ icon: 'error', title: 'Error', content: 'Error al pausar/reanudar la actividad', timer: 3000, showCancelButton: false })
       console.log('fallo consulta (playActivity)', body)
       return ok
     }
@@ -405,7 +415,6 @@ function ActivityProvider({ children }) {
       arrayState,
       infoTimes,
       activityDetails
-      // totals
     },
     functions: {
       login,

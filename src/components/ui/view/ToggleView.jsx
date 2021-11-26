@@ -10,6 +10,35 @@ function ToggleView({ onChangeGrid, onChangeList, active }) {
       <p className="ml-1 font-semibold text-gray-500">{ActState.activitiesRA.length} {ActState.activitiesRA.length <= 1 ? 'Actividad' : 'Actividades'}</p>
       <div>
         <Button
+          className={`bg-transparent text-gray-800 rounded-lg hover:bg-gray-300 mb-1`}
+          type="icon"
+          icon="fas fa-chevron-left"
+        />
+        <Button
+          className={`bg-transparent text-gray-800 rounded-lg hover:bg-gray-300 mb-1`}
+          name="1"
+        />
+        <Button
+          className={`bg-transparent text-gray-800 rounded-lg hover:bg-gray-300 mb-1`}
+          name="2"
+        />
+        <Button
+          className={`bg-transparent text-gray-800 rounded-lg hover:bg-gray-300 mb-1`}
+          name="3"
+        />
+        ...
+        <Button
+          className={`bg-transparent text-gray-800 rounded-lg hover:bg-gray-300 mb-1`}
+          name="10"
+        />
+        <Button
+          className={`bg-transparent text-gray-800 rounded-lg hover:bg-gray-300 mb-1`}
+          type="icon"
+          icon="fas fa-chevron-right"
+        />
+      </div>
+      <div>
+        <Button
           className={`bg-transparent text-gray-800 rounded-md hover:bg-gray-300 px-2 py-1 mb-1 ${!active && 'text-blue-600'}`}
           type="icon"
           icon="fas fa-border-all"

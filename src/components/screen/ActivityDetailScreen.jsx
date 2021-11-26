@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { ActivityContext } from '../../context/ActivityContext'
-import Form from '../ui/form/Form'
+import Details from '../ui/details/Details'
 
 function ActivityDetailScreen() {
 
@@ -22,7 +22,7 @@ function ActivityDetailScreen() {
 
   if (Object.keys(data).length > 0) {
     return (
-      <Form data={data} />
+      <Details data={data} />
     )
   }
   return null

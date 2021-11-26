@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import TextContent from '../ui/text/TextContent'
 import Activity from './Activity'
 
 function ActivityContainer({ array = [], type, onExpand }) {
+
+  useEffect(() => {
+    console.log(array);
+  }, [])
+
   return (
     <>
       {

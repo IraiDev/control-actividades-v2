@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react'
 import { UiContext } from '../../../context/UiContext'
 import { GraphContext } from '../../../context/GraphContext'
-import { alertTimer, alertQuest } from '../../../helpers/alerts'
 import { useForm } from '../../../hooks/useForm'
 import Modal from '../modal/Modal'
 import Button from '../buttons/Button'
 import Input from '../inputs/Input'
 import { useWindowSize } from '../../../hooks/useWindowSize'
+import { Alert } from '../../../helpers/alert'
 
 let baseStyle = 'hover:bg-gray-800 px-4 rounded-md hover:shadow-inner mb-1 flex justify-between items-center text-transparent'
 
@@ -28,35 +28,37 @@ function ButtonList(props) {
   const size = useWindowSize()
 
   const handleClick = () => {
-    const data = {
-      title,
-      icon
-    }
     onClick(idList)
     if (noSelect) return
+    const data = { title, icon }
     UiFunc.setDisplayNameTodoList(data)
     size.width < 1024 && UiFunc.setToggleSideMenu(false)
   }
 
   const handleUpdateList = () => {
-    const data = { displayName: input }
-    const aciton = () => {
-      setShowModal(false)
-      GraphFunc.updateTodoList(idList, data)
+    if (input === '') {
+      Alert({
+        icon: 'warn',
+        title: 'Atencion',
+        content: 'no pude crear una lista sin nombre, llene el campo y vuelva a intentarlo',
+        timer: 5000,
+        showCancelButton: false
+      })
+      return
     }
-    const state = input !== ''
-    alertTimer(state, 'info', 1500, 'Llene el campo para actualizar') ? aciton() : setShowModal(true)
+    setShowModal(false)
+    GraphFunc.updateTodoList(idList, { displayName: input })
   }
 
   const handleDeleteList = () => {
-    const action = () => GraphFunc.deleteTodoList(idList)
-    alertQuest(
-      'info',
-      `<p>La siguiente lista: <b>"${title}"</b> se eliminará</p>`,
-      'No, cancelar',
-      'Si, eliminar',
-      action
-    )
+    Alert({
+      icon: 'warn',
+      title: 'Atencion',
+      content: `¿Seguro desea eliminar la lista: <b>"${title}"</b>?`,
+      cancelText: 'No, cancelar',
+      confirmText: 'Si, eliminar',
+      action: () => GraphFunc.deleteTodoList(idList)
+    })
   }
 
   const showModalFalse = () => {

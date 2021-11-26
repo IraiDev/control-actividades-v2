@@ -16,6 +16,8 @@ import { useForm } from '../../../hooks/useForm'
 import { checkForms, seekParam } from '../../../helpers/auxFunctions'
 import { alertQuest, alertTimer, normalAlert, respAlert } from '../../../helpers/alerts'
 import moment from 'moment'
+import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu'
+import { Alert } from '../../../helpers/alert'
 
 let today = moment(new Date()).format('yyyy-MM-DD')
 
@@ -96,8 +98,9 @@ function Form({ data }) {
   const { functions: UiFunc } = useContext(UiContext)
   const [{ inputEdit, inputAdd, desc, priority, ticket, time, title, glose }, onChangeValues, reset] = useForm(initialState)
   const [{ idNote }, setNoteActive] = useState({ idNote: null })
-  const [updateOrAdd, setUpdateOrAdd] = useState(false)
   // modals
+  const [updateOrAdd, setUpdateOrAdd] = useState(false)
+  const [gloseOrDesc, setGloseOrDesc] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [showDescModal, setShowDescModal] = useState(false)
   const [showCloneModal, setShowCloneModal] = useState(false)
@@ -113,7 +116,6 @@ function Form({ data }) {
   // selects
   const [resetFile, setResetFile] = useState(randomString)
   const [values, setValues] = useState(initialStateRA)
-  // const [isActPlay, setIsActPlay] = useState(pause)
   const { inputPriority, inputDesc } = values
 
   const handleBack = async () => {
@@ -132,46 +134,81 @@ function Form({ data }) {
   }
 
   const handleAddNewNote = () => {
-
     const vDesc = checkForms(inputAdd)
-    if (vDesc.state) {
-      normalAlert('warning', `Caracter <b class="text-gray-600 text-xl">${vDesc.char}</b> no pemitido, campo: <b>Nota</b> <br><br> <i class="text-blue-500">Caracteres no permitidos:</i> <b>${vDesc.list}</b>`, 'Entiendo')
+    const { state, char, list } = vDesc
+    if (state) {
+      Alert({
+        icon: 'warn',
+        title: 'Atencion',
+        content: `Caracter <b class="text-gray-600 text-xl">${char}</b>
+                  no pemitido, campo: <b>Nota</b>
+                  <p class="mt-5">Caracteres no permitidos:</p> <b>${list}</b>`,
+        timer: 5000,
+        showCancelButton: false
+      })
       return
     }
 
-    const data = { id_actividad: id_det, description: inputAdd }
-    const action = () => {
-      ActFunc.addNewNote(data, true, id_det)
-      showModalFalse()
+    if (inputAdd === '') {
+      Alert({
+        icon: 'warn',
+        title: 'Atencion',
+        content: 'No puedes crear una nota vacia',
+        timer: 5000,
+        showCancelButton: false
+      })
+      return
     }
-    let state = inputAdd !== ''
-    alertTimer(state, 'info', 1500, 'No puedes agregar una nota vacia') && action()
+    const data = { id_actividad: id_det, description: inputAdd }
+    ActFunc.addNewNote(data, true, id_det)
+    showModalFalse()
   }
 
   const handleUpdateNote = () => {
 
     const vDesc = checkForms(inputEdit)
-    if (vDesc.state) {
-      normalAlert('warning', `Caracter <b class="text-gray-600 text-xl">${vDesc.char}</b> no pemitido, campo: <b>Nota</b> <br><br> <i class="text-blue-500">Caracteres no permitidos:</i> <b>${vDesc.list}</b>`, 'Entiendo')
+    const { state, char, list } = vDesc
+    if (state) {
+      Alert({
+        icon: 'warn',
+        title: 'Atencion',
+        content: `Caracter <b class="text-gray-600 text-xl">${char}</b>
+                  no pemitido, campo: <b>Nota</b>
+                  <p class="mt-5">Caracteres no permitidos:</p> <b>${list}</b>`,
+        timer: 5000,
+        showCancelButton: false
+      })
       return
     }
 
-    const dataUpdate = { id_nota: idNote, description: inputEdit }
-    const actionUpdate = () => {
-      ActFunc.updateNote(dataUpdate, true, id_det)
-      showModalFalse()
-    }
-    const dataAdd = { id_actividad: id_det, description: inputEdit }
-    const actionAdd = () => {
-      ActFunc.addNewNote(dataAdd, true, id_det)
-      showModalFalse()
-    }
     if (idNote !== null) {
-      let state = inputEdit !== ''
-      alertTimer(state, 'info', 1500, 'LLena el campo nota para actualizar') && actionUpdate()
+      if (inputEdit === '') {
+        Alert({
+          icon: 'warn',
+          title: 'Atencion',
+          content: 'No puedes actualizar la nota si el campo esta vacio',
+          timer: 5000,
+          showCancelButton: false
+        })
+        return
+      }
+      const data = { id_nota: idNote, description: inputEdit }
+      ActFunc.updateNote(data, true, id_det)
+      showModalFalse()
     } else {
-      let state = inputEdit !== ''
-      alertTimer(state, 'info', 1500, 'No puedes agregar una nota vacia') && actionAdd()
+      if (inputEdit === '') {
+        Alert({
+          icon: 'warn',
+          title: 'Atencion',
+          content: 'No puedes crear una nota vacia',
+          timer: 5000,
+          showCancelButton: false
+        })
+        return
+      }
+      const data = { id_actividad: id_det, description: inputEdit }
+      ActFunc.addNewNote(data, true, id_det)
+      showModalFalse()
     }
   }
 
@@ -211,26 +248,23 @@ function Form({ data }) {
   }
 
   const handleDeleteActivity = () => {
-    const action = () => {
-      console.log('se elimino fake');
-    }
-    alertQuest('info', '¿Estas seguro de eliminar esta actividad?', 'No Cancelar', 'Si, eliminar', action)
+    console.log('se elimino fake')
   }
 
   const onChangeFile = (event) => {
-    if (event.target.files[0].size < 5242881) {
-      setFile(event.target.files[0])
-    }
-    else {
+    if (event.target.files[0].size > 5242881) {
       setFile(null)
       setResetFile(randomString)
-      alertTimer(
-        false,
-        'info',
-        3000,
-        'Archivo excede el peso permitido por el sistema, peso maximo 5 mb'
-      )
+      Alert({
+        icon: 'warn',
+        title: 'Atencion',
+        content: 'El archivo excede el peso permitido por el sistema, peso maximo <b>5MB</b>',
+        timer: 5000,
+        showCancelButton: false
+      })
+      return
     }
+    setFile(event.target.files[0])
   }
 
   const handleClone = () => {
@@ -239,21 +273,29 @@ function Form({ data }) {
 
   const handlePlayActivity = async () => {
 
-    UiFunc.setIsLoading(true)
+    // aqui quede en la actualizacion de alertas!!!!!!!!!!!
 
     if (pause) { // se pusara
-      const html = '<p>Ingrese el detalle de la detancia (obligatorio):</p>'
-      const resp = await respAlert({ html })
+      const content =
+        `
+          Se pausara la actividad: <b>${id_det}</b>, <b>${actividad}</b>
+          <p>Ingrese el detalle de la detencia <b>(obligatorio):</b></p>
+        `
+      const resp = await Alert({ content, title: 'Atencion', type: 'input', input: 'textarea' })
+      const { ok, text } = resp
 
-      if (resp) {
+      if (ok) {
+        UiFunc.setIsLoading(true)
+
         const data = {
-          mensaje: resp,
+          mensaje: text,
           id_actividad: id_det
         }
         ActFunc.playActivity(data)
       }
     }
     else { // se pondra play
+      UiFunc.setIsLoading(true)
       ActFunc.playActivity({ id_actividad: id_det })
     }
   }
@@ -296,6 +338,7 @@ function Form({ data }) {
         <>
           <div className="md:container mx-1 sm:mx-3 md:mx-auto text-gray-700">
             <div className="bg-white p-3 sm:p-6 md:p-8 rounded-lg shadow-lg my-10">
+              {/* titulo */}
               <div className="md:flex justify-between items-center mb-10">
                 <div className="text-lg md:text-xl font-bold text-gray-700 capitalize mt-2">
                   <Button
@@ -351,7 +394,7 @@ function Form({ data }) {
                     hwBtn="5" />
                 </div>
               </div>
-              {/* informas y lista de propiedas de actividad */}
+              {/* notas y lista de propiedas de actividad */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
                 <div className="col-span-1 px-4 sm:p-0">
                   <TextContent bold tag="Encargado" value={encargado_actividad}
@@ -418,25 +461,71 @@ function Form({ data }) {
                   </div>
                 </div>
               </div>
-              <div className="grid grid-cols-1 mt-6 bg-gray-100 rounded-md py-2 px-4">
-                <div className="flex justify-between">
-                  <TextContent tag="Descripcion" />
-                  <Button
-                    className="h-8 w-8 rounded-full hover:bg-gray-300"
-                    type="icon"
-                    icon="fas fa-pen"
-                    onClick={() => setShowDescModal(true)} />
+              {/* descripcion */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
+                <div className="bg-gray-100 rounded-md py-2 px-4">
+                  <div className="flex justify-between">
+                    <TextContent tag="Descripcion" />
+                    <Button
+                      className="h-8 w-8 rounded-full hover:bg-gray-300"
+                      type="icon"
+                      icon="fas fa-pen"
+                      onClick={() => {
+                        setShowDescModal(true)
+                        setGloseOrDesc(false)
+                      }} />
+                  </div>
+                  <div className="max-h-96 overflow-custom">
+                    <p className="p-2 leading-tight text-justify salto text-sm">
+                      {seekParam(func_objeto, '- PAUSA')}
+                    </p>
+                  </div>
                 </div>
-                <div className="max-h-96 overflow-custom">
-                  <p className="p-2 leading-tight text-justify salto text-sm">
-                    {seekParam(func_objeto, '- PAUSA')}
-                  </p>
+                <div className="bg-gray-100 rounded-md py-2 px-4">
+                  <div className="flex justify-between">
+                    <TextContent tag="Glosa explicativa" />
+                    <Button
+                      className="h-8 w-8 rounded-full hover:bg-gray-300"
+                      type="icon"
+                      icon="fas fa-pen"
+                      onClick={() => {
+                        setShowDescModal(true)
+                        setGloseOrDesc(true)
+                      }} />
+                  </div>
+                  <div className="max-h-96 overflow-custom">
+                    <p className="p-2 leading-tight text-justify salto text-sm">
+                      {/* {seekParam(func_objeto, '- PAUSA')} */}
+                    </p>
+                  </div>
                 </div>
               </div>
               <div className="grid grid-cols-1 mt-6">
+                {/* opciones RA */}
                 <div className="flex justify-between items-center mb-6">
                   <TextContent tag="Opciones Registro de Avance: (sin funcionalidades por ahora)" />
                   <div className="flex items-center justify-between px-3">
+                    <Menu
+                      direction="bottom"
+                      menuButton={
+                        <MenuButton
+                          disabled={!isPending}
+                          className="text-sm focus:outline-none active:outline-none py-1 px-3 rounded-full font-bold transition duration-500 hover:bg-black hover:bg-opacity-10">
+                          {isPending ? 'Pendiente' : 'En Trabajo'} <i className="fas fa-chevron-down ml-2"></i>
+                        </MenuButton>
+                      }
+                    >
+                      <MenuItem
+                        className="text-left hover:text-white hover:bg-blue-500 text-sm"
+                      >
+                        Pendiente
+                      </MenuItem>
+                      <MenuItem
+                        className="text-left hover:text-white hover:bg-blue-500 text-sm"
+                      >
+                        En Trabajo
+                      </MenuItem>
+                    </Menu>
                     {
                       pause &&
                       <Tippy
@@ -465,6 +554,7 @@ function Form({ data }) {
                   </div>
                 </div>
                 <div className="mt-4 grid grid-cols-4 gap-10 px-5">
+                  {/* select RA */}
                   <div className="col-span-4 lg:col-span-1 lg:border-r border-b lg:border-b-0 pb-10 lg:pb-0 lg grid grid-cols-1 lg:pr-5">
                     <label className="text-xs">Proyecto:</label>
                     <Select
@@ -497,6 +587,7 @@ function Form({ data }) {
                       onChange={(option) => { setUserR(option) }}
                       value={userR} />
                   </div>
+                  {/* inputs y tiempos */}
                   <div className="col-span-4 lg:col-span-3">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-10 gap-4">
                       <Input
@@ -523,24 +614,32 @@ function Form({ data }) {
                     </div>
                     <hr />
                     <div className="mt-10 border-b pb-10 lg:pb-0 lg:border-b-0 ">
-                      <TableTimes />
+                      <TableTimes data={{ tiempo_estimado, tiempo_hoy, tiempo_trabajado }} />
                     </div>
                   </div>
                 </div>
-                <h5 className="mt-10 font-bold">
+                {/* archivos */}
+                <h5 className="mt-10 mb-5 font-bold">
                   Archivos adjuntos:
                   <label className="text-xs text-gray-400 ml-1 font-normal">{file !== null ? file.name : '(No hay archivo seleccionado)'}</label>
                 </h5>
                 <ul className="text-sm grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2">
                   {
-                    files.map(file => {
-                      return (
-                        <ListDocs key={file.id} name={file.name} />
-                      )
-                    })
+                    tarea_documentos.length > 0 ?
+                      tarea_documentos.map(file => {
+                        return (
+                          <ListDocs
+                            key={file.id_docum}
+                            id={file.id_docum}
+                            idRef={file.id_det}
+                            name={file.nom_docum}
+                            route={file.ruta_docum} />
+                        )
+                      }) : 'No hay documentos...'
                   }
                 </ul>
               </div>
+              {/* botones */}
               <div className="mt-16 md:flex justify-between">
                 <div className="md:flex items-center">
                   <Button
@@ -785,16 +884,13 @@ function Form({ data }) {
 
           {/* modal desc */}
           <Modal showModal={showDescModal} onClose={onCloseDescModal} className="max-w-3xl">
-            <h1 className="text-xl font-semibold mb-5">Editar descripcion</h1>
+            <h1 className="text-xl font-semibold mb-5">Editar {gloseOrDesc ? 'glosa' : 'Descripcion'}</h1>
             <div className="w-full">
               <TextArea
-                field="Descripcion"
-                name="inputDesc"
-                value={inputDesc}
-                onChange={(e) => setValues({
-                  ...values,
-                  inputDesc: e.target.value
-                })} />
+                field={gloseOrDesc ? 'Glosa' : 'Descripcion'}
+                name={gloseOrDesc ? 'glose' : 'desc'}
+                value={gloseOrDesc ? glose : desc}
+                onChange={onChangeValues} />
             </div>
             <br />
             <div className="flex justify-end">
