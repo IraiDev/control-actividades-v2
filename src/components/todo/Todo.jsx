@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react'
 import { UiContext } from '../../context/UiContext'
 import { GraphContext } from '../../context/GraphContext'
 import { useForm } from '../../hooks/useForm'
-import { alertTimer } from '../../helpers/alerts'
 import TodoCard from './TodoCard'
 import Modal from '../ui/modal/Modal'
 import Input from '../ui/inputs/Input'
@@ -10,6 +9,7 @@ import Button from '../ui/buttons/Button'
 import TextArea from '../ui/inputs/TextArea'
 import TextContent from '../ui/text/TextContent'
 import Tippy from '@tippyjs/react'
+import { Alert } from '../../helpers/alert'
 
 function Todo() {
   const [{ input, textArea }, onChangeValues, reset] = useForm({ input: '', textArea: '' })
@@ -21,6 +21,16 @@ function Todo() {
   const [showImportant, setShowImportant] = useState('normal')
 
   const handleCreateTodo = () => {
+    if (input === '' || textArea === '') {
+      Alert({
+        icon: 'warn',
+        title: 'Atencion',
+        content: 'No puedes crear un to-do sin titulo o descripcion',
+        showCancelButton: false,
+        timer: 5000
+      })
+      return
+    }
     const data = {
       title: input,
       importance: check ? 'high' : 'normal',
@@ -28,23 +38,15 @@ function Todo() {
         content: textArea,
       }
     }
-    const action = () => {
-      setShowModal(false)
-      GraphFunc.createTodo(GraphState.idListSelected, data)
-      reset()
-    }
-    let state = input === '' ? false : textArea === '' ? false : true
-    alertTimer(state, 'info', 1500) ? action() : setShowModal(true)
+    GraphFunc.createTodo(GraphState.idListSelected, data)
+    setShowModal(false)
+    reset()
   }
 
   const showModalFalse = () => {
     setShowModal(false)
     setCheck(false)
     reset()
-  }
-
-  const showModalTrue = () => {
-    setShowModal(true)
   }
 
   const onChangeImportance = () => {
@@ -82,7 +84,7 @@ function Todo() {
         <Button
           className="text-blue-500 font-semibold border-2 border-blue-500 rounded-full hover:text-white hover:bg-blue-500"
           name="Agregar to-do"
-          onClick={showModalTrue}
+          onClick={() => setShowModal(true)}
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-5 gap-3">
@@ -124,8 +126,8 @@ function Todo() {
       {/* modal create todo */}
 
       <Modal showModal={showModal} onClose={showModalFalse} className="max-w-xl">
-        <div className="flex items-center justify-between">
-          <h1 className="text-xl font-semibold mb-5">Crear ToDo</h1>
+        <div className="flex items-center mb-5 gap-5">
+          <h1 className="text-xl font-semibold">Crear To-do</h1>
           <Tippy
             offset={[0, 10]}
             delay={[700, 0]}

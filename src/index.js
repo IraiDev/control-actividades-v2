@@ -40,11 +40,11 @@ LocalizationHelper.strings = {
 ReactDOM.render(
   <React.StrictMode>
     <UiProvider>
-      <GraphProvider>
-        <ActivityProvider>
+      <ActivityProvider>
+        <GraphProvider>
           <App />
-        </ActivityProvider>
-      </GraphProvider>
+        </GraphProvider>
+      </ActivityProvider>
     </UiProvider>
   </React.StrictMode>,
   document.getElementById('root')

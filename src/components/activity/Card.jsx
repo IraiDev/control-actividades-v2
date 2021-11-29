@@ -9,9 +9,9 @@ import Modal from '../ui/modal/Modal'
 import Button from '../ui/buttons/Button'
 import TextArea from '../ui/inputs/TextArea'
 import moment from 'moment'
-import { alertTimer, normalAlert } from '../../helpers/alerts'
 import { checkForms, seekParam } from '../../helpers/auxFunctions'
 import TextContent from '../ui/text/TextContent'
+import { Alert } from '../../helpers/alert'
 
 let initialState = { inputEdit: '', inputAdd: '' }
 let today = new Date()
@@ -99,7 +99,7 @@ function Card(props) {
 
     const vDesc = checkForms(inputAdd)
     if (vDesc.state) {
-      normalAlert('warning', `Caracter <b class="text-gray-600 text-xl">${vDesc.char}</b> no pemitido, campo: <b>Nota</b> <br><br> <i class="text-blue-500">Caracteres no permitidos:</i> <b>${vDesc.list}</b>`, 'Entiendo')
+      Alert('warning', `Caracter <b class="text-gray-600 text-xl">${vDesc.char}</b> no pemitido, campo: <b>Nota</b> <br><br> <i class="text-blue-500">Caracteres no permitidos:</i> <b>${vDesc.list}</b>`, 'Entiendo')
       return
     }
 
@@ -109,14 +109,14 @@ function Card(props) {
       showModalFalse()
     }
     let state = inputAdd !== ''
-    alertTimer(state, 'info', 1500, 'No puedes agregar una nota vacia') && action()
+    Alert(state, 'info', 1500, 'No puedes agregar una nota vacia') && action()
   }
 
   const handleUpdateNote = () => {
 
     const vDesc = checkForms(inputEdit)
     if (vDesc.state) {
-      normalAlert('warning', `Caracter <b class="text-gray-600 text-xl">${vDesc.char}</b> no pemitido, campo: <b>Nota</b> <br><br> <i class="text-blue-500">Caracteres no permitidos:</i> <b>${vDesc.list}</b>`, 'Entiendo')
+      Alert('warning', `Caracter <b class="text-gray-600 text-xl">${vDesc.char}</b> no pemitido, campo: <b>Nota</b> <br><br> <i class="text-blue-500">Caracteres no permitidos:</i> <b>${vDesc.list}</b>`, 'Entiendo')
       return
     }
 
@@ -132,10 +132,10 @@ function Card(props) {
     }
     if (noteActive.idNote !== null) {
       let state = inputEdit !== ''
-      alertTimer(state, 'info', 1500, 'LLena el campo nota para actualizar') && actionUpdate()
+      Alert(state, 'info', 1500, 'LLena el campo nota para actualizar') && actionUpdate()
     } else {
       let state = inputEdit !== ''
-      alertTimer(state, 'info', 1500, 'No puedes agregar una nota vacia') && actionAdd()
+      Alert(state, 'info', 1500, 'No puedes agregar una nota vacia') && actionAdd()
     }
   }
 

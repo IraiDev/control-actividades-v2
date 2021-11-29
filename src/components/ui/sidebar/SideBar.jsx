@@ -16,10 +16,6 @@ function SideBar() {
   const [isChecked, setIsChecked] = useState(false)
   const [active, setActive] = useState(null)
 
-  const toggleSideBar = () => {
-    UiFunc.setToggleSideBar()
-  }
-
   const handleOrderAsc = (param) => {
     UiFunc.setIsLoading(true)
     setActive(param)
@@ -41,11 +37,12 @@ function SideBar() {
     ActFunc.getActivities(newValues)
   }
 
-  const onChangeCheck = () => {
+  const onChangeCheck = (e) => {
     UiFunc.setIsLoading(true)
-    setIsChecked(!isChecked)
+    const check = e.target.checked
+    setIsChecked(check)
 
-    if (!isChecked) {
+    if (check) {
       let hideCA = UiFunc.saveFilters('usuario_no_mostrar', 'usuario_no_mostrar=ca&')
       ActFunc.getActivities(hideCA)
     } else {
@@ -64,6 +61,7 @@ function SideBar() {
   }, [UiState.isResetFilters])
 
   // useEffect(() => {
+  // para mantener los filtros de orden  aun cambiando de pestaña
   //   if (UiState.activeOrder) {
   //     setActive(null)
   //     UiFunc.setActiveOrder(false)
@@ -80,7 +78,7 @@ function SideBar() {
             className="h-8 w-8 text-gray-600 hover:text-blue-500 mt-1"
             type="icon"
             icon="fas fa-times fa-lg"
-            onClick={toggleSideBar}
+            onClick={() => UiFunc.setToggleSideBar()}
           />
         </div>
         <div className="mb-10">

@@ -1,4 +1,3 @@
-
 import React, { useContext, useEffect, useState } from 'react'
 import { UiContext } from '../../context/UiContext'
 import { ActivityContext } from '../../context/ActivityContext'
@@ -10,9 +9,9 @@ import Modal from '../ui/modal/Modal'
 import Button from '../ui/buttons/Button'
 import TextArea from '../ui/inputs/TextArea'
 import moment from 'moment'
-import { alertTimer, normalAlert, respAlert } from '../../helpers/alerts'
 import { checkForms, seekParam } from '../../helpers/auxFunctions'
 import TextContent from '../ui/text/TextContent'
+import { Alert } from '../../helpers/alert'
 
 let initialState = { inputEdit: '', inputAdd: '' }
 let today = moment(new Date()).format('yyyy-MM-DD')
@@ -53,7 +52,7 @@ function Activity(props) {
   const [{ inputEdit, inputAdd }, onChangeValues, reset] = useForm(initialState)
   const [showModal, setShowModal] = useState(false)
   const [updateOrAdd, setUpdateOrAdd] = useState(false)
-  const [noteActive, setNoteActive] = useState({ idNote: null, description: '' })
+  const [{ idNote }, setNoteActive] = useState({ idNote: null, description: '' })
   const [isExpand, setIsExpand] = useState(false)
 
   let dateTo = moment(fechaCrea)
@@ -87,7 +86,7 @@ function Activity(props) {
       break;
   }
 
-  if (pause && !isPending) {
+  if (pause) {
     border = 'border-4 border-black border-opacity-25'
     border_list = 'border-3 border-black border-opacity-25'
   }
@@ -96,64 +95,80 @@ function Activity(props) {
     border_list = 'border'
   }
 
-  // funciones controladoras de eventos
-  const handleUpdatePriority = (id, priority) => {
-    let data = { prioridad_numero: priority, id_actividad: id, }
-    ActFunc.updatePriority(data)
-  }
-
   const handleAddNewNote = () => {
-
     const vDesc = checkForms(inputAdd)
-    if (vDesc.state) {
-      normalAlert('warning', `Caracter <b class="text-gray-600 text-xl">${vDesc.char}</b> no pemitido, campo: <b>Nota</b> <br><br> <i class="text-blue-500">Caracteres no permitidos:</i> <b>${vDesc.list}</b>`, 'Entiendo')
+    const { state, char, list } = vDesc
+    if (state) {
+      Alert({
+        icon: 'warn',
+        title: 'Atencion',
+        content: `Caracter <b class="text-gray-600 text-xl">${char}</b>
+        no pemitido, campo: <b>Descripcion Nota</b>
+        <p class="mt-5">Caracteres no permitidos:</p> <b>${list}</b>`,
+        showCancelButton: false,
+        timer: 5000
+      })
       return
     }
 
-    const data = { id_actividad: id, description: inputAdd }
-    const action = () => {
-      ActFunc.addNewNote(data)
-      showModalFalse()
+    if (inputAdd === '') {
+      Alert({
+        icon: 'warn',
+        title: 'Atencion',
+        content: 'No se puede crear una nota vacia',
+        showCancelButton: false,
+        timer: 5000
+      })
+      return
     }
-    let state = inputAdd !== ''
-    alertTimer(state, 'info', 1500, 'No puedes agregar una nota vacia') && action()
+    const data = { id_actividad: id, description: inputAdd }
+    ActFunc.addNewNote({ data })
+    showModalFalse()
   }
 
   const handleUpdateNote = () => {
-
     const vDesc = checkForms(inputEdit)
-    if (vDesc.state) {
-      normalAlert('warning', `Caracter <b class="text-gray-600 text-xl">${vDesc.char}</b> no pemitido, campo: <b>Nota</b> <br><br> <i class="text-blue-500">Caracteres no permitidos:</i> <b>${vDesc.list}</b>`, 'Entiendo')
+    const { state, char, list } = vDesc
+    if (state) {
+      Alert({
+        icon: 'warn',
+        title: 'Atencion',
+        content: `Caracter <b class="text-gray-600 text-xl">${char}</b>
+        no pemitido, campo: <b>Descripcion Nota</b>
+        <p class="mt-5">Caracteres no permitidos:</p> <b>${list}</b>`,
+        showCancelButton: false,
+        timer: 5000
+      })
       return
     }
 
-    const dataUpdate = { id_nota: noteActive.idNote, description: inputEdit }
-    const actionUpdate = () => {
-      ActFunc.updateNote(dataUpdate)
+    const dataUpdate = { id_nota: idNote, description: inputEdit }
+    const update = () => {
+      ActFunc.updateNote({ data: dataUpdate })
       showModalFalse()
     }
     const dataAdd = { id_actividad: id, description: inputEdit }
-    const actionAdd = () => {
-      ActFunc.addNewNote(dataAdd)
+    const add = () => {
+      ActFunc.addNewNote({ data: dataAdd })
       showModalFalse()
     }
-    if (noteActive.idNote !== null) {
-      let state = inputEdit !== ''
-      alertTimer(state, 'info', 1500, 'LLena el campo nota para actualizar') && actionUpdate()
-    } else {
-      let state = inputEdit !== ''
-      alertTimer(state, 'info', 1500, 'No puedes agregar una nota vacia') && actionAdd()
+    if (inputEdit === '') {
+      Alert({
+        icon: 'warn',
+        title: 'Atencion',
+        content: 'No se puede crear/modificar una nota como vacia',
+        showCancelButton: false,
+        timer: 5000
+      })
+      return
     }
+    if (idNote !== null) update()
+    else add()
   }
 
-  const showModalUpdateNote = () => {
+  const showModalAddOrUpdate = ({ state }) => {
     setShowModal(true)
-    setUpdateOrAdd(false)
-  }
-
-  const showModalAddNote = () => {
-    setShowModal(true)
-    setUpdateOrAdd(true)
+    setUpdateOrAdd(state)
   }
 
   const showModalFalse = () => {
@@ -163,7 +178,7 @@ function Activity(props) {
     reset()
   }
 
-  const handleGetidNote = (idNote, description) => {
+  const handleGetIdNote = (idNote, description) => {
     reset()
     setNoteActive({ idNote, description })
     initialState.inputEdit = description
@@ -176,31 +191,41 @@ function Activity(props) {
     await UiFunc.detailsView(true, true)
   }
 
-  const handleExpand = () => {
-    setIsExpand(!isExpand)
-  }
-
   const handlePlayActivity = async () => {
-
     if (pause) { // se pusara
-      const html =
+      const content =
         `
           <p class="text-sm">Se pausara la actividad: <b>${id}</b>, <b>${actividad}</b></p>
           <p class="text-sm">Ingrese el detalle de la detencia <b>(obligatorio):</b></p>
         `
-      const resp = await respAlert({ html, name: actividad, id })
+      const resp = await Alert({ type: 'input', input: 'textarea', content, title: 'Pausar actividad' })
       const { ok, text } = resp
+      const vText = checkForms(text)
+      const { state, char, list } = vText
+
+      if (state) {
+        Alert({
+          icon: 'warn',
+          title: 'Atencion',
+          content: `Caracter <b class="text-gray-600 text-xl">${char}</b>
+          no pemitido en descripcion de pausa.
+          <p class="mt-5">Caracteres no permitidos:</p> <b>${list}</b>`,
+          showCancelButton: false,
+          timer: 5000
+        })
+        return
+      }
 
       if (ok) {
         UiFunc.setIsLoading(true)
-
         const data = {
           mensaje: text,
           id_actividad: id
         }
         ActFunc.playActivity(data, false)
       }
-    } else { // se pondra play
+    }
+    else { // se pondra play
       UiFunc.setIsLoading(true)
       ActFunc.playActivity({ id_actividad: id }, false)
     }
@@ -257,6 +282,7 @@ function Activity(props) {
                             desc={obj.desc_nota}
                             date={obj.fecha_hora_crea}
                             user={obj.user_crea}
+                            from={false}
                           />
                         )
                       } else {
@@ -294,12 +320,12 @@ function Activity(props) {
               </Menu>
               {!isPending &&
                 <>
+                  <i className={`ml-2 fas fa-user-clock fa-sm ${!pause && 'hidden'}`}></i>
                   <Button
                     type="icon"
                     icon={pause ? 'fas fa-pause fa-sm' : 'fas fa-play fa-sm'}
                     className="rounded-md hover:bg-opacity-10 hover:bg-black"
                     onClick={handlePlayActivity} />
-                  <i className="ml-2 fas fa-user-clock fa-sm"></i>
                 </>
               }
               {/* <select className={`${background} transition duration-500 rounded-md p-1 focus:outline-none font-bold lowercase`} name="" id="">
@@ -328,26 +354,17 @@ function Activity(props) {
               >
                 <MenuItem
                   className="text-left hover:text-white hover:bg-blue-500"
-                  onClick={() => {
-                    showModalAddNote();
-                  }}
-                >
+                  onClick={() => showModalAddOrUpdate({ state: true })} >
                   Agregar Nota
                 </MenuItem>
                 <MenuItem
                   className="text-left hover:text-white hover:bg-blue-500"
-                  onClick={() => {
-                    showModalUpdateNote();
-                  }}
-                >
+                  onClick={() => showModalAddOrUpdate({ state: false })} >
                   Agregar/Editar Nota
                 </MenuItem>
                 <MenuItem
                   className="flex justify-between hover:text-white hover:bg-blue-500"
-                  onClick={() => {
-                    handleUpdatePriority(id, 100);
-                  }}
-                >
+                  onClick={() => ActFunc.updatePriority({ prioridad_numero: 100, id_actividad: id })} >
                   <p className="font-medium">Prioridad Alta</p>
                   <p
                     className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_alta} rounded-full focus:outline-none active:outline-none`}
@@ -355,10 +372,7 @@ function Activity(props) {
                 </MenuItem>
                 <MenuItem
                   className="flex justify-between hover:text-white hover:bg-blue-500"
-                  onClick={() => {
-                    handleUpdatePriority(id, 400);
-                  }}
-                >
+                  onClick={() => ActFunc.updatePriority({ prioridad_numero: 400, id_actividad: id })} >
                   <p className="font-medium">Prioridad Media</p>
                   <p
                     className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_media} rounded-full focus:outline-none active:outline-none`}
@@ -366,10 +380,7 @@ function Activity(props) {
                 </MenuItem>
                 <MenuItem
                   className="flex justify-between hover:text-white hover:bg-blue-500"
-                  onClick={() => {
-                    handleUpdatePriority(id, 600);
-                  }}
-                >
+                  onClick={() => ActFunc.updatePriority({ prioridad_numero: 600, id_actividad: id })} >
                   <p className="font-medium">Prioridad Baja</p>
                   <p
                     className={`p-2 ml-3 ${ActState.userData.usuario.color_prioridad_baja} rounded-full focus:outline-none active:outline-none`}
@@ -377,10 +388,7 @@ function Activity(props) {
                 </MenuItem>
                 <MenuItem
                   className="flex justify-between hover:text-white hover:bg-blue-500"
-                  onClick={() => {
-                    handleUpdatePriority(id, 1000);
-                  }}
-                >
+                  onClick={() => ActFunc.updatePriority({ prioridad_numero: 1000, id_actividad: id })} >
                   <p className="font-medium">Sin Prioridad</p>
                   <p
                     className={`p-2 ml-3 bg-gray-200 rounded-full focus:outline-none active:outline-none`}
@@ -431,7 +439,7 @@ function Activity(props) {
               className="ml-2"
               type="icon"
               icon={isExpand ? 'fas fa-angle-up' : 'fas fa-angle-down'}
-              onClick={handleExpand} />
+              onClick={() => setIsExpand(!isExpand)} />
           </div>
           <div className="py-2.5 mx-auto col-span-1 font-semibold text-base">
             <Menu
@@ -484,7 +492,7 @@ function Activity(props) {
                 <MenuItem
                   className="flex justify-between"
                   onClick={() => {
-                    handleUpdatePriority(id, 100);
+                    ActFunc.updatePriority({ prioridad_numero: 100, id_actividad: id })
                   }}
                 >
                   <p className="font-medium">Prioridad Alta</p>
@@ -495,7 +503,7 @@ function Activity(props) {
                 <MenuItem
                   className="flex justify-between"
                   onClick={() => {
-                    handleUpdatePriority(id, 400);
+                    ActFunc.updatePriority({ prioridad_numero: 400, id_actividad: id })
                   }}
                 >
                   <p className="font-medium">Prioridad Media</p>
@@ -506,7 +514,7 @@ function Activity(props) {
                 <MenuItem
                   className="flex justify-between"
                   onClick={() => {
-                    handleUpdatePriority(id, 600);
+                    ActFunc.updatePriority({ prioridad_numero: 600, id_actividad: id })
                   }}
                 >
                   <p className="font-medium">Prioridad Baja</p>
@@ -517,7 +525,7 @@ function Activity(props) {
                 <MenuItem
                   className="flex justify-between"
                   onClick={() => {
-                    handleUpdatePriority(id, 1000);
+                    ActFunc.updatePriority({ prioridad_numero: 1000, id_actividad: id })
                   }}
                 >
                   <p className="font-medium">Sin Prioridad</p>
@@ -534,7 +542,7 @@ function Activity(props) {
       {/* modal update todo */}
 
       <Modal showModal={showModal} onClose={showModalFalse} className="max-w-3xl">
-        <h1 className="text-xl font-semibold mb-5">{noteActive.idNote !== null ? 'Editar Nota' : 'Agregar nueva nota'}</h1>
+        <h1 className="text-xl font-semibold mb-5">{idNote !== null ? 'Editar Nota' : 'Agregar nueva nota'}</h1>
         <div className="w-full">
           {
             updateOrAdd ?
@@ -575,8 +583,8 @@ function Activity(props) {
                               desc={obj.desc_nota}
                               date={obj.fecha_hora_crea}
                               user={obj.user_crea}
-                              onclick={handleGetidNote}
-                              activeColor={noteActive.idNote === obj.id_nota ? 'text-green-500' : 'text-gray-500'}
+                              onclick={handleGetIdNote}
+                              activeColor={idNote === obj.id_nota ? 'text-green-500' : 'text-gray-500'}
                               separator={notas.length !== index + 1}
                             />
                           )
@@ -599,7 +607,7 @@ function Activity(props) {
         <div className="flex justify-end">
           <Button
             className="hover:bg-blue-100 text-blue-500 hover:text-blue-700 rounded-full font-semibold"
-            name={noteActive.idNote !== null ? (updateOrAdd ? 'Agregar' : 'Editar') : 'Agregar'}
+            name={idNote !== null ? (updateOrAdd ? 'Agregar' : 'Editar') : 'Agregar'}
             onClick={updateOrAdd ? () => handleAddNewNote() : () => handleUpdateNote()}
           />
         </div>

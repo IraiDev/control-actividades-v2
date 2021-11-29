@@ -34,7 +34,7 @@ function HomeScreen() {
       ActFunc.getNotify()
       ActFunc.getFilters()
     }
-  }, [ActState.userData.ok])
+  }, [ActState.userData])
 
   return (
     <>
@@ -43,7 +43,6 @@ function HomeScreen() {
       <SideBar />
       <UtilityBar />
       {
-        // !UiState.isViewChanged ? <PlannerScreen /> : <ActivitiesScreen />
         UiState.tabs === plannerView ? <PlannerScreen /> :
           UiState.tabs === activitiesView ? <ActivitiesScreen /> :
             UiState.tabs === timesView && <TimeScreen />

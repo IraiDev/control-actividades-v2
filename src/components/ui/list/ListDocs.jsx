@@ -1,5 +1,5 @@
 import React from 'react'
-import { alertQuest } from '../../../helpers/alerts'
+import { Alert } from '../../../helpers/alert'
 import Button from '../buttons/Button'
 const urlRA = 'http://www.zcloud.cl/registro_avance/'
 
@@ -9,7 +9,12 @@ function ListDocs({ id, idRef, name, route, }) {
     const action = () => {
       console.log('se elimino fake');
     }
-    alertQuest('info', `¿Esta seguro de eliminar el siguiente archivo <b>${name}</b>?`, 'No Cancelar', 'Si, eliminar', action)
+    Alert({
+      icon: 'warn',
+      title: 'Atencion',
+      content: `¿Esta seguro de eliminar el siguiente archivo: <b>${name}</b>?`,
+      action
+    })
   }
 
   return (

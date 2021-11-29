@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from 'react'
 import { UiContext } from './UiContext';
 import { deleteFetch, getFetch, postFetch, updateFetch, updateFetchTask } from '../helpers/fetchingGraph';
+import { ActivityContext } from './ActivityContext';
 
 export const GraphContext = createContext()
 
@@ -11,6 +12,7 @@ function GraphProvider({ children }) {
   const [todoList, setTodoList] = useState([])
   const [idListSelected, setIdListSelected] = useState(null)
   const { functions: UiFunc, states: UiState } = useContext(UiContext)
+  const { functions: ActFunc, states: ActState } = useContext(ActivityContext)
 
   const getUserData = async () => {
     await getFetch('/me/').then(resp => {
@@ -22,6 +24,10 @@ function GraphProvider({ children }) {
     await getFetch('/me/planner/tasks', '', 'details')
       .then(resp => {
         setPlannerTask(resp.value)
+        if (ActState.userData.ok) {
+          ActFunc.getNotify()
+          ActFunc.getTimes()
+        }
       })
     UiFunc.setIsLoading(false)
   }
@@ -31,6 +37,10 @@ function GraphProvider({ children }) {
     await getFetch(endPoint)
       .then(resp => {
         setTodoTask(resp.value)
+        if (ActState.userData.ok) {
+          ActFunc.getNotify()
+          ActFunc.getTimes()
+        }
       })
     UiFunc.setIsLoading(false)
   }
@@ -58,7 +68,13 @@ function GraphProvider({ children }) {
 
   const getTodoList = async () => {
     await getFetch('/me/todo/lists')
-      .then(resp => setTodoList(resp.value))
+      .then(resp => {
+        setTodoList(resp.value)
+        if (ActState.userData.ok) {
+          ActFunc.getNotify()
+          ActFunc.getTimes()
+        }
+      })
     UiFunc.setIsLoading(false)
   }
 

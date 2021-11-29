@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react'
 import { GraphContext } from '../../context/GraphContext'
-import { alertQuest, alertTimer } from '../../helpers/alerts'
 import { useForm } from '../../hooks/useForm'
 import Button from '../ui/buttons/Button'
 import Modal from '../ui/modal/Modal'
@@ -8,6 +7,7 @@ import Input from '../ui/inputs/Input'
 import TextArea from '../ui/inputs/TextArea'
 import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu'
 import Tippy from '@tippyjs/react'
+import { Alert } from '../../helpers/alert'
 
 function TodoCard({ idTodo, title, desc, importance }) {
   const [{ input, textArea }, onChangeValues, reset] = useForm({ input: title, textArea: desc })
@@ -16,6 +16,16 @@ function TodoCard({ idTodo, title, desc, importance }) {
   const [check, setCheck] = useState(importance === 'high')
 
   const handleUpdate = () => {
+    if (input === '' || textArea === '') {
+      Alert({
+        icon: 'warn',
+        title: 'Atencion',
+        content: 'No se puede actualizar el to-do si el titulo o descripcion estan vacios',
+        showCancelButton: false,
+        timer: 5000
+      })
+      return
+    }
     const data = {
       title: input,
       importance: check ? 'high' : 'normal',
@@ -23,24 +33,19 @@ function TodoCard({ idTodo, title, desc, importance }) {
         content: textArea,
       }
     }
-    const action = async () => {
-      setShowModal(false)
-      await GraphFunc.updateTodo(GraphState.idListSelected, idTodo, data)
-      reset()
-    }
-    let state = input === '' ? false : textArea === '' ? false : true
-    alertTimer(state, 'info', 1500) ? action() : setShowModal(true)
+    GraphFunc.updateTodo(GraphState.idListSelected, idTodo, data)
+    setShowModal(false)
+    reset()
   }
 
   const handleDelete = () => {
-    const action = () => GraphFunc.deleteTodo(GraphState.idListSelected, idTodo)
-    alertQuest(
-      'info',
-      `<p>¿Eliminar ToDo: <b>"${title}"</b>?</p>`,
-      'No, cancelar',
-      'Si, eliminar',
-      action
-    )
+    Alert({
+      title: 'Eliminar',
+      content: `¿Seguro desea eliminar el siguiente to-do: <b>"${title}"</b>?`,
+      cancelText: 'No, cancelar',
+      confirmText: 'Si, aceptar',
+      action: () => GraphFunc.deleteTodo(GraphState.idListSelected, idTodo)
+    })
   }
 
   const showModalFalse = () => {
@@ -49,14 +54,9 @@ function TodoCard({ idTodo, title, desc, importance }) {
     reset()
   }
 
-  const showModalTrue = () => {
-    setShowModal(true)
-    reset()
-  }
-
   return (
     <>
-      <div onDoubleClick={showModalTrue}
+      <div onDoubleClick={() => setShowModal(true)}
         className={`p-4 rounded-md shadow-md border-2 border-transparent  transition duration-500 ${importance === 'high' ? 'bg-gray-700 text-white hover:bg-gray-600 hover:border-black' : 'bg-white hover:bg-gray-50 hover:border-gray-600'}`}>
         <div className="mb-1 font-semibold flex justify-between items-start">
           <h5 className="capitalize">{title}</h5>
@@ -72,7 +72,7 @@ function TodoCard({ idTodo, title, desc, importance }) {
               </Tippy>
             }
             <Menu
-              className={importance === 'high' ? 'bg-gray-700 text-white' : 'bg-white text-black'}
+              className={importance === 'high' ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'}
               direction="left"
               menuButton={
                 <MenuButton className="focus:outline-none active:outline-none h-7 w-7 rounded-full transition duration-500 hover:bg-black hover:bg-opacity-10">
@@ -80,13 +80,13 @@ function TodoCard({ idTodo, title, desc, importance }) {
                 </MenuButton>
               }>
               <MenuItem
-                className="hover:text-white hover:bg-blue-500"
-                onClick={showModalTrue}>
+                className="hover:text-white hover:bg-blue-500 font-semibold"
+                onClick={() => setShowModal(true)}>
                 Editar
                 <i className="fas fa-pen ml-2"></i>
               </MenuItem>
               <MenuItem
-                className="hover:text-white hover:bg-blue-500"
+                className="hover:text-white hover:bg-blue-500 font-semibold"
                 onClick={handleDelete}>
                 Eliminar
                 <i className="fas fa-trash-alt ml-2"></i>
@@ -103,8 +103,8 @@ function TodoCard({ idTodo, title, desc, importance }) {
       {/* modal update todo */}
 
       <Modal showModal={showModal} onClose={showModalFalse} className="max-w-xl">
-        <div className="flex justify-between items-center">
-          <h1 className="text-xl font-semibold mb-5">Editar ToDo</h1>
+        <div className="flex items-center gap-5 mb-5">
+          <h1 className="text-xl font-semibold">Editar To-do</h1>
           <Tippy
             offset={[0, 10]}
             delay={[700, 0]}

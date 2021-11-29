@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import { UiContext } from '../../../context/UiContext'
 import { GraphContext } from '../../../context/GraphContext'
 import { useForm } from '../../../hooks/useForm'
-import { alertTimer } from '../../../helpers/alerts'
 import ButtonList from '../buttons/ButtonList'
 import Modal from "../modal/Modal"
 import Button from "../buttons/Button"
 import Input from "../inputs/Input"
 import { useWindowSize } from '../../../hooks/useWindowSize'
+import { Alert } from '../../../helpers/alert'
 
 const style = 'min-w-max z-40 px-3 py-10 ml-3 text-white bg-gray-700 border-r rounded-md shadow-md top-40 animate__animated animate__faster'
 
@@ -38,14 +38,20 @@ function SideMenu() {
   }
 
   const handleCreateTodoList = () => {
-    const data = { displayName: input }
-    const action = () => {
-      setShowModal(false)
-      GraphFunc.createTodoList(data)
-      reset()
+    if (input === '') {
+      Alert({
+        icon: 'warn',
+        title: 'Atencion',
+        content: 'No se puede crear una lista sin nombre.',
+        showCancelButton: false,
+        timer: 4000
+      })
+      return
     }
-    let state = input === '' ? false : true
-    alertTimer(state, 'info', 1500) ? action() : setShowModal(true)
+    const data = { displayName: input }
+    GraphFunc.createTodoList(data)
+    reset()
+    setShowModal(false)
   }
 
   const showModalFalse = () => {

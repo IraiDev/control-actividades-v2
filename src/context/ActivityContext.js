@@ -5,12 +5,8 @@ import { Alert } from '../helpers/alert'
 
 export const ActivityContext = createContext()
 
-let arrayState = []
-let arrayPriority = []
-let arrayProject = []
-let arraySubProject = []
-let arrayUsersE = []
-let arrayUsersS = []
+let arrayState = [], arrayPriority = [], arrayProject = []
+let arraySubProject = [], arrayUsersE = [], arrayUsersS = []
 
 function ActivityProvider({ children }) {
   const { states: UiState, functions: UiFunc } = useContext(UiContext)
@@ -166,6 +162,8 @@ function ActivityProvider({ children }) {
 
       if (body.ok) {
         setActivitiesRA(body.tareas)
+        getNotify()
+        getTimes()
       } else {
         Alert({ icon: 'error', title: 'Error', content: 'Error al obtener las actividades', timer: 3000, showCancelButton: false })
       }
@@ -192,6 +190,8 @@ function ActivityProvider({ children }) {
 
     if (body.ok) {
       setActivityDetails(body.tareas[0])
+      getNotify()
+      getTimes()
       return { ok, res: body.tareas[0] }
     }
     else {
@@ -201,7 +201,7 @@ function ActivityProvider({ children }) {
   }
 
   const getInfoTimes = async (param) => {
-    const resp = await fetchToken(`times/get-times-info?${param}`)
+    const resp = await fetchToken(`times/get-times-info?fecha=${param}`)
     const body = await resp.json()
 
 
@@ -294,6 +294,8 @@ function ActivityProvider({ children }) {
       })
       // setTotals(arrayTotalTimes)
       setInfoTimes(arrayNewTimes)
+      getNotify()
+      getTimes()
     }
     else {
       Alert({ icon: 'error', title: 'Error', content: 'Error al obtener informe de tiempos', timer: 3000, showCancelButton: false })
@@ -302,10 +304,10 @@ function ActivityProvider({ children }) {
   }
 
   const updatePriority = async (data, from = false, idActivity) => {
-    UiFunc.setIsLoading(true)
     const resp = await fetchToken('task/update-priority', data, 'POST')
     const body = await resp.json()
     if (body.ok) {
+      UiFunc.setIsLoading(true)
       if (from) getActivityDetail(idActivity)
       else getActivities()
     }
@@ -313,40 +315,42 @@ function ActivityProvider({ children }) {
   }
 
   const updateUserColors = async (data) => {
-    UiFunc.setIsLoading(true)
     const resp = await fetchToken('user/update-priority', data, 'PUT')
     const body = await resp.json()
-    if (body.ok) login(userData.usuario.email)
+    if (body.ok) {
+      UiFunc.setIsLoading(true)
+      login(userData.usuario.email)
+    }
     else Alert({ icon: 'error', title: 'Error', content: 'Error al actualizar colores de prioridad de usaurio', timer: 3000, showCancelButton: false })
   }
 
-  const addNewNote = async (data, from = false, idActivity) => {
-    UiFunc.setIsLoading(true)
+  const addNewNote = async ({ data, from, idActivity }) => {
     const resp = await fetchToken('task/create-note', data, 'POST')
     const body = await resp.json()
     if (body.ok) {
+      UiFunc.setIsLoading(true)
       if (from) getActivityDetail(idActivity)
       else getActivities()
     }
     else Alert({ icon: 'error', title: 'Error', content: 'Error al crear nota', timer: 3000, showCancelButton: false })
   }
 
-  const updateNote = async (data, from = false, idActivity) => {
-    UiFunc.setIsLoading(true)
+  const updateNote = async ({ data, from, idActivity }) => {
     const resp = await fetchToken('task/update-note', data, 'PUT')
     const body = await resp.json()
     if (body.ok) {
+      UiFunc.setIsLoading(true)
       if (from) getActivityDetail(idActivity)
       else getActivities()
     }
     else Alert({ icon: 'error', title: 'Error', content: 'Error al actualizar nota', timer: 3000, showCancelButton: false })
   }
 
-  const deleteNote = async (data, from = false, idActivity) => {
-    UiFunc.setIsLoading(true)
+  const deleteNote = async ({ data, from, idActivity }) => {
     const resp = await fetchToken('task/delete-note', data, 'DELETE')
     const body = await resp.json()
     if (body.ok) {
+      UiFunc.setIsLoading(true)
       if (from) getActivityDetail(idActivity)
       else getActivities()
     }
@@ -363,7 +367,7 @@ function ActivityProvider({ children }) {
       if (data.description === '') {
         Alert({ icon: 'warn', title: 'Atencion', content: 'La tarea debe tener una descripcion para ser creada como como actividad', timer: 3000, showCancelButton: false })
       } else {
-        Alert({ icon: 'wern', title: 'Error', content: 'El ID de esta tarea ya existe en las actividades', timer: 3000, showCancelButton: false })
+        Alert({ icon: 'wern', title: 'Error', content: 'El ID de esta tarea ya existe en las actividades', timer: 5000, showCancelButton: false })
       }
       return false
     }
@@ -373,13 +377,8 @@ function ActivityProvider({ children }) {
     const resp = await fetchToken('task/update-notification', data, 'POST')
     const body = await resp.json()
 
-    if (body.ok) {
-      getNotify()
-    }
-    else {
-      Alert({ icon: 'error', title: 'Error', content: 'Error al marcar las notificaciones', timer: 3000, showCancelButton: false })
-    }
-
+    if (body.ok) getNotify()
+    else Alert({ icon: 'error', title: 'Error', content: 'Error al marcar las notificaciones', timer: 3000, showCancelButton: false })
   }
 
   const playActivity = async (data, isDetail = true) => {
@@ -389,8 +388,6 @@ function ActivityProvider({ children }) {
 
     if (ok) {
       isDetail ? getActivityDetail(data.id_actividad) : getActivities()
-      getTimes()
-      getNotify()
       return ok
     }
     else {

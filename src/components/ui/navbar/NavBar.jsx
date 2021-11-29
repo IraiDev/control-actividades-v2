@@ -10,26 +10,12 @@ const { plannerView, activitiesView, timesView, detailsView } = types
 
 function NavBar() {
   const { functions: UiFunc, states: UiState } = useContext(UiContext)
-  const { functions: ActFunc, states: ActState } = useContext(ActivityContext)
+  const { functions: ActFunc } = useContext(ActivityContext)
 
   const handleActivityView = async () => {
     await UiFunc.setIsLoading(true)
     await ActFunc.getActivities()
     await UiFunc.activityView()
-    await ActFunc.getNotify()
-    await ActFunc.getTimes()
-  }
-
-  const handlePlannerView = () => {
-    UiFunc.plannerView()
-    ActFunc.getNotify()
-    ActFunc.getTimes()
-  }
-
-  const handleTimesView = () => {
-    UiFunc.timesView()
-    ActFunc.getNotify()
-    ActFunc.getTimes()
   }
 
   return (
@@ -49,14 +35,14 @@ function NavBar() {
         <button
           disabled={UiState.navTab.disabled === plannerView}
           className={`transition duration-500 hover:text-blue-700 focus:outline-none hover:bg-gray-200 rounded-full px-4 py-2 ${UiState.navTab.planner}`}
-          onClick={() => { handlePlannerView() }}
+          onClick={() => UiFunc.plannerView()}
         >
           Planner
         </button>
         <button
           disabled={UiState.navTab.disabled === timesView}
           className={`transition duration-500 hover:text-blue-700 focus:outline-none hover:bg-gray-200 rounded-full px-4 py-2 ${UiState.navTab.times}`}
-          onClick={() => { handleTimesView() }}
+          onClick={() => UiFunc.timesView()}
         >
           Informe de Tiempos
         </button>
@@ -82,13 +68,13 @@ function NavBar() {
             <MenuItem
               disabled={UiState.navTab.disabled === plannerView}
               className={` px-4 py-2 ${UiState.navTab.planner}`}
-              onClick={() => { handlePlannerView() }}>
+              onClick={() => UiFunc.plannerView()}>
               Planner
             </MenuItem>
             <MenuItem
               disabled={UiState.navTab.disabled === timesView}
               className={`px-4 py-2 ${UiState.navTab.times}`}
-              onClick={() => { handleTimesView() }}
+              onClick={() => UiFunc.timesView()}
             >
               Informe de Tiempos
             </MenuItem>

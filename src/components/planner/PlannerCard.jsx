@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ActivityContext } from '../../context/ActivityContext'
 import { getFetch } from '../../helpers/fetchingGraph'
 import { Person } from '@microsoft/mgt-react'
-import { alertQuest } from '../../helpers/alerts'
 import Button from '../ui/buttons/Button'
 import moment from 'moment'
 import { GraphContext } from '../../context/GraphContext'
 import TextContent from '../ui/text/TextContent'
+import { Alert } from '../../helpers/alert'
 
 let state = ''
 
@@ -36,17 +36,17 @@ function PlannerCard({ idTask, idPlan, title, description, assignments, createdB
       percentComplete: 50
     }
     const action = async () => {
-      const flag = await ActFunc.addTaskToRA(data)
-      if (!flag) return
+      const resp = await ActFunc.addTaskToRA(data)
+      if (!resp) return
       await GraphFunc.updateTask(idTask, updateData, decodeURIComponent(Object.values(etag)[0]))
     }
-    alertQuest(
-      'info',
-      '¿Desea crear esta tarea como una actividad en RA?',
-      'No, cancelar',
-      'Si, crear',
+    Alert({
+      title: 'Crear Actividad',
+      content: '¿Desea crear esta tarea como una actividad en el <b>Registro de Avance</b>?',
+      cancelText: 'No, cancelar',
+      confirmText: 'Si, crear',
       action
-    )
+    })
   }
 
   useEffect(() => {

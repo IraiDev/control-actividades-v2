@@ -14,19 +14,11 @@ import ListDocs from '../list/ListDocs'
 import Tippy from '@tippyjs/react'
 import { useForm } from '../../../hooks/useForm'
 import { checkForms, seekParam } from '../../../helpers/auxFunctions'
-import { alertQuest, alertTimer, normalAlert, respAlert } from '../../../helpers/alerts'
 import moment from 'moment'
 import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu'
 import { Alert } from '../../../helpers/alert'
 
 let today = moment(new Date()).format('yyyy-MM-DD')
-
-const initialStateRA = {
-  inputDesc: '',
-  inputTicket: '',
-  inputPriority: '',
-  inputTime: ''
-}
 
 const files = [
   { id: 2, name: 'file_EJEMPLO1.png' },
@@ -57,7 +49,8 @@ function Form({ data }) {
     hora_tx,
     id_det,
     id_proy,
-    id_revisor, b_proyecto,
+    id_revisor,
+    b_proyecto,
     id_todo_task,
     notas,
     num_ticket_edit,
@@ -66,6 +59,7 @@ function Form({ data }) {
     proyectoIdProy,
     proyectoTareaIdProy,
     proyecto_tarea,
+    id_sub_proyecto,
     subproyectoIdSubProyecto,
     subproyectosTareasIdSubProyecto,
     subproyectos_tareas,
@@ -88,7 +82,7 @@ function Form({ data }) {
     priority: '',
     time: tiempo_estimado,
     title: actividad,
-    glose: ''
+    gloss: ''
   }
 
   const pause = pausas.length > 0 && pausas[pausas.length - 1].boton === 2
@@ -96,7 +90,7 @@ function Form({ data }) {
   let randomString = Math.random().toString(36)
   const { states: ActState, functions: ActFunc } = useContext(ActivityContext)
   const { functions: UiFunc } = useContext(UiContext)
-  const [{ inputEdit, inputAdd, desc, priority, ticket, time, title, glose }, onChangeValues, reset] = useForm(initialState)
+  const [{ inputEdit, inputAdd, desc, priority, ticket, time, title, gloss }, onChangeValues, reset] = useForm(initialState)
   const [{ idNote }, setNoteActive] = useState({ idNote: null })
   // modals
   const [updateOrAdd, setUpdateOrAdd] = useState(false)
@@ -112,25 +106,16 @@ function Form({ data }) {
   const [userS, setUserS] = useState(null)
   const [userE, setUserE] = useState(null)
   const [file, setFile] = useState(null)
-  const [newSubProjectArray, setNewSubProjectArray] = useState(null)
+  const [arrSubProject, setArrSubProject] = useState([])
   // selects
   const [resetFile, setResetFile] = useState(randomString)
-  const [values, setValues] = useState(initialStateRA)
-  const { inputPriority, inputDesc } = values
 
   const handleBack = async () => {
     await UiFunc.setIsLoading(true)
     await ActFunc.getActivities()
     await UiFunc.activityView()
-    await ActFunc.getNotify()
-    await ActFunc.getTimes()
     setResetFile(randomString)
     setFile(null)
-  }
-
-  const handleUpdatePriority = (id, priority) => {
-    let data = { prioridad_numero: priority, id_actividad: id, }
-    ActFunc.updatePriority(data, true, id)
   }
 
   const handleAddNewNote = () => {
@@ -160,12 +145,11 @@ function Form({ data }) {
       return
     }
     const data = { id_actividad: id_det, description: inputAdd }
-    ActFunc.addNewNote(data, true, id_det)
+    ActFunc.addNewNote({ data, from: true, idActivity: id_det })
     showModalFalse()
   }
 
   const handleUpdateNote = () => {
-
     const vDesc = checkForms(inputEdit)
     const { state, char, list } = vDesc
     if (state) {
@@ -193,7 +177,7 @@ function Form({ data }) {
         return
       }
       const data = { id_nota: idNote, description: inputEdit }
-      ActFunc.updateNote(data, true, id_det)
+      ActFunc.updateNote({ data, from: true, idActivity: id_det })
       showModalFalse()
     } else {
       if (inputEdit === '') {
@@ -207,19 +191,14 @@ function Form({ data }) {
         return
       }
       const data = { id_actividad: id_det, description: inputEdit }
-      ActFunc.addNewNote(data, true, id_det)
+      ActFunc.addNewNote({ data, from: true, idActivity: id_det })
       showModalFalse()
     }
   }
 
-  const showModalUpdateNote = () => {
+  const showModalAddOrUpdate = ({ state }) => {
     setShowModal(true)
-    setUpdateOrAdd(false)
-  }
-
-  const showModalAddNote = () => {
-    setShowModal(true)
-    setUpdateOrAdd(true)
+    setUpdateOrAdd(state)
   }
 
   const showModalFalse = () => {
@@ -231,14 +210,6 @@ function Form({ data }) {
 
   const onCloseDescModal = () => {
     setShowDescModal(false)
-    setValues({
-      ...values,
-      inputDesc: ActState.activityDetails.func_objeto
-    })
-  }
-
-  const onCloseCloneModal = () => {
-    setShowCloneModal(false)
   }
 
   const handleGetIdNote = (idNote, description) => {
@@ -272,9 +243,6 @@ function Form({ data }) {
   }
 
   const handlePlayActivity = async () => {
-
-    // aqui quede en la actualizacion de alertas!!!!!!!!!!!
-
     if (pause) { // se pusara
       const content =
         `
@@ -283,6 +251,21 @@ function Form({ data }) {
         `
       const resp = await Alert({ content, title: 'Atencion', type: 'input', input: 'textarea' })
       const { ok, text } = resp
+      const vText = checkForms(text)
+      const { state, char, list } = vText
+
+      if (state) {
+        Alert({
+          icon: 'warn',
+          title: 'Atencion',
+          content: `Caracter <b class="text-gray-600 text-xl">${char}</b>
+          no pemitido en descripcion de pausa.
+          <p class="mt-5">Caracteres no permitidos:</p> <b>${list}</b>`,
+          showCancelButton: false,
+          timer: 5000
+        })
+        return
+      }
 
       if (ok) {
         UiFunc.setIsLoading(true)
@@ -302,34 +285,18 @@ function Form({ data }) {
 
   useEffect(() => {
     if (project !== null) {
-      const tempArray = ActState.arraySubProject.filter(item => project.id === item.id)
-      const tempSubProj = tempArray.filter(item => ActState.activityDetails.id_sub_proyecto === item.id)
-      tempSubProj !== [] && setSubProject(tempSubProj)
-      setNewSubProjectArray(tempArray)
-    }
-    else {
-      setNewSubProjectArray(ActState.arraySubProject)
+      setArrSubProject(ActState.arraySubProject.filter(item => item.id === project.value))
+      const temp = ActState.arraySubProject.find(item => item.value === id_sub_proyecto)
+      if (temp !== undefined) setSubProject(temp)
     }
   }, [project])
 
   useEffect(() => {
-    if (ActState.activityDetails !== null) {
-      setValues({
-        ...values,
-        inputTicket: ActState.activityDetails.num_ticket_edit,
-        inputPriority: ActState.activityDetails.num_prioridad,
-        inputDesc: ActState.activityDetails.func_objeto
-      })
-      const tempProj = ActState.arrayProject.filter(item => ActState.activityDetails.id_proy === item.id)
-      setProject(tempProj[0])
-
-      const tempUserS = ActState.arrayUsersS.filter(item => ActState.activityDetails.user_solicita === item.label)
-      setUserS(tempUserS[0])
-
-      const tempUserE = ActState.arrayUsersE.filter(item => ActState.activityDetails.encargado_actividad === item.label)
-      setUserE(tempUserE[0])
-    }
-  }, [ActState.activityDetails])
+    setProject(ActState.arrayProject.find(item => id_proy === item.value))
+    setUserS(ActState.arrayUsersS.find(item => user_solicita === item.value))
+    setUserE(ActState.arrayUsersE.find(item => encargado_actividad === item.value))
+    setUserR(ActState.arrayUsersE.find(item => tarea_revisor !== null && tarea_revisor.abrev_user === item.value))
+  }, [])
 
   return (
     <>
@@ -354,7 +321,9 @@ function Form({ data }) {
                     isUpdate={true}
                     priority={1000}
                     id={id_det}
-                    updatePriority={handleUpdatePriority}
+                    updatePriority={
+                      (id, priority) => ActFunc.updatePriority({ prioridad_numero: priority, id_actividad: id }, true, id)
+                    }
                     isTippy={true}
                     tippyText="Sin Prioridad"
                     offSet={10}
@@ -365,7 +334,9 @@ function Form({ data }) {
                     isUpdate={true}
                     priority={600}
                     id={id_det}
-                    updatePriority={handleUpdatePriority}
+                    updatePriority={
+                      (id, priority) => ActFunc.updatePriority({ prioridad_numero: priority, id_actividad: id }, true, id)
+                    }
                     isTippy={true}
                     tippyText="Prioridad Baja"
                     offSet={10}
@@ -376,7 +347,9 @@ function Form({ data }) {
                     isUpdate={true}
                     priority={400}
                     id={id_det}
-                    updatePriority={handleUpdatePriority}
+                    updatePriority={
+                      (id, priority) => ActFunc.updatePriority({ prioridad_numero: priority, id_actividad: id }, true, id)
+                    }
                     isTippy={true}
                     tippyText="Prioridad Media"
                     offSet={10}
@@ -387,7 +360,9 @@ function Form({ data }) {
                     isUpdate={true}
                     priority={100}
                     id={id_det}
-                    updatePriority={handleUpdatePriority}
+                    updatePriority={
+                      (id, priority) => ActFunc.updatePriority({ prioridad_numero: priority, id_actividad: id }, true, id)
+                    }
                     isTippy={true}
                     tippyText="Prioridad Alta"
                     offSet={10}
@@ -433,12 +408,12 @@ function Form({ data }) {
                         className="h-8 w-8 rounded-full hover:bg-gray-300"
                         type="icon"
                         icon="fas fa-plus"
-                        onClick={showModalAddNote} />
+                        onClick={() => showModalAddOrUpdate({ state: true })} />
                       <Button
                         className="h-8 w-8 rounded-full hover:bg-gray-300"
                         type="icon"
                         icon="fas fa-pen"
-                        onClick={showModalUpdateNote} />
+                        onClick={() => showModalAddOrUpdate({ state: false })} />
                     </div>
                   </div>
                   <div className="max-h-56 overflow-custom">
@@ -475,8 +450,8 @@ function Form({ data }) {
                         setGloseOrDesc(false)
                       }} />
                   </div>
-                  <div className="max-h-96 overflow-custom">
-                    <p className="p-2 leading-tight text-justify salto text-sm">
+                  <div className="max-h-56 overflow-custom">
+                    <p className="p-2 leading-tight text-justify whitespace-pre-wrap text-sm">
                       {seekParam(func_objeto, '- PAUSA')}
                     </p>
                   </div>
@@ -493,8 +468,8 @@ function Form({ data }) {
                         setGloseOrDesc(true)
                       }} />
                   </div>
-                  <div className="max-h-96 overflow-custom">
-                    <p className="p-2 leading-tight text-justify salto text-sm">
+                  <div className="max-h-56 overflow-custom">
+                    <p className="p-2 leading-tight text-justify whitespace-pre-wrap text-sm">
                       {/* {seekParam(func_objeto, '- PAUSA')} */}
                     </p>
                   </div>
@@ -503,7 +478,7 @@ function Form({ data }) {
               <div className="grid grid-cols-1 mt-6">
                 {/* opciones RA */}
                 <div className="flex justify-between items-center mb-6">
-                  <TextContent tag="Opciones Registro de Avance: (sin funcionalidades por ahora)" />
+                  <TextContent tag="Detalles" />
                   <div className="flex items-center justify-between px-3">
                     <Menu
                       direction="bottom"
@@ -553,52 +528,55 @@ function Form({ data }) {
                     }
                   </div>
                 </div>
-                <div className="mt-4 grid grid-cols-4 gap-10 px-5">
+                <div className="mt-4 grid grid-cols-1 lg:grid-cols-6 gap-10 px-5">
                   {/* select RA */}
-                  <div className="col-span-4 lg:col-span-1 lg:border-r border-b lg:border-b-0 pb-10 lg:pb-0 lg grid grid-cols-1 lg:pr-5">
+                  <div className="col-span-1 lg:col-span-2 lg:border-r border-b lg:border-b-0 pb-10 lg:pb-0 lg grid grid-cols-1 lg:pr-5">
                     <label className="text-xs">Proyecto:</label>
                     <Select
+                      selecedValue
+                      maxMenuHeight={170}
                       placeholder="Seleccionar"
                       options={ActState.arrayProject}
                       onChange={(option) => { setProject(option) }}
                       value={project} />
                     <label className="text-xs">Sub Proyecto:</label>
                     <Select
+                      maxMenuHeight={170}
                       placeholder="Seleccionar"
-                      options={newSubProjectArray}
+                      options={arrSubProject}
                       onChange={(option) => { setSubProject(option) }}
                       value={subProject} />
                     <label className="text-xs">Solicita:</label>
                     <Select
+                      maxMenuHeight={170}
                       placeholder="Seleccionar"
                       options={ActState.arrayUsersS}
                       onChange={(option) => { setUserS(option) }}
                       value={userS} />
                     <label className="text-xs">Encargado:</label>
                     <Select
+                      maxMenuHeight={170}
                       placeholder="Seleccionar"
                       options={ActState.arrayUsersE}
                       onChange={(option) => { setUserE(option) }}
                       value={userE} />
                     <label className="text-xs">Revisor:</label>
                     <Select
+                      maxMenuHeight={170}
                       placeholder="Seleccionar"
                       options={ActState.arrayUsersE}
                       onChange={(option) => { setUserR(option) }}
                       value={userR} />
                   </div>
                   {/* inputs y tiempos */}
-                  <div className="col-span-4 lg:col-span-3">
+                  <div className="col-span-1 lg:col-span-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-10 gap-4">
                       <Input
                         className="text-sm"
-                        name="inputPriority"
-                        value={inputPriority}
+                        name="priority"
+                        value={priority}
                         field="Nᵒ prioridad"
-                        onChange={(e) => setValues({
-                          ...values,
-                          inputPriority: parseInt(e.target.value)
-                        })} />
+                        onChange={onChangeValues} />
                       <Input
                         className="text-sm"
                         name="ticket"
@@ -686,7 +664,8 @@ function Form({ data }) {
           </div>
 
           {/* modal clone */}
-          <Modal showModal={showCloneModal} onClose={onCloseCloneModal} className="max-w-7xl p-10">
+          <Modal showModal={showCloneModal} onClose={() => setShowCloneModal(false)}
+            className="max-w-7xl p-10">
             <h1 className="capitalize text-xl font-semibold mb-2">Clonar actividad: {id_det}</h1>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
               <div className="col-span-1">
@@ -699,7 +678,7 @@ function Form({ data }) {
                 <label className="text-xs p-4">Sub Proyecto:</label>
                 <Select
                   placeholder="Seleccionar"
-                  options={newSubProjectArray}
+                  options={arrSubProject}
                   onChange={(option) => { setSubProject(option) }}
                   value={subProject} />
                 <label className="text-xs p-4">Solicita:</label>
@@ -736,12 +715,12 @@ function Form({ data }) {
                   name="time"
                   value={time}
                   onChange={onChangeValues} />
-                <ul className="text-sm grid grid-cols-1 gap-2 mt-4 max-h-40 overflow-custom">
-                  <h5 className="text-sm truncate">
-                    Archivos: <label className="font-semibold">
-                      No hay archivo seleccionado
-                    </label>
-                  </h5>
+                {/* <ul className="text-sm grid grid-cols-1 gap-2 mt-4 max-h-40 overflow-custom">
+                  <h5 className="text-sm truncate mt-4">
+                  Archivos: <label className="font-semibold">
+                    No hay archivo seleccionado
+                  </label>
+                </h5>
                   {
                     files.map(file => {
                       return (
@@ -749,7 +728,7 @@ function Form({ data }) {
                       )
                     })
                   }
-                </ul>
+                </ul> */}
               </div>
               <div className="col-span-1 lg:col-span-2">
                 <Input
@@ -764,47 +743,51 @@ function Form({ data }) {
                   onChange={onChangeValues} />
                 <TextArea
                   field="glosa explicativa"
-                  name="glose"
-                  value={glose}
+                  name="gloss"
+                  value={gloss}
                   onChange={onChangeValues} />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-16">
-                  <label
-                    htmlFor="archivoForm"
-                    className="transition duration-500 text-center cursor-pointer hover:bg-blue-100 text-blue-600 font-semibold capitalize py-2.5 px-6 rounded-full mb-2 md:mb-0 block md:inline"
-                  >
-                    <input
-                      key={resetFile || ''}
-                      id="archivoForm"
-                      className="text-xs hidden"
-                      name="archivo"
-                      onChange={onChangeFile}
-                      type="file"
-                    />
-                    <i className="fas fa-cloud-upload-alt fa-lg mr-2"></i>
-                    archivo
-                  </label>
-                  <Button
-                    className="rounded-full bg-yellow-400 hover:bg-yellow-500 text-white py-2.5"
-                    name="Guardar en trabajo"
-                    block
-                    shadow
-                  />
-                  <Button
-                    className="rounded-full border border-red-500 hover:bg-red-500 text-red-500 hover:text-white py-2.5 order-last md:order-none"
-                    name="cancelar"
-                    block
-                    shadow
-                  />
-                  <Button
-                    className="rounded-full bg-green-400 hover:bg-green-600 text-white py-2.5"
-                    name="Guardar"
-                    block
-                    shadow
-                  />
-                </div>
               </div>
             </div>
-
+            <h5 className="text-sm truncate mt-10">
+              Archivos: <label className="font-semibold">
+                No hay archivo seleccionado
+              </label>
+            </h5>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-16">
+              <label
+                htmlFor="archivoForm"
+                className="transition duration-500 text-center cursor-pointer hover:bg-blue-100 text-blue-600 font-semibold capitalize py-2 px-6 rounded-full mb-2 md:mb-0 block md:inline"
+              >
+                <input
+                  key={resetFile || ''}
+                  id="archivoForm"
+                  className="text-xs hidden"
+                  name="archivo"
+                  onChange={onChangeFile}
+                  type="file"
+                />
+                <i className="fas fa-cloud-upload-alt fa-lg mr-2"></i>
+                archivo
+              </label>
+              <Button
+                className="rounded-full border border-red-500 hover:bg-red-500 text-red-500 hover:text-white py-2 order-last md:order-none"
+                name="cancelar"
+                block
+                shadow
+              />
+              <Button
+                className="rounded-full bg-yellow-400 hover:bg-yellow-500 text-white py-2"
+                name="Guardar en trabajo"
+                block
+                shadow
+              />
+              <Button
+                className="rounded-full bg-green-400 hover:bg-green-600 text-white py-2"
+                name="Guardar"
+                block
+                shadow
+              />
+            </div>
           </Modal>
 
           {/* modal add/update note */}
@@ -820,7 +803,7 @@ function Form({ data }) {
                         defaultNotes.map((note, index) => (
                           <ListNote
                             key={note.id}
-                            from
+                            isDetail={true}
                             type="listAction"
                             idActivity={ActState.activityDetails.id_det}
                             desc={note.desc}
@@ -838,7 +821,7 @@ function Form({ data }) {
                   </> :
                   <>
                     <label className="mb-2 text-xs">Notas:</label>
-                    <ul className="max-h-56 overflow-custom bg-gray-100 rounded-md py-3 pl-3">
+                    <ul className="max-h-44 overflow-custom bg-gray-100 rounded-md py-3 pl-3">
                       {
                         ActState.activityDetails.notas.length > 0 ?
                           ActState.activityDetails.notas.map((obj, index) => {
@@ -851,7 +834,8 @@ function Form({ data }) {
                                   desc={obj.desc_nota}
                                   date={obj.fecha_hora_crea}
                                   user={obj.user_crea}
-                                  idActivity={ActState.activityDetails.id_det}
+                                  isDetail={true}
+                                  idActivity={id_det}
                                   onclick={handleGetIdNote}
                                   activeColor={idNote === obj.id_nota ? 'text-green-600' : 'text-gray-500'}
                                   separator={ActState.activityDetails.notas.length !== index + 1}
@@ -888,8 +872,8 @@ function Form({ data }) {
             <div className="w-full">
               <TextArea
                 field={gloseOrDesc ? 'Glosa' : 'Descripcion'}
-                name={gloseOrDesc ? 'glose' : 'desc'}
-                value={gloseOrDesc ? glose : desc}
+                name={gloseOrDesc ? 'gloss' : 'desc'}
+                value={gloseOrDesc ? gloss : desc}
                 onChange={onChangeValues} />
             </div>
             <br />

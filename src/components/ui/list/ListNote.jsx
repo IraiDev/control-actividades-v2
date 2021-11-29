@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import { ActivityContext } from '../../../context/ActivityContext'
-import { alertQuest } from '../../../helpers/alerts'
 import Button from '../buttons/Button'
 import moment from 'moment'
+import { Alert } from '../../../helpers/alert'
 
 let name = 'NN'
 
@@ -19,7 +19,7 @@ function ListNote(props) {
     separator = true,
     updatePriority,
     callBack,
-    from = false,
+    isDetail = false,
     className
   } = props
 
@@ -45,47 +45,35 @@ function ListNote(props) {
       break;
   }
 
-  const handleGetidNote = () => {
-    onclick(idNote, desc)
-  }
-
   const handleDeleteNote = () => {
-
-    if (idActivity === null) {
-      const data = { id_nota: idNote }
-      const action = () => ActFunc.deleteNote(data)
-      let text = desc.substring(0, 15)
-      alertQuest(
-        'info',
-        `<p>Esto eliminara la nota: <b>${text}...</b></p>`,
-        'No, cancelar',
-        'Si, eliminar',
-        action
-      )
-    }
-    else {
-      const data = { id_nota: idNote }
-      const action = () => ActFunc.deleteNote(data, true, idActivity)
-      let text = desc.substring(0, 15)
-      alertQuest(
-        'info',
-        `<p>Esto eliminara la nota: <b>${text}...</b></p>`,
-        'No, cancelar',
-        'Si, eliminar',
-        action
-      )
-    }
+    const data = { id_nota: idNote }
+    let text = desc.substring(0, 15)
+    Alert({
+      icon: 'warn',
+      title: 'Atencion',
+      content: `<p>Esta seguro de eliminar la siguiente nota: <b>${text}...</b></p>`,
+      action: () => ActFunc.deleteNote({ data, from: isDetail, idActivity })
+    })
   }
 
   const handleAddNote = () => {
     if (updatePriority) {
-      const data = { prioridad_numero: 100, id_actividad: idActivity }
-      ActFunc.updatePriority(data, from, idActivity)
-      const data2 = { description: desc, id_actividad: idActivity }
-      ActFunc.addNewNote(data2, from, idActivity)
+      const data = {
+        prioridad_numero: 100,
+        id_actividad: idActivity
+      }
+      ActFunc.updatePriority({ data, from: isDetail, idActivity })
+      const data2 = {
+        description: desc,
+        id_actividad: idActivity
+      }
+      ActFunc.addNewNote({ data: data2, from: isDetail, idActivity })
     } else {
-      const data = { description: desc, id_actividad: idActivity }
-      ActFunc.addNewNote(data, from, idActivity)
+      const data = {
+        description: desc,
+        id_actividad: idActivity
+      }
+      ActFunc.addNewNote({ data, from: isDetail, idActivity })
     }
     callBack()
   }
@@ -96,9 +84,7 @@ function ListNote(props) {
         <li className="flex justify-between items-center">
           <button
             className={`text-left my-2 focus:outline-none hover:text-blue-500 ${activeColor} ${className}`}
-            onClick={() => {
-              handleGetidNote()
-            }}>
+            onClick={() => onclick(idNote, desc)}>
             <p className="inline font-bold text-sm mr-2">{name}</p>
             <p className="inline font-semibold text-2xs">{moment(date).format("DD/MM/yyyy, HH:mm")}:</p>
             <p className="text-2xs mx-2">{desc}</p>

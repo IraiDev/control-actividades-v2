@@ -18,19 +18,12 @@ function TimeScreen() {
 
   const handleNewDate = () => {
     UiFunc.setIsLoading(true)
-    const fecha = moment(input).format('yyyy-MM-DD')
-    const param = `fecha=${fecha}`
-    ActFunc.getInfoTimes(param)
-  }
-
-  const handleOnChangeCheck = () => {
-    setIsChecked(!isChecked)
+    const date = moment(input).format('yyyy-MM-DD')
+    ActFunc.getInfoTimes(date)
   }
 
   useEffect(() => {
-    reset()
-    const param = `fecha=${dateFormat}`
-    ActFunc.getInfoTimes(param)
+    ActFunc.getInfoTimes(dateFormat)
   }, [])
 
   return (
@@ -43,7 +36,10 @@ function TimeScreen() {
               id="floatcheck123"
               type="checkbox"
               checked={isChecked}
-              onChange={handleOnChangeCheck} />
+              onChange={(e) => {
+                const check = e.target.checked
+                setIsChecked(check)
+              }} />
             <p className={!isChecked ? 'line-through' : ''}>Cobrables</p>
           </label>
         </div>

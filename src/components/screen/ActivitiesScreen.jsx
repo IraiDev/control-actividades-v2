@@ -27,9 +27,6 @@ function ActivitiesScreen() {
       UiFunc.setIsLoading(false)
     }, 500)
   }
-  const handleExpand = () => {
-    setIsExpand(!isExpand)
-  }
 
   if (UiState.allOrDetails) {
     return (
@@ -38,7 +35,7 @@ function ActivitiesScreen() {
         {
           view ?
             <div className="overflow-custom text-center text-sm max-h-3/4 pb-5">
-              <ActivityHeader onClick={handleExpand} active={isExpand} />
+              <ActivityHeader onClick={() => setIsExpand(!isExpand)} active={isExpand} />
               <ActivityContainer array={ActState.activitiesRA} type="list" onExpand={isExpand} />
             </div>
             :

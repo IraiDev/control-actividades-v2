@@ -16,14 +16,6 @@ function ButtonColor(props) {
     hwBtn = "7"
   } = props
 
-  const handleChangeColor = () => {
-    setColor(color);
-  }
-
-  const handleUpdatePriority = () => {
-    updatePriority(id, priority)
-  }
-
   return (
     <>
       <Tippy
@@ -36,7 +28,7 @@ function ButtonColor(props) {
         <button
           className={`h-${hwBtn} w-${hwBtn} m-1 rounded-full focus:outline-black ${color} transition duration-300 transform hover:-translate-y-1 hover:scale-110`}
           onClick={() => {
-            isUpdate ? handleUpdatePriority() : handleChangeColor();
+            isUpdate ? updatePriority(id, priority) : setColor(color)
           }}
         ></button>
       </Tippy>

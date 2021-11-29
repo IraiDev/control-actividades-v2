@@ -3,7 +3,6 @@ import { UiContext } from '../../../context/UiContext'
 import { ActivityContext } from '../../../context/ActivityContext'
 import { GraphContext } from '../../../context/GraphContext'
 import { Menu, MenuButton, MenuDivider, MenuGroup, MenuItem } from '@szhsin/react-menu'
-import { alertTimer } from '../../../helpers/alerts'
 import Select from 'react-select'
 import UserTimer from './UserTimer'
 import TextContent from '../text/TextContent'
@@ -15,6 +14,7 @@ import '@szhsin/react-menu/dist/index.css'
 import { types } from '../../../types/types'
 import moment from 'moment'
 import { useWindowSize } from '../../../hooks/useWindowSize'
+import { Alert } from '../../../helpers/alert'
 
 const { plannerView, activitiesView, timesView, detailsView } = types
 
@@ -51,32 +51,20 @@ function UtilityBar() {
   const [isWorking, toggleIsWorking] = useState(false)
   const size = useWindowSize();
 
-  const handleSideBar = () => {
-    UiFunc.setToggleSideBar()
-  }
-
-  const onChangeSelect = (option) => {
-    setColorSelected('')
-    setPriority(option)
-  }
-
-  const handleSelectColor = (color) => {
-    setColorSelected(color)
-  }
-
   const handleUpdateColorPriority = () => {
-    console.log(colorSelected);
-    const data = { prioridad_numero: priority.value, prioridad_color: colorSelected }
-    const action = () => {
-      ActFunc.updateUserColors(data)
-      showModalFalse()
+    if (priority.value === null || colorSelected === null) {
+      Alert({
+        icon: 'warn',
+        title: 'Atencion',
+        content: 'Debes seleccionar primero una prioridad y luego un color para realizar el cambio de color de prioridad',
+        showCancelButton: false,
+        timer: 5000
+      })
+      return
     }
-    const state = (priority.value !== null && colorSelected !== null)
-    alertTimer(state, 'info', 1500, 'Debe seleccionar una prioridad y un color.') && action()
-  }
-
-  const showModalTrue = () => {
-    setShowModal(true)
+    const data = { prioridad_numero: priority.value, prioridad_color: colorSelected }
+    ActFunc.updateUserColors(data)
+    showModalFalse()
   }
 
   const showModalFalse = () => {
@@ -86,58 +74,34 @@ function UtilityBar() {
   }
 
   const updateTimesComponents = () => {
-    const date = new Date()
-    const dateFormat = moment(date).format('yyyy-MM-DD')
-    const param = `fecha=${dateFormat}`
+    const dateFormat = moment(new Date()).format('yyyy-MM-DD')
     UiFunc.setIsLoading(true)
-    ActFunc.getTimes()
-    ActFunc.getNotify()
-    ActFunc.getInfoTimes(param)
+    ActFunc.getInfoTimes(dateFormat)
   }
 
   const updatePlannerComponents = () => {
-    if (UiState.isTodoOrPlanner) {
-      GraphFunc.getTodoTask(GraphState.idListSelected)
-    }
-    else {
-      GraphFunc.getPlannerTask()
-    }
+    if (UiState.isTodoOrPlanner) GraphFunc.getTodoTask(GraphState.idListSelected)
+    else { GraphFunc.getPlannerTask() }
     UiFunc.setIsLoading(true)
-    ActFunc.getTimes()
-    ActFunc.getNotify()
   }
 
   const updateActivityComponents = () => {
-    UiFunc.setViewActivities()
+    // UiFunc.setViewActivities()
     UiFunc.setIsLoading(true)
     ActFunc.getActivities()
-    ActFunc.getTimes()
-    ActFunc.getNotify()
   }
 
   const handleUserWorking = () => {
     UiFunc.setIsLoading(true)
-    ActFunc.getTimes()
-    ActFunc.getNotify()
     toggleIsWorking(!isWorking)
     if (!isWorking) {
       let param = UiFunc.saveFilters('entrabajo', 'entrabajo=2&')
       ActFunc.getActivities(param)
-      return
     }
-    let param = UiFunc.saveFilters('entrabajo', 'entrabajo=&')
-    ActFunc.getActivities(param)
-  }
-
-  const handleMarkAllNotifications = () => {
-    ActFunc.markNotifications()
-  }
-
-  const handleMarkNotifications = (idNote) => {
-    const data = {
-      id_nota: idNote
+    else {
+      let param = UiFunc.saveFilters('entrabajo', 'entrabajo=&')
+      ActFunc.getActivities(param)
     }
-    ActFunc.markNotifications(data)
   }
 
   const handleGoActivity = (idAct) => {
@@ -170,7 +134,7 @@ function UtilityBar() {
               type="iconText"
               icon="fas fa-filter fa-sm"
               name="Filtrar"
-              onClick={handleSideBar} />
+              onClick={() => UiFunc.setToggleSideBar()} />
             <Button
               disabled={UiState.tabs !== plannerView || size.width > 1024}
               className="rounded-full px-4 py-1 bg-gray-100  hover:bg-gray-50 hover:text-blue-500"
@@ -238,6 +202,7 @@ function UtilityBar() {
               tippyText={UiState.tabs === plannerView ? "Actualizar Planner o to-do" : UiState.tabs === activitiesView ? "Actualizar Actividades" : UiState.tabs === timesView && "Actualizar Informe de tiempos"}
               onClick={UiState.tabs === plannerView ? updatePlannerComponents : UiState.tabs === activitiesView ? updateActivityComponents : UiState.tabs === timesView && updateTimesComponents} />
             <Menu
+              className="z-50"
               direction="bottom"
               overflow="auto"
               position="anchor"
@@ -262,37 +227,38 @@ function UtilityBar() {
                 </MenuButton>
               }
             >
-              <MenuGroup takeOverflow>
+              <MenuGroup className="z-50" takeOverflow>
                 {
                   ActState.userNotify.length > 0 ?
-                    ActState.userNotify.map((obj, index) => {
-                      return (
-                        <MenuItem
-                          onClick={() => handleGoActivity(obj.id_det)}
-                          key={index}>
-                          <p className="pb-3 text-sm border-b text-transparent hover:text-gray-400">
-                            <strong className="text-black">{obj.user_crea_nota.abrev_user}</strong><i className="text-black">, ha
-                              creado una nota en la Actividad:</i> <strong className="text-black">{obj.id_det}</strong><i className="text-black">,
-                                con fecha</i> <strong className="text-black">{moment(obj.fecha_hora_crea).format('DD-MM-yyyy')}</strong>
-                            <button
-                              className="outline-none focus:outline-none"
-                              onClick={() => handleMarkNotifications(obj.id_nota)}>
-                              <i className="ml-2 fas fa-eye-slash hover:text-red-500"></i>
-                            </button>
+                    ActState.userNotify.map(note => (
+                      <MenuItem
+                        key={note.id_nota}>
+                        <div className="pb-3 text-sm border-b text-transparent hover:text-gray-400 w-64 flex justify-between items-center">
+                          <p className="text-gray-800 w-max"
+                            onClick={() => handleGoActivity(note.id_det)}>
+                            Nueva nota en Actividad: <b>{note.id_det}</b>
+                            <br />
+                            Con fecha: <b>{moment(note.fecha_hora_crea).format('DD-MM-yyyy, HH:MM')}</b>
+                            <br />
+                            Creador: <b>{note.user_crea_nota.abrev_user}</b>
                           </p>
-                        </MenuItem>
-                      );
-                    })
+                          <Button
+                            className="outline-none focus:outline-none hover:text-red-500"
+                            type="icon"
+                            icon="ml-2 fas fa-eye-slash"
+                            onClick={() => ActFunc.markNotifications({ id_nota: note.id_nota })} />
+                        </div>
+                      </MenuItem>
+                    ))
                     :
-                    <MenuItem>
-                      <p>no hay notificaciones</p>
+                    <MenuItem disabled>
+                      <p className="text-sm">No hay notificaciones...</p>
                     </MenuItem>
                 }
               </MenuGroup>
-              <MenuDivider />
               <MenuItem
                 disabled={ActState.userNotify.length <= 0}
-                onClick={() => handleMarkAllNotifications()}
+                onClick={() => ActFunc.markNotifications()}
               >
                 <div className={`flex items-center mx-auto text-gray-400 ${ActState.userNotify.length > 0 && 'hover:text-red-500'}`}>
                   Marcar como vistas
@@ -305,7 +271,7 @@ function UtilityBar() {
               type="icon"
               icon="fas fa-paint-brush"
               tippyText="Ajustes de usuario"
-              onClick={showModalTrue} />
+              onClick={() => setShowModal(true)} />
           </div>
         </div>
         <div className="md:flex items-center justify-around order-first pb-5 lg:order-last hidden">
@@ -346,7 +312,10 @@ function UtilityBar() {
               placeholder="seleccione una opcion"
               className="mt-2"
               options={selectArray}
-              onChange={onChangeSelect}
+              onChange={(option) => {
+                setColorSelected(null)
+                setPriority(option)
+              }}
               value={priority}
             />
           </div>
@@ -360,7 +329,7 @@ function UtilityBar() {
                   <ButtonColor
                     key={obj.id}
                     color={obj.colorButton}
-                    setColor={handleSelectColor}
+                    setColor={(color) => setColorSelected(color)}
                   />
                 );
               })}
