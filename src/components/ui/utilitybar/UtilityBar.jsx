@@ -121,6 +121,15 @@ function UtilityBar() {
     }
   }, [UiState.isResetFilters])
 
+  useEffect(() => {
+    if (ActState.userNotify.length > 0) {
+      document.title = `(${ActState.userNotify.length}) Control de actividades`
+    }
+    else {
+      document.title = `Control de actividades`
+    }
+  }, [ActState.userNotify])
+
   return (
     <>
       <div
@@ -202,7 +211,6 @@ function UtilityBar() {
               tippyText={UiState.tabs === plannerView ? "Actualizar Planner o to-do" : UiState.tabs === activitiesView ? "Actualizar Actividades" : UiState.tabs === timesView && "Actualizar Informe de tiempos"}
               onClick={UiState.tabs === plannerView ? updatePlannerComponents : UiState.tabs === activitiesView ? updateActivityComponents : UiState.tabs === timesView && updateTimesComponents} />
             <Menu
-              className="z-50"
               direction="bottom"
               overflow="auto"
               position="anchor"
@@ -227,7 +235,7 @@ function UtilityBar() {
                 </MenuButton>
               }
             >
-              <MenuGroup className="z-50" takeOverflow>
+              <MenuGroup index={200} takeOverflow>
                 {
                   ActState.userNotify.length > 0 ?
                     ActState.userNotify.map(note => (

@@ -9,7 +9,7 @@ import Input from "../inputs/Input"
 import { useWindowSize } from '../../../hooks/useWindowSize'
 import { Alert } from '../../../helpers/alert'
 
-const style = 'min-w-max z-40 px-3 py-10 ml-3 text-white bg-gray-700 border-r rounded-md shadow-md top-40 animate__animated animate__faster'
+const style = 'min-w-max px-3 py-10 ml-3 mt-7 text-white bg-gray-700 border-r rounded-md shadow-md animate__animated animate__faster'
 
 function SideMenu() {
   const [{ input }, onChangeValues, reset] = useForm({ input: '' })
@@ -76,7 +76,7 @@ function SideMenu() {
 
   return (
     <>
-      <div className={`${style} ${UiState.toggleSideMenu ? 'animate__slideInLeft' : 'animate__slideOutLeft'} ${size.width > 1024 ? 'sticky h-full' : 'fixed'}`}>
+      <div className={`${style} ${UiState.toggleSideMenu ? 'animate__slideInLeft' : 'animate__slideOutLeft'} ${size.width > 1024 ? 'sticky h-full top-0' : 'fixed z-40 top-1/3'}`}>
         <div className="relative">
           <ButtonList
             title={"Nueva lista"}
