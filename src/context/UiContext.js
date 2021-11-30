@@ -38,7 +38,7 @@ function UiProvider({ children }) {
   const [displayNameTodoList, setDisplayNameTodoList] = useState({})
   //filtros en formato string y array
   const [filters, setFilters] = useState('')
-  const [multiEncargados, setMultiEncargados] = useState(['IA'])
+  const [multiEncargados, setMultiEncargados] = useState([])
   const [multiProyectos, setMultiProyectos] = useState([])
   const [multiSubProyectos, setMultiSubProyectos] = useState([])
   const [multiSolicitantes, setMultiSolicitantes] = useState([])
