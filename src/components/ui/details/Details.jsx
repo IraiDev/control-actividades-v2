@@ -241,23 +241,14 @@ function Form({ data }) {
           Se pausara la actividad: <b>${id_det}</b>, <b>${actividad}</b>
           <p>Ingrese el detalle de la detencion <b>(obligatorio):</b></p>
         `
-      const resp = await Alert({ content, title: 'Atencion', type: 'input', input: 'textarea' })
+      const resp = await Alert({
+        content,
+        title: 'Atencion',
+        type: 'input',
+        input: 'textarea',
+        confirmText: 'Guardar pausa'
+      })
       const { ok, text } = resp
-      const vText = checkForms(text)
-      const { state, char, list } = vText
-
-      if (state) {
-        Alert({
-          icon: 'warn',
-          title: 'Atencion',
-          content: `Caracter <b class="text-gray-600 text-xl">${char}</b>
-          no pemitido en descripcion de pausa.
-          <p class="mt-5">Caracteres no permitidos:</p> <b>${list}</b>`,
-          showCancelButton: false,
-          timer: 5000
-        })
-        return
-      }
 
       if (ok) {
         UiFunc.setIsLoading(true)

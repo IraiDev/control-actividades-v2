@@ -1,4 +1,5 @@
 import Swal from 'sweetalert2'
+import { checkForms } from './auxFunctions'
 
 const showClass = {
   popup: 'animate__animated animate__bounce animate__faster',
@@ -15,11 +16,8 @@ const hideClass = {
 const customClass = {
   cancelButton: 'focus:outline-none ring-red-200 focus:ring-4 transition duration-500 capitalize py-2.5 px-6 font-semibold shadow-xl rounded-full bg-red-500 hover:bg-red-600 text-white',
   confirmButton: 'focus:outline-none transition duration-500 capitalize py-2.5 px-6 font-semibold shadow-xl rounded-full bg-blue-500 hover:bg-blue-700 text-white mr-3',
-  input: 'px-4 py-2 placeholder-gray-400 text-base border-none text-gray-600 bg-gray-100 rounded-md resize-none transition duration-500 focus:outline-none focus:ring-2 focus:bg-white focus:shadow-lg',
-  title: 'text-2xl capitalize',
-  closeButton: 'focus:outline-none h-9 w-9 pt-1 transition focus:outline-none duration-500 absolute -right-3 -top-3 bg-white hover:bg-red-400 text-gray-400 hover:text-white rounded-full shadow-lg',
-  htmlContainer: 'text-base',
-  validationMessage: '...',
+  input: 'text-base text-gray-700 resize-none border focus:ring-2 ring-blue-400 focus:outline-none',
+  validationMessage: 'bg-white text-center',
 }
 
 export const Alert = async (props) => {
@@ -35,6 +33,7 @@ export const Alert = async (props) => {
     inputPlaceholder = 'Escriba aqui',
     showCancelButton = true,
     showConfirmButton = true,
+    isBlur = false,
     timer = undefined,
     action = () => { return false }
   } = props
@@ -64,15 +63,34 @@ export const Alert = async (props) => {
       showClass,
       hideClass,
       input,
-      html: content,
+      html: `<div class="text-base">${content}</div>`,
+      title: `<h4 class="text-2xl capitalize">${title} <i class="fas ${icon}"></i></h4>`,
       inputPlaceholder,
-      title: `<h1>${title} <i class="fas ${icon}"></i></h1>`,
-      closeButtonHtml: '<i class="fas fa-times text-lg"></i>',
-      showCloseButton: true,
       showCancelButton,
       showConfirmButton,
       cancelButtonText: cancelText,
       confirmButtonText: confirmText,
+      allowOutsideClick: isBlur,
+      width: '50rem',
+      inputValidator: (value) => {
+        const vText = checkForms(value)
+        const { state, char, list } = vText
+        if (!value || state) {
+          if (state) {
+            return `
+            <div>
+              <p>
+              Caracter <b class="text-xl font-bold">${char}</b>
+              no pemitido en descripcion de la pausa.
+              </p>
+              <p>
+              Caracteres no permitidos: <b class="font-bold">${list}</b>
+              </p>
+            </div>`
+          }
+          return 'Este campo es obligatorio'
+        }
+      }
     })
     if (text) return { ok: true, text }
     else return { ok: false, text: '' }
@@ -84,10 +102,8 @@ export const Alert = async (props) => {
       customClass,
       showClass,
       hideClass,
-      html: content,
-      title: `<h1>${title} <i class="fas ${icon}"></i></h1>`,
-      closeButtonHtml: '<i class="fas fa-times text-lg"></i>',
-      showCloseButton: true,
+      html: `<div class="text-base">${content}</div>`,
+      title: `<h4 class="text-2xl capitalize">${title} <i class="fas ${icon}"></i></h4>`,
       showCancelButton,
       showConfirmButton,
       focusCancel: true,
@@ -95,6 +111,8 @@ export const Alert = async (props) => {
       confirmButtonText: confirmText,
       timer,
       timerProgressBar: timer !== undefined,
+      allowOutsideClick: isBlur,
+      width: '36rem',
     }).then((result) => {
       if (result.isConfirmed) {
         action()
