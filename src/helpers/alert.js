@@ -13,11 +13,11 @@ const hideClass = {
 }
 
 const customClass = {
-  cancelButton: 'focus:outline-none border-4 border-transparent focus:border-gray-400 transition duration-500 capitalize py-2.5 px-6 font-semibold shadow-xl rounded-full bg-red-500 hover:bg-red-600 text-white',
+  cancelButton: 'focus:outline-none ring-red-200 focus:ring-4 transition duration-500 capitalize py-2.5 px-6 font-semibold shadow-xl rounded-full bg-red-500 hover:bg-red-600 text-white',
   confirmButton: 'focus:outline-none transition duration-500 capitalize py-2.5 px-6 font-semibold shadow-xl rounded-full bg-blue-500 hover:bg-blue-700 text-white mr-3',
   input: 'px-4 py-2 placeholder-gray-400 text-base border-none text-gray-600 bg-gray-100 rounded-md resize-none transition duration-500 focus:outline-none focus:ring-2 focus:bg-white focus:shadow-lg',
   title: 'text-2xl capitalize',
-  closeButton: 'focus:outline-none h-9 w-9 transition border-none duration-500 absolute -right-3 -top-3 bg-white hover:bg-red-400 text-gray-400 hover:text-white rounded-full shadow-lg',
+  closeButton: 'focus:outline-none h-9 w-9 pt-1 transition focus:outline-none duration-500 absolute -right-3 -top-3 bg-white hover:bg-red-400 text-gray-400 hover:text-white rounded-full shadow-lg',
   htmlContainer: 'text-base',
   validationMessage: '...',
 }
@@ -69,7 +69,6 @@ export const Alert = async (props) => {
       title: `<h1>${title} <i class="fas ${icon}"></i></h1>`,
       closeButtonHtml: '<i class="fas fa-times text-lg"></i>',
       showCloseButton: true,
-      focusCancel: true,
       showCancelButton,
       showConfirmButton,
       cancelButtonText: cancelText,

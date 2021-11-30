@@ -196,7 +196,7 @@ function Activity(props) {
       const content =
         `
           <p class="text-sm">Se pausara la actividad: <b>${id}</b>, <b>${actividad}</b></p>
-          <p class="text-sm">Ingrese el detalle de la detencia <b>(obligatorio):</b></p>
+          <p class="text-sm">Ingrese el detalle de la detencion <b>(obligatorio):</b></p>
         `
       const resp = await Alert({ type: 'input', input: 'textarea', content, title: 'Pausar actividad' })
       const { ok, text } = resp
@@ -556,6 +556,7 @@ function Activity(props) {
                         type="listAction"
                         idActivity={id}
                         desc={note.desc}
+                        isDetail={false}
                         updatePriority={note.id === 11121}
                         callBack={showModalFalse}
                         separator={defaultNotes.length !== index + 1} />

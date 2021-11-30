@@ -62,7 +62,7 @@ function ListNote(props) {
         prioridad_numero: 100,
         id_actividad: idActivity
       }
-      ActFunc.updatePriority({ data, from: isDetail, idActivity })
+      ActFunc.updatePriority(data, isDetail, idActivity)
       const data2 = {
         description: desc,
         id_actividad: idActivity

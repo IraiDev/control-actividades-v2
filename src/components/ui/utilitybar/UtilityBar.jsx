@@ -233,14 +233,16 @@ function UtilityBar() {
                     ActState.userNotify.map(note => (
                       <MenuItem
                         key={note.id_nota}>
-                        <div className="pb-3 text-sm border-b text-transparent hover:text-gray-400 w-64 flex justify-between items-center">
-                          <p className="text-gray-800 w-max"
+                        <div className="pb-3 text-xs border-b text-transparent hover:text-gray-400 w-64 flex justify-between items-center">
+                          <p className="text-gray-800 w-max truncate"
                             onClick={() => handleGoActivity(note.id_det)}>
                             Nueva nota en Actividad: <b>{note.id_det}</b>
                             <br />
                             Con fecha: <b>{moment(note.fecha_hora_crea).format('DD-MM-yyyy, HH:MM')}</b>
                             <br />
                             Creador: <b>{note.user_crea_nota.abrev_user}</b>
+                            <br />
+                            <b>Contenido</b>: <b className="font-normal">{note.desc_nota}</b>
                           </p>
                           <Button
                             className="outline-none focus:outline-none hover:text-red-500"

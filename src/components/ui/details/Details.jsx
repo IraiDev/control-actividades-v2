@@ -20,14 +20,6 @@ import { Alert } from '../../../helpers/alert'
 
 let today = moment(new Date()).format('yyyy-MM-DD')
 
-const files = [
-  { id: 2, name: 'file_EJEMPLO1.png' },
-  { id: 3, name: 'file_EJEMPLO2.png' },
-  { id: 4, name: 'file_EJEMPLO3asassssssssss.png' },
-  { id: 5, name: 'file_EJEMPLO4.png' },
-  { id: 6, name: 'file_EJEMPLO5.png' }
-]
-
 const defaultNotes = [
   { id: 11121, desc: "Inicializar actividad urgente" },
   { id: 11122, desc: "esperando respuesta de cliente" },
@@ -247,7 +239,7 @@ function Form({ data }) {
       const content =
         `
           Se pausara la actividad: <b>${id_det}</b>, <b>${actividad}</b>
-          <p>Ingrese el detalle de la detencia <b>(obligatorio):</b></p>
+          <p>Ingrese el detalle de la detencion <b>(obligatorio):</b></p>
         `
       const resp = await Alert({ content, title: 'Atencion', type: 'input', input: 'textarea' })
       const { ok, text } = resp

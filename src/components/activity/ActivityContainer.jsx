@@ -5,7 +5,7 @@ import Activity from './Activity'
 function ActivityContainer({ array = [], type, onExpand }) {
 
   useEffect(() => {
-    console.log(array);
+    // console.log(array)
   }, [])
 
   return (
