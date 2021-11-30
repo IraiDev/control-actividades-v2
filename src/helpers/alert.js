@@ -16,8 +16,8 @@ const hideClass = {
 const customClass = {
   cancelButton: 'focus:outline-none ring-red-200 focus:ring-4 transition duration-500 capitalize py-2.5 px-6 font-semibold shadow-xl rounded-full bg-red-500 hover:bg-red-600 text-white',
   confirmButton: 'focus:outline-none transition duration-500 capitalize py-2.5 px-6 font-semibold shadow-xl rounded-full bg-blue-500 hover:bg-blue-700 text-white mr-3',
-  input: 'text-base text-gray-700 resize-none border focus:ring-2 ring-blue-400 focus:outline-none',
-  validationMessage: 'bg-white text-center',
+  input: 'text-base text-gray-700 resize-none transition duration-300 focus:ring ring-gray-400 active:outline-none outline-none focus:outline-none',
+  validationMessage: 'text-center',
 }
 
 export const Alert = async (props) => {

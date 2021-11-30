@@ -126,7 +126,7 @@ function Todo() {
       {/* modal create todo */}
 
       <Modal showModal={showModal} onClose={showModalFalse} className="max-w-xl">
-        <div className="flex items-center mb-5 gap-5">
+        <div className="flex items-center mb-3 gap-5">
           <h1 className="text-xl font-semibold">Crear To-do</h1>
           <Tippy
             offset={[0, 10]}
@@ -152,7 +152,6 @@ function Todo() {
             name="input"
             value={input}
             onChange={onChangeValues} />
-          <br />
           <TextArea
             field="descripcion"
             value={textArea}

@@ -335,6 +335,20 @@ function ActivityProvider({ children }) {
     else Alert({ icon: 'error', title: 'Error', content: 'Error al crear nota', timer: 3000, showCancelButton: false })
   }
 
+  const addNoteUpdatePriority = async ({ dataNote, dataPriority, from, idActivity }) => {
+    const resp = await fetchToken('task/update-priority', dataPriority, 'POST')
+    const body = await resp.json()
+    const r = await fetchToken('task/create-note', dataNote, 'POST')
+    const b = await r.json()
+
+    if (body.ok && b.ok) {
+      UiFunc.setIsLoading(true)
+      if (from) getActivityDetail(idActivity)
+      else getActivities()
+    }
+    else Alert({ icon: 'error', title: 'Error', content: 'Error al crear nota y actualizar prioridad (addNoteUpdatePriority)', timer: 3000, showCancelButton: false })
+  }
+
   const updateNote = async ({ data, from, idActivity }) => {
     const resp = await fetchToken('task/update-note', data, 'PUT')
     const body = await resp.json()
@@ -429,7 +443,8 @@ function ActivityProvider({ children }) {
       getFilters,
       getInfoTimes,
       markNotifications,
-      playActivity
+      playActivity,
+      addNoteUpdatePriority
     }
   }
   return (

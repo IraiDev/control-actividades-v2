@@ -200,7 +200,7 @@ function Activity(props) {
         `
       const resp = await Alert({
         content,
-        title: 'Atencion',
+        title: 'Pausar actividad',
         type: 'input',
         input: 'textarea',
         confirmText: 'Guardar pausa'
@@ -345,6 +345,11 @@ function Activity(props) {
               >
                 <MenuItem
                   className="text-left hover:text-white hover:bg-blue-500"
+                  onClick={handleOpenDetails} >
+                  Ver Detalle
+                </MenuItem>
+                <MenuItem
+                  className="text-left hover:text-white hover:bg-blue-500"
                   onClick={() => showModalAddOrUpdate({ state: true })} >
                   Agregar Nota
                 </MenuItem>
@@ -480,6 +485,11 @@ function Activity(props) {
                   </MenuButton>
                 }
               >
+                <MenuItem
+                  className="text-left hover:text-white hover:bg-blue-500"
+                  onClick={handleOpenDetails} >
+                  Ver Detalle
+                </MenuItem>
                 <MenuItem
                   className="flex justify-between"
                   onClick={() => {

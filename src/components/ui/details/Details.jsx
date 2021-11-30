@@ -243,7 +243,7 @@ function Form({ data }) {
         `
       const resp = await Alert({
         content,
-        title: 'Atencion',
+        title: 'Pausar actividad',
         type: 'input',
         input: 'textarea',
         confirmText: 'Guardar pausa'
@@ -514,7 +514,7 @@ function Form({ data }) {
                 <div className="mt-4 grid grid-cols-1 lg:grid-cols-6 gap-10 px-5">
                   {/* select RA */}
                   <div className="col-span-1 lg:col-span-2 lg:border-r border-b lg:border-b-0 pb-10 lg:pb-0 lg grid grid-cols-1 lg:pr-5">
-                    <label className="text-xs">Proyecto:</label>
+                    <label className="text-xs block py-1.5">Proyecto:</label>
                     <Select
                       selecedValue
                       maxMenuHeight={170}
@@ -522,28 +522,28 @@ function Form({ data }) {
                       options={ActState.arrayProject}
                       onChange={(option) => { setProject(option) }}
                       value={project} />
-                    <label className="text-xs">Sub Proyecto:</label>
+                    <label className="text-xs block py-1.5">Sub Proyecto:</label>
                     <Select
                       maxMenuHeight={170}
                       placeholder="Seleccionar"
                       options={arrSubProject}
                       onChange={(option) => { setSubProject(option) }}
                       value={subProject} />
-                    <label className="text-xs">Solicita:</label>
+                    <label className="text-xs block py-1.5">Solicita:</label>
                     <Select
                       maxMenuHeight={170}
                       placeholder="Seleccionar"
                       options={ActState.arrayUsersS}
                       onChange={(option) => { setUserS(option) }}
                       value={userS} />
-                    <label className="text-xs">Encargado:</label>
+                    <label className="text-xs block py-1.5">Encargado:</label>
                     <Select
                       maxMenuHeight={170}
                       placeholder="Seleccionar"
                       options={ActState.arrayUsersE}
                       onChange={(option) => { setUserE(option) }}
                       value={userE} />
-                    <label className="text-xs">Revisor:</label>
+                    <label className="text-xs block py-1.5">Revisor:</label>
                     <Select
                       maxMenuHeight={170}
                       placeholder="Seleccionar"
@@ -648,35 +648,35 @@ function Form({ data }) {
 
           {/* modal clone */}
           <Modal showModal={showCloneModal} onClose={() => setShowCloneModal(false)}
-            className="max-w-7xl p-10">
+            className="max-w-7xl" padding="p-10">
             <h1 className="capitalize text-xl font-semibold mb-2">Clonar actividad: {id_det}</h1>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
               <div className="col-span-1">
-                <label className="text-xs p-4">Proyecto:</label>
+                <label className="text-xs block py-1.5">Proyecto:</label>
                 <Select
                   placeholder="Seleccionar"
                   options={ActState.arrayProject}
                   onChange={(option) => { setProject(option) }}
                   value={project} />
-                <label className="text-xs p-4">Sub Proyecto:</label>
+                <label className="text-xs block py-1.5">Sub Proyecto:</label>
                 <Select
                   placeholder="Seleccionar"
                   options={arrSubProject}
                   onChange={(option) => { setSubProject(option) }}
                   value={subProject} />
-                <label className="text-xs p-4">Solicita:</label>
+                <label className="text-xs block py-1.5">Solicita:</label>
                 <Select
                   placeholder="Seleccionar"
                   options={ActState.arrayUsersS}
                   onChange={(option) => { setUserS(option) }}
                   value={userS} />
-                <label className="text-xs p-4">Encargado:</label>
+                <label className="text-xs block py-1.5">Encargado:</label>
                 <Select
                   placeholder="Seleccionar"
                   options={ActState.arrayUsersE}
                   onChange={(option) => { setUserE(option) }}
                   value={userE} />
-                <label className="text-xs p-4">Revisor:</label>
+                <label className="text-xs block py-1.5">Revisor:</label>
                 <Select
                   placeholder="Seleccionar"
                   options={ActState.arrayUsersE}
@@ -781,7 +781,7 @@ function Form({ data }) {
                 updateOrAdd ?
                   <>
                     <p className="text-xs">Mensajes predeterminados:</p>
-                    <div className="py-3 pl-3 pr-1 mx-auto mt-1 mb-5 bg-gray-100 rounded-md">
+                    <div className="py-3 pl-3 pr-1 mx-auto overflow-custom h-44 mt-1 mb-5 bg-gray-100 rounded-md">
                       {
                         defaultNotes.map((note, index) => (
                           <ListNote

@@ -103,7 +103,7 @@ function TodoCard({ idTodo, title, desc, importance }) {
       {/* modal update todo */}
 
       <Modal showModal={showModal} onClose={showModalFalse} className="max-w-xl">
-        <div className="flex items-center gap-5 mb-5">
+        <div className="flex items-center gap-5 mb-3">
           <h1 className="text-xl font-semibold">Editar To-do</h1>
           <Tippy
             offset={[0, 10]}
@@ -129,7 +129,6 @@ function TodoCard({ idTodo, title, desc, importance }) {
             name="input"
             value={input}
             onChange={onChangeValues} />
-          <br />
           <TextArea
             className="text-sm h-44 overflow-custom whitespace-pre-wrap"
             field="descripcion"

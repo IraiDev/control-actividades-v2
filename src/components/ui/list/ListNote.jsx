@@ -57,24 +57,16 @@ function ListNote(props) {
   }
 
   const handleAddNote = () => {
-    if (updatePriority) {
-      const data = {
-        prioridad_numero: 100,
-        id_actividad: idActivity
-      }
-      ActFunc.updatePriority(data, isDetail, idActivity)
-      const data2 = {
-        description: desc,
-        id_actividad: idActivity
-      }
-      ActFunc.addNewNote({ data: data2, from: isDetail, idActivity })
-    } else {
-      const data = {
-        description: desc,
-        id_actividad: idActivity
-      }
-      ActFunc.addNewNote({ data, from: isDetail, idActivity })
+    const dataPriority = {
+      prioridad_numero: 100,
+      id_actividad: idActivity
     }
+    const dataNote = {
+      description: desc,
+      id_actividad: idActivity
+    }
+    if (updatePriority) ActFunc.addNoteUpdatePriority({ dataNote, dataPriority, from: isDetail, idActivity })
+    else { ActFunc.addNewNote({ data: dataNote, from: isDetail, idActivity }) }
     callBack()
   }
 
