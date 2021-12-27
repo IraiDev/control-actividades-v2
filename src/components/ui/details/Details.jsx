@@ -62,7 +62,9 @@ function Form({ data }) {
     tiempo_hoy,
     tiempo_trabajado,
     tiempo_zionit,
-    user_solicita
+    user_solicita,
+    num_prioridad,
+    glosa_explicativa
 
   } = data
 
@@ -71,10 +73,10 @@ function Form({ data }) {
     inputAdd: '',
     desc: func_objeto,
     ticket: num_ticket_edit,
-    priority: '',
+    priority: num_prioridad,
     time: tiempo_estimado,
     title: actividad,
-    gloss: ''
+    gloss: glosa_explicativa
   }
 
   const pause = pausas.length > 0 && pausas[pausas.length - 1].boton === 2
@@ -202,6 +204,7 @@ function Form({ data }) {
 
   const onCloseDescModal = () => {
     setShowDescModal(false)
+    reset()
   }
 
   const handleGetIdNote = (idNote, description) => {
@@ -264,6 +267,26 @@ function Form({ data }) {
       UiFunc.setIsLoading(true)
       ActFunc.playActivity({ id_actividad: id_det })
     }
+  }
+
+  const handleSaveChanges = () => {
+
+    const formData = new FormData()
+    formData.append('proyecto', project.value)
+    subProject && formData.append('sub_proyecto', subProject.value)
+    formData.append('solicita', userS.value)
+    formData.append('encargado', userE.value)
+    formData.append('revisor', userR.value)
+    formData.append('prioridad', priority)
+    formData.append('ticket', ticket)
+    formData.append('tiempo_estimado', time)
+    formData.append('titulo', title)
+    formData.append('descripcion', desc)
+    formData.append('glosa', gloss)
+    formData.append('id_actividad', id_det)
+    // formData.append('archivos', file) 
+
+    ActFunc.saveActivityChanges(formData)
   }
 
   useEffect(() => {
@@ -383,41 +406,50 @@ function Form({ data }) {
                   </div>
                   <TextContent bold tag="Prioridad RA" value={ActState.activityDetails.num_prioridad} />
                 </div>
-                <div className="col-span-2 bg-gray-100 py-2 px-4 rounded-md mt-4 md:mt-0">
-                  <div className="flex justify-between">
-                    <TextContent tag="Informes Diarios (notas)" />
-                    <div>
-                      <Button
-                        className="h-8 w-8 rounded-full hover:bg-gray-300"
-                        type="icon"
-                        icon="fas fa-plus"
-                        onClick={() => showModalAddOrUpdate({ state: true })} />
-                      <Button
-                        className="h-8 w-8 rounded-full hover:bg-gray-300"
-                        type="icon"
-                        icon="fas fa-pen"
-                        onClick={() => showModalAddOrUpdate({ state: false })} />
+                <section className='col-span-2'>
+                  <Input
+                    className='mb-2'
+                    field='titulo'
+                    name='title'
+                    value={title}
+                    onChange={onChangeValues}
+                  />
+                  <div className="bg-gray-100 py-2 px-4 rounded-md mt-4 md:mt-0">
+                    <div className="flex justify-between">
+                      <TextContent tag="Informes Diarios (notas)" />
+                      <div>
+                        <Button
+                          className="h-8 w-8 rounded-full hover:bg-gray-300"
+                          type="icon"
+                          icon="fas fa-plus"
+                          onClick={() => showModalAddOrUpdate({ state: true })} />
+                        <Button
+                          className="h-8 w-8 rounded-full hover:bg-gray-300"
+                          type="icon"
+                          icon="fas fa-pen"
+                          onClick={() => showModalAddOrUpdate({ state: false })} />
+                      </div>
+                    </div>
+                    <div className="h-44 overflow-custom">
+                      <ul className="mt-1 text-sm">
+                        {notas.length > 0 ?
+                          notas.map(obj => {
+                            return (
+                              <ListNote
+                                key={obj.id_nota}
+                                desc={obj.desc_nota}
+                                date={obj.fecha_hora_crea}
+                                user={obj.user_crea}
+                              />
+                            )
+                          })
+                          :
+                          <li>Sin notas</li>
+                        }
+                      </ul>
                     </div>
                   </div>
-                  <div className="max-h-56 overflow-custom">
-                    <ul className="mt-1 text-sm">
-                      {notas.length > 0 ?
-                        notas.map(obj => {
-                          return (
-                            <ListNote
-                              key={obj.id_nota}
-                              desc={obj.desc_nota}
-                              date={obj.fecha_hora_crea}
-                              user={obj.user_crea}
-                            />
-                          )
-                        })
-                        :
-                        <li>Sin notas</li>
-                      }
-                    </ul>
-                  </div>
-                </div>
+                </section>
               </div>
               {/* descripcion */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
@@ -638,6 +670,7 @@ function Form({ data }) {
                     className="bg-green-500 text-white rounded-full hover:bg-green-600 mb-2 md:mb-0 py-2.5 block w-full md:w-max md:inline"
                     shadow
                     name="Guardar cambios"
+                    onClick={handleSaveChanges}
                   />
                 </div>
               </div>
@@ -864,6 +897,7 @@ function Form({ data }) {
               <Button
                 className="text-blue-500 hover:text-blue-700 hover:bg-blue-100 rounded-full font-semibold"
                 name="Editar"
+                onClick={handleSaveChanges}
               />
             </div>
           </Modal>

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react'
 import { UiContext } from './UiContext'
-import { fetchToken } from '../helpers/fetch'
+import { fetchToken, fetchTokenFile } from '../helpers/fetch'
 import { Alert } from '../helpers/alert'
 
 export const ActivityContext = createContext()
@@ -412,6 +412,13 @@ function ActivityProvider({ children }) {
     }
   }
 
+  const saveActivityChanges = async (data) => {
+    const resp = await fetchTokenFile('task/editar-detalle-actividad', data, 'POST')
+    const body = await resp.json()
+
+    console.log(body)
+  }
+
   const value = {
     states: {
       userData,
@@ -444,7 +451,8 @@ function ActivityProvider({ children }) {
       getInfoTimes,
       markNotifications,
       playActivity,
-      addNoteUpdatePriority
+      addNoteUpdatePriority,
+      saveActivityChanges
     }
   }
   return (
